@@ -1,0 +1,88 @@
+<div class="container-fluid app-body">
+  <div class="row">
+    <div id="leftlist" *ngIf="show_list">
+      <!-- Articlelist component -->
+      <div class="form-group text-center">
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <div class="input-group-text search-prefix" id="btnGroupAddon">
+              <small class="oi oi-magnifying-glass"></small>
+            </div>
+          </div>
+          <input 
+            type="text" 
+            class="form-control" 
+            id="search-box" 
+            placeholder="Search articles"
+            [(ngModel)]="search_term"
+          >
+        </div>
+      </div>
+      <div class="list-group" id="article-list-container" [style.height.px]="listHeight">
+        <a href="#" class="list-group-item list-group-item-action flex-column align-items-start" 
+          *ngFor="let article of articles | filterArticles:search_term; let i=index"
+          (click)="select_article(article)"
+          >
+          <div class="d-flex w-100 justify-content-between">
+            <h5 class="article-list-title">{{i+1}} {{article.title}}</h5>
+          </div>
+          <p>{{article.summary}}</p>
+          <div class="text-right">
+            <small class=" badge badge-warning">
+              <span class="oi oi-clock"></span> 3 days ago</small>
+            <span class="badge badge-info">
+              <span class="oi oi-tags"></span> 23</span>
+          </div>
+        </a>
+      </div>
+    </div>
+    <!-- Article details component  -->
+    <div class="col-sm right-content">
+      <div class="row info-row" [class.celebrate]="celebrate">
+        <div class="col-sm text-right">
+          <button type="button" class="btn btn-dark btn-sm float-left btn-article-list" 
+            [innerHTML]="show_list_label"
+            (click)="toggle_list()"
+            >  </button>
+          <span class="btn btn-sm btn-outline-dark">
+            Words Left
+            <span class="badge badge-light counter word-counter">
+              <span class="oi oi-tags"></span> {{target_words}} </span>
+          </span>
+          <span class="btn btn-sm btn-outline-dark">
+            Time Left
+            <span class="badge counter time-counter badge-light">
+              <span class="oi oi-clock"></span> 23:42 </span>
+          </span>
+          <button type="button" class="btn btn-primary btn-sm">
+            <span class="oi oi-pencil"></span> Edit </button>
+          <button type="button" class="btn btn-dark btn-sm">
+            <span class="oi oi-plus"></span> New </button>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm">
+          <input type="text" 
+            class="form-control" 
+            id="headline" 
+            spellcheck="true" 
+            placeholder="Your title will come here"
+            [(ngModel)]="current_article.title"
+          >
+        </div>
+      </div>
+      <div>
+        <div class="form-group">
+          <textarea 
+          class="form-control" 
+          id="editor" 
+          spellcheck="true" 
+          [style.height.px]="editorHeight"
+          [(ngModel)]="current_article.content"
+          placeholder="Click here and start writing.&#10;Click 'New' button on top right to start the timer.&#10;Remember, you just have to write 50 words to maintain your streak.&#10;&#10;You are awesome !!!.">Lorem ipsum dolor sit amet consectetur adipisicing elit. Praesentium doloribus, possimus voluptatibus deleniti quo, consectetur voluptas eaque nulla, mollitia eligendi illum facere adipisci nostrum tempore porro! Ex sequi voluptas voluptatibus.</textarea>
+        </div>
+      </div>
+      <app-message></app-message>
+    </div>
+  </div>
+</div>
