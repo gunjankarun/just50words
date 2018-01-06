@@ -1,27 +1,17 @@
 # Just50words
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.5.5.
+A simple to use editor that I built to help me write at least 50 words daily.
+This is a desktop app that 
+- enables you to write articles in a distraction free environment, 
+- motivates you to write more by showing the count of words
+- has interval writing features to help you write in short spurts
 
-## Development server
+I have used this to successfully write 30 articles on Medium for 30 continuous days.
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+This is a free app. Free to download and use. I do not show any ads or in app purchases. This is my gift to you all awesome people who love to write.
 
-## Code scaffolding
+If you are a coder and know JavaScript, you are welcome to download it's code and add more features and functionality to it.
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+If you are not a coder/programmer but want some features that is not here, feel free to tell me at my email address.
 
-## Build
-
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `-prod` flag for a production build.
-
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+Also, if you find this useful, a small donation to support me would be great help.

@@ -1,1 +1,124 @@
 /* You can add global styles to this file, and also import other style files */
+
+body{
+    margin:0px;
+    padding:0px;
+}
+
+*{
+    border-radius: 0px !important;
+}
+
+/* Reset blue outline */
+*:focus,*:active, .form-control:focus {
+   outline: 0px !important;
+   box-shadow: none;
+   -webkit-appearance:none;
+}
+
+.app-body{
+    box-sizing: border-box;    
+    /* padding: 10px; */
+}
+
+#article-list-container{
+    height: 500px;
+    overflow: scroll;
+}
+
+#leftlist, .right-content{
+    padding-top:10px;
+}
+
+#leftlist{
+    /* padding-left: 10px; */
+    background-color: burlywood;
+    width:30%;
+    font-size: 80%;
+    padding:10px;
+}
+
+
+
+#leftlist .list-group-item.active{
+    background-color:rgba(201, 135, 69, 0.795);
+    
+    color:black;
+    border:brown;
+}
+
+#leftlist .article-list-title{
+    font-size:14px;
+    margin-bottom: 0px;    
+}
+
+#leftlist p{
+    margin-bottom: 0px;
+    font-size: 12px;
+}
+#search-box{
+    font-size: 14px;
+    outline: 0;
+    border-left: none;
+    border-color: white;
+}
+
+.search-prefix{
+    border-right: 0px;
+    background-color: white;
+    border-color: white;
+}
+
+.right-content{
+    /* background-color: papayawhip; */
+    background-image: url('assets/images/bg-dirty-paper.jpg');
+    background-size: cover;
+    background-position: center center;
+    /* margin-left: -15px; */
+}
+
+.info-row{
+    margin-bottom: 10px;
+}
+
+.btn-article-list{
+    float: left;
+    margin-left: -15px;
+    /* border-radius: 0 10px 10px 0 !important; */
+    background-color:burlywood;
+    border-color: burlywood;
+    color: black;
+    /* z-index: 1001;
+    box-shadow: 3px 10px 10px grey; */
+}
+
+.btn-article-list:focus{
+   outline: none !important;
+   box-shadow: none;
+}
+
+.btn-article-list:hover{
+    background-color: brown;
+    border-color: brown;
+}
+
+input#headline, #editor{
+    border: none;
+    outline: none !important;
+    box-shadow: none;
+    background:transparent;
+}
+
+input#headline {
+    font-size: 24px;
+    font-family: 'Lora', serif;
+    /* font-style: italic; */
+}
+
+#editor{
+    resize: none;
+    font-family: 'Eczar', serif;
+    font-size: 18px;
+    line-height: 1.5em;
+    height:455px;
+}
