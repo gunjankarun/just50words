@@ -1,13 +1,18 @@
 import { Injectable } from '@angular/core';
 import { Article } from '../article';
 import { MessageService } from './message.service';
+import { FileService } from './file.service';
 
 @Injectable()
 export class ArticleService {
 
   articles: Article[];
+  current_article: Article;
+  autosave_interval = 3 * 1000;
+  autosave_timeout: any;
 
-  constructor(private msgService: MessageService) {
+
+  constructor(private msgService: MessageService, private fileService: FileService) {
     this.load_articles();
    }
 
@@ -59,8 +64,28 @@ export class ArticleService {
     };
   }
 
-  save_article(article: Article) {
-    console.log('Saving Article', article);
+  save_article() {
+    this.msgService.add('Saving Article', this.current_article.title);
+  }
+
+  auto_save_start() {
+    this.msgService.add('Will save automatically when you type.');
+
+    if (this.autosave_timeout) {
+      clearTimeout(this.autosave_timeout);
+    }
+
+    this.autosave_timeout = setTimeout(() => {
+      this.msgService.add('Starting auto save');
+      this.fileService.save(true);
+    }, this.autosave_interval);
+  }
+
+  auto_save_stop() {
+    this.msgService.add('Autosave stopped');
+    if (this.autosave_timeout) {
+      clearTimeout(this.autosave_timeout);
+    }
   }
 
 

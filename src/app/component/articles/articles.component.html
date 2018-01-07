@@ -68,6 +68,7 @@
             spellcheck="true" 
             placeholder="Your title will come here"
             [(ngModel)]="current_article.title"
+            (keyup)="schedule_autosave($event)"
           >
         </div>
       </div>
@@ -79,6 +80,7 @@
           spellcheck="true" 
           [style.height.px]="editorHeight"
           [(ngModel)]="current_article.content"
+          (keyup)="schedule_autosave($event)"
           placeholder="Click here and start writing.&#10;Click 'New' button on top right to start the timer.&#10;Remember, you just have to write 50 words to maintain your streak.&#10;&#10;You are awesome !!!.">Lorem ipsum dolor sit amet consectetur adipisicing elit. Praesentium doloribus, possimus voluptatibus deleniti quo, consectetur voluptas eaque nulla, mollitia eligendi illum facere adipisci nostrum tempore porro! Ex sequi voluptas voluptatibus.</textarea>
         </div>
       </div>

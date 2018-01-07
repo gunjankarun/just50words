@@ -128,4 +128,9 @@ input#headline {
 .footer-alert{
     font-size: 12px;
     padding: 5px;
+    border-radius: 3px !important;
+}
+
+.footer-alert .close{
+    font-size: 16px;
 }

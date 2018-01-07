@@ -4,11 +4,14 @@ import { FormsModule } from '@angular/forms';
 
 import { AppComponent } from './app.component';
 import { ArticlesComponent } from './component/articles/articles.component';
+import { MessageComponent } from './component/message/message.component';
+
 import { ArticleService } from './service/article.service';
 import { ConfigService } from './service/config.service';
 import { MessageService } from './service/message.service';
+import { FileService } from './service/file.service';
+
 import { FilterArticlesPipe } from './pipe/filter-articles.pipe';
-import { MessageComponent } from './component/message/message.component';
 
 
 @NgModule({
@@ -22,7 +25,7 @@ import { MessageComponent } from './component/message/message.component';
     BrowserModule,
     FormsModule
   ],
-  providers: [ArticleService, ConfigService, MessageService],
+  providers: [ArticleService, ConfigService, MessageService, FileService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
