@@ -2,7 +2,7 @@
   <div class="row">
     <div id="leftlist" *ngIf="show_list">
       <!-- Articlelist component -->
-      <div class="form-group text-center">
+      <!-- <div class="form-group text-center">
         <div class="input-group">
           <div class="input-group-prepend">
             <div class="input-group-text search-prefix" id="btnGroupAddon">
@@ -17,23 +17,27 @@
             [(ngModel)]="search_term"
           >
         </div>
-      </div>
+      </div> -->
+      <div class="title">Just 50 Words</div>
       <div class="list-group" id="article-list-container" [style.height.px]="listHeight">
-        <a href="#" class="list-group-item list-group-item-action flex-column align-items-start" 
-          *ngFor="let article of articles | filterArticles:search_term; let i=index"
-          (click)="select_article(article)"
-          >
-          <div class="d-flex w-100 justify-content-between">
-            <h5 class="article-list-title">{{i+1}} {{article.title}}</h5>
-          </div>
-          <p>{{article.summary}}</p>
-          <div class="text-right">
-            <small class=" badge badge-warning">
-              <span class="oi oi-clock"></span> 3 days ago</small>
-            <span class="badge badge-info">
-              <span class="oi oi-tags"></span> 23</span>
-          </div>
-        </a>
+        <span *ngFor="let article of articleService.filtered_articles; let i=index">
+          <a href="#" class="list-group-item list-group-item-action flex-column align-items-start" 
+            (click)="select_article(article)"
+            *ngIf='article.title || article.summary'
+            [class.active]="((i==0 && select_first_article) || (article==current_article))"
+            >
+              <div class="d-flex w-100 justify-content-between">
+                <h5 class="article-list-title">{{article.title}}</h5>
+              </div>
+              <div *ngIf='(article.summary)'>{{article.summary}}</div>
+              <div class="text-right" >
+                <small class=" badge badge-warning">
+                  <span class="oi oi-clock"></span> 3 days ago</small>
+                <span class="badge badge-info">
+                  <span class="oi oi-tags"></span> 23</span>
+              </div>
+          </a>
+        </span>
       </div>
     </div>
     <!-- Article details component  -->
@@ -50,14 +54,19 @@
               <span class="oi oi-tags"></span> {{target_words}} </span>
           </span>
           <span class="btn btn-sm btn-outline-dark">
-            Time Left
-            <span class="badge counter time-counter badge-light">
-              <span class="oi oi-clock"></span> 23:42 </span>
+            
+            <span class="counter time-counter">
+              <span class="oi oi-clock"></span> 23:42 </span> <span class="oi oi-caret-right"></span>
           </span>
-          <button type="button" class="btn btn-primary btn-sm">
-            <span class="oi oi-pencil"></span> Edit </button>
-          <button type="button" class="btn btn-dark btn-sm">
-            <span class="oi oi-plus"></span> New </button>
+          <!-- <button type="button" class="btn btn-primary btn-sm">
+            <span class="oi oi-pencil"></span> Edit </button> -->
+          <button type="button" class="btn btn-dark btn-sm" (click)="new_article_button_click()">
+            <span class="oi oi-plus"></span> New 
+          </button>
+          <button type="button" class="btn btn-small btn-link btn-sm">
+            <span class="oi oi-menu"></span>
+          </button>
+
         </div>
       </div>
       <div class="row">
@@ -66,9 +75,12 @@
             class="form-control" 
             id="headline" 
             spellcheck="true" 
-            placeholder="Your title will come here"
+            autofocus
+            placeholder="Search or start new (Hit Enter to start)"
             [(ngModel)]="current_article.title"
-            (keyup)="schedule_autosave($event)"
+            (keyup)="key_pressed($event)"
+            (ngModelChange)="search_article($event)"
+            (focus)="focus_set()"
           >
         </div>
       </div>
@@ -80,8 +92,8 @@
           spellcheck="true" 
           [style.height.px]="editorHeight"
           [(ngModel)]="current_article.content"
-          (keyup)="schedule_autosave($event)"
-          placeholder="Click here and start writing.&#10;Click 'New' button on top right to start the timer.&#10;Remember, you just have to write 50 words to maintain your streak.&#10;&#10;You are awesome !!!.">Lorem ipsum dolor sit amet consectetur adipisicing elit. Praesentium doloribus, possimus voluptatibus deleniti quo, consectetur voluptas eaque nulla, mollitia eligendi illum facere adipisci nostrum tempore porro! Ex sequi voluptas voluptatibus.</textarea>
+          (keyup)="key_pressed($event)"
+          placeholder="Hit SHIFT + Enter to select article or just Enter to start new.&#10;Click 'New' button on top right to start the timer.&#10;Remember, you just have to write 50 words to maintain your streak.&#10;&#10;You are awesome !!!.">Lorem ipsum dolor sit amet consectetur adipisicing elit. Praesentium doloribus, possimus voluptatibus deleniti quo, consectetur voluptas eaque nulla, mollitia eligendi illum facere adipisci nostrum tempore porro! Ex sequi voluptas voluptatibus.</textarea>
         </div>
       </div>
       <app-message></app-message>

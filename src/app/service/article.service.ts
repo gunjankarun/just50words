@@ -2,17 +2,19 @@ import { Injectable } from '@angular/core';
 import { Article } from '../article';
 import { MessageService } from './message.service';
 import { FileService } from './file.service';
+import { ConfigService } from './config.service';
 
 @Injectable()
 export class ArticleService {
 
   articles: Article[];
+  filtered_articles: Article[];
   current_article: Article;
-  autosave_interval = 3 * 1000;
+  autosave_interval = this.configService.auto_save_after * 1000;
   autosave_timeout: any;
 
 
-  constructor(private msgService: MessageService, private fileService: FileService) {
+  constructor(private msgService: MessageService, private fileService: FileService, private configService: ConfigService) {
     this.load_articles();
    }
 
@@ -77,7 +79,9 @@ export class ArticleService {
 
     this.autosave_timeout = setTimeout(() => {
       this.msgService.add('Starting auto save');
-      this.fileService.save(true);
+
+      this.fileService.save_article(this.current_article, true);
+
     }, this.autosave_interval);
   }
 
@@ -88,5 +92,29 @@ export class ArticleService {
     }
   }
 
+  filter_articles(filter_str: string, only_title: boolean = false) {
+    this.filtered_articles = this.articles;
+    console.log('Searching for ' + filter_str + ' and filtered articles are ' + this.filtered_articles.length);
+    filter_str = filter_str.toLowerCase();
+    this.filtered_articles = this.articles.filter(function (item) {
+      let found = false;
+      found = item.title.toLowerCase().indexOf(filter_str) !== -1;
+      if (!found && !only_title) {
+        found = item.content.toLowerCase().indexOf(filter_str) !== -1;
+      }
+      return found;
+    });
+  }
+
+  update_summary() {
+    if (this.current_article && this.current_article.content) {
+      let inputWords = this.current_article.content.split(/\s+/);
+      if (inputWords.length > this.configService.words_in_summary) {
+        this.current_article.summary = inputWords.slice(0, this.configService.words_in_summary).join(' ') + '\u2026';
+      } else {
+        this.current_article.summary = this.current_article.content;
+      }
+    }
+  }
 
 }

@@ -16,16 +16,31 @@ body{
    -webkit-appearance:none;
 }
 
+.title {
+    font-size: 24px;
+    text-align: center;
+    /* text-shadow: 1px 1px 0px rgb(216, 213, 213), 2px 2px 3px rgba(0,0,0,0.5); */
+    font-weight: bold;
+    margin-bottom: 7px;
+    font-family: 'Lora', serif;
+    background-color: #666666;
+    -webkit-background-clip: text;
+    -moz-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    text-shadow: rgba(255,255,255,0.5) 0px 2px 2px;
+}
+
 .app-body{
     box-sizing: border-box;    
     /* padding: 10px; */
 }
 
 #article-list-container{
-    height: 500px;
+    /* height: 500px; */
     overflow: scroll;
     background-color: white;
-    margin-top: -5px;
+    /* margin-top: -5px; */
 }
 
 #leftlist, .right-content{
