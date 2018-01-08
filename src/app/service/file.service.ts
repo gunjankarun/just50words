@@ -16,6 +16,12 @@ export class FileService {
       article_file = article.content_file;
     }else {
       const random_number = Math.floor(Math.random() * 999999) + 100000;
+      let article_title = '';
+      if (article.title) {
+        article_title = article.title;
+      }else {
+        article_title = 'article';
+      }
       const article_file_name = article.title.split(/\s+/).join('-') + '-' + random_number;
       article_file = this.configService.article_folder + '/' + article_file_name;
       article.content_file = article_file;

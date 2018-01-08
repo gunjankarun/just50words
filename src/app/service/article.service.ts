@@ -23,14 +23,14 @@ export class ArticleService {
     all_articles = [
       {
         title: 'This is my first article',
-        summary: 'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Voluptatibus ducimus adipisci ipsum illum numquam aliquam...',
-        content: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Commodi voluptatem quisquam impedit alias praesentium reprehenderit officiis quis error odio voluptas nam ab pariatur id assumenda cum quos, harum, sed quas!',
+        summary: 'One One One Four Lorem ipsum, dolor sit amet consectetur adipisicing elit. Voluptatibus ducimus adipisci ipsum illum numquam aliquam...',
+        content: 'Lorem iOne One One Four Lorem ipsum dolor sit amet consectetur adipisicing elit. Commodi voluptatem quisquam impedit alias praesentium reprehenderit officiis quis error odio voluptas nam ab pariatur id assumenda cum quos, harum, sed quas!',
         content_file: null
       },
       {
         title: 'This is my second article',
-        summary: 'Facere officia earum repellat laboriosam amet iste quod explicabo distinctio! Totam minus at culpa illo...',
-        content: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Commodi voluptatem quisquam impedit alias praesentium reprehenderit officiis quis error odio voluptas nam ab pariatur id assumenda cum quos, harum, sed quas!',
+        summary: 'Facere officia One Two Three Four earum repellat laboriosam amet iste quod explicabo distinctio! Totam minus at culpa illo...',
+        content: 'Lorem ipsum One Two Three Four earum dolor sit amet consectetur adipisicing elit. Commodi voluptatem quisquam impedit alias praesentium reprehenderit officiis quis error odio voluptas nam ab pariatur id assumenda cum quos, harum, sed quas!',
         content_file: null
       },
       // {
@@ -92,14 +92,14 @@ export class ArticleService {
     }
   }
 
-  filter_articles(filter_str: string, only_title: boolean = false) {
-    this.filtered_articles = this.articles;
-    console.log('Searching for ' + filter_str + ' and filtered articles are ' + this.filtered_articles.length);
+  filter_articles(filter_str: string) {
+    // this.filtered_articles = this.articles;
+    // console.log('Searching for ' + filter_str + ' and filtered articles are ' + this.filtered_articles.length);
     filter_str = filter_str.toLowerCase();
     this.filtered_articles = this.articles.filter(function (item) {
       let found = false;
       found = item.title.toLowerCase().indexOf(filter_str) !== -1;
-      if (!found && !only_title) {
+      if (!found) {
         found = item.content.toLowerCase().indexOf(filter_str) !== -1;
       }
       return found;

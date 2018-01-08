@@ -26,6 +26,7 @@ export class ArticlesComponent implements OnInit {
   select_first_article = false;
   show_list_label = '<span class="oi oi-caret-left"> </span>';
   old_title: string;
+  headline_placeholder = 'Search or start new (Hit Enter to start)';
 
   constructor(private articleService: ArticleService,
     private configService: ConfigService,
@@ -94,16 +95,21 @@ export class ArticlesComponent implements OnInit {
     }
   }
 
-  key_pressed(event) {
-    // console.log(event.keyCode + ' ', event.key);
+  key_pressed_textarea(event) {
     this.articleService.update_summary();
     if (!this.articleService.current_article) {
       // this.new_article();
       // do nothing
-    }else {
-    this.articleService.auto_save_start();
+    } else {
+      this.articleService.auto_save_start();
     }
 
+  }
+
+  key_pressed_headline(event) {
+    // console.log(event.keyCode + ' ', event.key);
+    // reset headline placeholder
+    this.headline_placeholder = 'Search or start new (Hit Enter to start)';
     switch (event.key) {
       case 'Enter':
         if (!event.shiftKey) {
@@ -130,9 +136,9 @@ export class ArticlesComponent implements OnInit {
         break;
 
       case 's':
-        console.log('User clicked s');
+        // console.log('User clicked s');
         if (event.ctrlKey) {
-          console.log('User clicked control + S');
+          // console.log('User clicked control + S');
         }
         // do nothing right now.
         break;
@@ -143,6 +149,7 @@ export class ArticlesComponent implements OnInit {
 
   new_article_button_click() {
     this.old_title = '';
+    this.headline_placeholder = 'Start typing here. Hit enter to save';
     this.current_article = this.articleService.get_blank_article();
     this.articleService.current_article = this.current_article;
     this.articleService.articles.unshift(this.current_article);

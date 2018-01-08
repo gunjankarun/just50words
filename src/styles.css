@@ -115,8 +115,15 @@ body{
 }
 
 .btn-article-list:hover{
-    background-color: brown;
-    border-color: brown;
+    text-shadow: 2px 2px 3px rgba(0,0,0,0.5);
+    /* text-shadow: 1px 1px 0px rgb(216, 213, 213), 2px 2px 3px rgba(0,0,0,0.5); */
+    background-color:burlywood;
+    border-color: burlywood;
+    color:black;
+    /* background-color: #fdc300;
+    border-color: #fdc300; */
+    /* background-color: brown;
+    border-color: brown; */
 }
 
 input#headline, #editor{
@@ -138,12 +145,14 @@ input#headline {
     font-size: 18px;
     line-height: 1.5em;
     height:455px;
+    margin-bottom: 62px;
 }
 
 .footer-alert{
     font-size: 12px;
     padding: 5px;
     border-radius: 3px !important;
+    margin-top: -46px;
 }
 
 .footer-alert .close{
