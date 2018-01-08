@@ -11,9 +11,12 @@ import { ArticleService } from './service/article.service';
 import { ConfigService } from './service/config.service';
 import { MessageService } from './service/message.service';
 import { FileService } from './service/file.service';
+import { WordCountService } from './service/word-count.service';
 
 import { FilterArticlesPipe } from './pipe/filter-articles.pipe';
 import { TimeAgoPipe } from './pipe/time-ago.pipe';
+import { WordCountComponent } from './component/word-count/word-count.component';
+import { WordCountPipe } from './pipe/word-count.pipe';
 
 
 @NgModule({
@@ -22,13 +25,15 @@ import { TimeAgoPipe } from './pipe/time-ago.pipe';
     ArticlesComponent,
     FilterArticlesPipe,
     MessageComponent,
-    TimeAgoPipe
+    TimeAgoPipe,
+    WordCountComponent,
+    WordCountPipe
   ],
   imports: [
     BrowserModule,
     FormsModule
   ],
-  providers: [ArticleService, ConfigService, MessageService, FileService],
+  providers: [ArticleService, ConfigService, MessageService, FileService, WordCountService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

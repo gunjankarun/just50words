@@ -10,19 +10,26 @@ export class ArticleService {
   articles: Article[];
   filtered_articles: Article[];
   current_article: Article;
-  autosave_interval = this.configService.auto_save_after * 1000;
+  autosave_interval: number;
   autosave_timeout: any;
+  target_words: number;
 
 
-  constructor(private msgService: MessageService, private fileService: FileService, private configService: ConfigService) {
+
+  constructor(private msgService: MessageService,
+    private fileService: FileService,
+    private configService: ConfigService) {
+
     this.load_articles();
+    this.autosave_interval = this.configService.auto_save_after * 1000;
+    this.target_words = this.configService.target_words;
    }
 
   private load_articles() {
     let all_articles: Article[];
-    const d1 = new Date("2018-01-08T09:30:51.01");
-    const d2 = new Date("2018-01-07T09:30:51.01");
-    const d3 = new Date("2017-08-07T19:30:51.01");
+    const d1 = new Date('2018-01-08T09:30:51.01');
+    const d2 = new Date('2018-01-07T09:30:51.01');
+    const d3 = new Date('2017-08-07T19:30:51.01');
     all_articles = [
       {
         title: 'This is my first article',
@@ -80,7 +87,7 @@ export class ArticleService {
   }
 
   auto_save_start() {
-    this.msgService.add('Will save automatically when you type.');
+    this.msgService.add('Will save automatically when you stop typing.');
 
     if (this.autosave_timeout) {
       clearTimeout(this.autosave_timeout);

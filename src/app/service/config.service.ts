@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 @Injectable()
 export class ConfigService {
   // Targets
-  target_words = 10;
+  target_words = 50;
   target_time = '12:00';
   words_in_summary = 20;
   application_root = '/Users/gunjan/Projects/just50words/';

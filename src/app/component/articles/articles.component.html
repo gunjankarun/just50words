@@ -34,7 +34,7 @@
                 <small class=" badge badge-warning">
                   <span class="oi oi-clock"></span> {{article.date_added | timeAgo}}</small>
                 <span class="badge badge-info">
-                  <span class="oi oi-tags"></span> 23</span>
+                  <span class="oi oi-tags"></span> {{article.title + ' ' + article.content| wordCount}}</span>
               </div>
           </a>
         </span>
@@ -50,11 +50,10 @@
             (click)="toggle_list()"
             >  </button>
             <!-- &nbsp;&nbsp;<div class="title" *ngIf='!show_list' style="float:left;">Just 50 Words</div> -->
-            <span class="btn btn-sm btn-outline-dark">
-            Words Left
-            <span class="badge badge-light counter word-counter">
-              <span class="oi oi-tags"></span> {{target_words}} </span>
-          </span>
+          <app-word-count 
+            [article_title]="articleService.current_article ? articleService.current_article.title : ''"
+            [article_content]="articleService.current_article ? articleService.current_article.content : ''"
+          ></app-word-count>
           <span class="btn btn-sm btn-outline-dark">
             
             <span class="counter time-counter">
