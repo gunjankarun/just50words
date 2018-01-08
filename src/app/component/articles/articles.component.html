@@ -34,7 +34,7 @@
                 <small class=" badge badge-warning">
                   <span class="oi oi-clock"></span> {{article.date_added | timeAgo}}</small>
                 <span class="badge badge-info">
-                  <span class="oi oi-tags"></span> {{article.title + ' ' + article.content| wordCount}}</span>
+                  <span class="oi oi-tags"></span> {{article.content| wordCount}}</span>
               </div>
           </a>
         </span>
@@ -53,6 +53,7 @@
           <app-word-count 
             [article_title]="articleService.current_article ? articleService.current_article.title : ''"
             [article_content]="articleService.current_article ? articleService.current_article.content : ''"
+            [article]="current_article ? current_article : null"
           ></app-word-count>
           <app-writing-timer></app-writing-timer>
           <!-- <button type="button" class="btn btn-primary btn-sm">

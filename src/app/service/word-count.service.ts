@@ -6,6 +6,9 @@ export class WordCountService {
   constructor() { }
 
   get_word_count(text: string) {
+    if (!text) {
+      return 0;
+    }
     let matches: any;
     matches = text.match(/[\w\d]+/gi);
     // console.log('matches=', matches);

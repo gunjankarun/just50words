@@ -14,7 +14,11 @@ import { MessageService } from '../../service/message.service';
 export class WordCountComponent implements OnInit {
   @Input() article_title: string;
   @Input() article_content: string;
+  @Input() article: Article;
+
   target_words = this.configService.target_words;
+
+  old_word_count = 0;
 
   // @Input() target_words = 50;
   // @Input() current_words = 50;
@@ -34,6 +38,16 @@ export class WordCountComponent implements OnInit {
   }
 
   ngOnChanges(changes: SimpleChanges) {
+    const articleChange: SimpleChange = changes.article;
+    if (articleChange) {
+      const article = articleChange.currentValue;
+      // const old_text = this.article.title + ' ' + this.article.content;
+      const old_text = this.article.content;
+      this.old_word_count = this.wordCountService.get_word_count(old_text);
+      this.word_count = this.target_words;
+      return false;
+    }
+
     const article_title_change: SimpleChange = changes.article_title;
     if (article_title_change) {
       this.article_title  = article_title_change.currentValue;
@@ -45,8 +59,12 @@ export class WordCountComponent implements OnInit {
       this.article_content  = article_content_change.currentValue;
     }
 
-    const text = this.article_title + ' ' + this.article_content;
-    const word_count = this.wordCountService.get_word_count(text);
+    // const text = this.article_title + ' ' + this.article_content;
+    const text = this.article_content;
+    let word_count = this.wordCountService.get_word_count(text);
+    if (this.old_word_count) {
+      word_count = word_count - this.old_word_count;
+    }
     if (word_count < this.target_words) {
       this.word_count = this.target_words - word_count;
       this.label = 'Words left';
