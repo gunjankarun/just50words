@@ -20,31 +20,38 @@ export class ArticleService {
 
   private load_articles() {
     let all_articles: Article[];
+    const d1 = new Date("2018-01-08T09:30:51.01");
+    const d2 = new Date("2018-01-07T09:30:51.01");
+    const d3 = new Date("2017-08-07T19:30:51.01");
     all_articles = [
       {
         title: 'This is my first article',
         summary: 'One One One Four Lorem ipsum, dolor sit amet consectetur adipisicing elit. Voluptatibus ducimus adipisci ipsum illum numquam aliquam...',
         content: 'Lorem iOne One One Four Lorem ipsum dolor sit amet consectetur adipisicing elit. Commodi voluptatem quisquam impedit alias praesentium reprehenderit officiis quis error odio voluptas nam ab pariatur id assumenda cum quos, harum, sed quas!',
-        content_file: null
+        content_file: null,
+        date_added: d1
       },
       {
         title: 'This is my second article',
         summary: 'Facere officia One Two Three Four earum repellat laboriosam amet iste quod explicabo distinctio! Totam minus at culpa illo...',
         content: 'Lorem ipsum One Two Three Four earum dolor sit amet consectetur adipisicing elit. Commodi voluptatem quisquam impedit alias praesentium reprehenderit officiis quis error odio voluptas nam ab pariatur id assumenda cum quos, harum, sed quas!',
-        content_file: null
+        content_file: null,
+        date_added: d2
       },
-      // {
-      //   title: 'This is my third article',
-      //   summary: 'Officia earum repellat laboriosam amet iste quod explicabo distinctio! Totam minus at culpa illo...',
-      //   content: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Commodi voluptatem quisquam impedit alias praesentium reprehenderit officiis quis error odio voluptas nam ab pariatur id assumenda cum quos, harum, sed quas!',
-      //   content_file: null
-      // },
-      // {
-      //   title: 'This is my fourth article',
-      //   summary: 'Dolor sit amet consectetur adipisicing elit. Voluptatibus ducimus adipisci ipsum illum numam illium elit sit...',
-      //   content: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Commodi voluptatem quisquam impedit alias praesentium reprehenderit officiis quis error odio voluptas nam ab pariatur id assumenda cum quos, harum, sed quas!',
-      //   content_file: null
-      // },
+      {
+        title: 'This is my third article',
+        summary: 'Officia earum repellat laboriosam amet iste quod explicabo distinctio! Totam minus at culpa illo...',
+        content: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Commodi voluptatem quisquam impedit alias praesentium reprehenderit officiis quis error odio voluptas nam ab pariatur id assumenda cum quos, harum, sed quas!',
+        content_file: null,
+        date_added: d3
+      },
+      {
+        title: 'This is my fourth article',
+        summary: 'Dolor sit amet consectetur adipisicing elit. Voluptatibus ducimus adipisci ipsum illum numam illium elit sit...',
+        content: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Commodi voluptatem quisquam impedit alias praesentium reprehenderit officiis quis error odio voluptas nam ab pariatur id assumenda cum quos, harum, sed quas!',
+        content_file: null,
+        date_added: d1
+      },
     ];
 
     this.articles = all_articles;
@@ -58,11 +65,13 @@ export class ArticleService {
   }
 
   get_blank_article() {
+    const d = new Date();
     return {
       title: null,
       summary: null,
       content: null,
-      content_file: null
+      content_file: null,
+      date_added: d
     };
   }
 

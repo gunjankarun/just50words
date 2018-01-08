@@ -5,7 +5,7 @@ export class ConfigService {
   // Targets
   target_words = 10;
   target_time = '12:00';
-  words_in_summary = 6;
+  words_in_summary = 20;
   application_root = '/Users/gunjan/Projects/just50words/';
   article_folder = this.application_root + 'articles';
   article_summary_folder = this.application_root + 'articles';

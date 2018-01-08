@@ -13,6 +13,7 @@ import { MessageService } from './service/message.service';
 import { FileService } from './service/file.service';
 
 import { FilterArticlesPipe } from './pipe/filter-articles.pipe';
+import { TimeAgoPipe } from './pipe/time-ago.pipe';
 
 
 @NgModule({
@@ -20,7 +21,8 @@ import { FilterArticlesPipe } from './pipe/filter-articles.pipe';
     AppComponent,
     ArticlesComponent,
     FilterArticlesPipe,
-    MessageComponent
+    MessageComponent,
+    TimeAgoPipe
   ],
   imports: [
     BrowserModule,

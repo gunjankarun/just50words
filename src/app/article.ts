@@ -3,4 +3,5 @@ export class Article {
     summary: string;
     content_file: string;
     content: string;
+    date_added: Date;
 }
