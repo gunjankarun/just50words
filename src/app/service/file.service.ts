@@ -28,11 +28,11 @@ export class FileService {
     }
     const article_file_contents = JSON.stringify(article);
 
-    let message = 'File saved ';
+    let message = 'Contents saved successfully';
     if (autosave) {
-      message = 'File saved automatically';
+      message = 'Contents saved automatically';
     }
-    message = message + ' in ' + article_file;
+    // message = message + ' in ' + article_file;
     this.msgService.add(message, 'success');
   }
 

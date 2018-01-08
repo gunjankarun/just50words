@@ -1,0 +1,10 @@
+<span class="btn btn-sm" 
+  [ngClass]= 'class' 
+  (click)='toggle_timer()'
+  title = 'Click here to toggle timer'
+>
+  {{session_label}}
+  <span class="counter time-counter badge">
+    <span class="oi oi-clock"></span> {{timer_label}} </span>
+  <span class="oi" [ngClass]='play_pause_icon'></span>
+</span>

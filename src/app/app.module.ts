@@ -17,6 +17,7 @@ import { FilterArticlesPipe } from './pipe/filter-articles.pipe';
 import { TimeAgoPipe } from './pipe/time-ago.pipe';
 import { WordCountComponent } from './component/word-count/word-count.component';
 import { WordCountPipe } from './pipe/word-count.pipe';
+import { WritingTimerComponent } from './component/writing-timer/writing-timer.component';
 
 
 @NgModule({
@@ -27,7 +28,8 @@ import { WordCountPipe } from './pipe/word-count.pipe';
     MessageComponent,
     TimeAgoPipe,
     WordCountComponent,
-    WordCountPipe
+    WordCountPipe,
+    WritingTimerComponent
   ],
   imports: [
     BrowserModule,

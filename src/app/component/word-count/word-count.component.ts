@@ -4,6 +4,7 @@ import { ConfigService } from '../../service/config.service';
 import { WordCountService } from '../../service/word-count.service';
 
 import { Article } from '../../article';
+import { MessageService } from '../../service/message.service';
 
 @Component({
   selector: 'app-word-count',
@@ -18,12 +19,15 @@ export class WordCountComponent implements OnInit {
   // @Input() target_words = 50;
   // @Input() current_words = 50;
 
-  label = 'Words Left';
+  label = 'Words left';
   word_count = 0;
   class = 'btn-outline-dark';
 
   constructor(
-    private configService: ConfigService, private wordCountService: WordCountService) { }
+    private configService: ConfigService,
+    private wordCountService: WordCountService,
+    private msgService: MessageService
+  ) { }
 
   ngOnInit() {
     this.word_count = this.target_words;
@@ -45,16 +49,18 @@ export class WordCountComponent implements OnInit {
     const word_count = this.wordCountService.get_word_count(text);
     if (word_count < this.target_words) {
       this.word_count = this.target_words - word_count;
-      this.label = 'Words Left';
+      this.label = 'Words left';
       if (word_count < this.target_words / 2) {
         this.class = 'btn-danger';
       } else {
         this.class = 'btn-warning';
+        this.msgService.add('You are halfway there. Keep on writing.', 'warning');
       }
     } else {
       this.word_count = word_count;
-      this.label = 'Words Typed';
+      this.label = 'Words typed';
       this.class = 'btn-outline-dark';
+      this.msgService.add('You did it! Proud of you.', 'success');
     }
 
     // const name: SimpleChange = changes.name;

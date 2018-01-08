@@ -26,7 +26,7 @@ export class ArticlesComponent implements OnInit {
   select_first_article = false;
   show_list_label = '<span class="oi oi-caret-left"> </span>';
   old_title: string;
-  headline_placeholder = 'Search or start new (Hit Enter to start)';
+  headline_placeholder = 'Search or start here (this is the title)';
 
   constructor(private articleService: ArticleService,
     private configService: ConfigService,
@@ -38,7 +38,7 @@ export class ArticlesComponent implements OnInit {
 
   ngOnInit() {
     this.target_words = this.configService.target_words;
-    this.target_time = this.configService.target_time;
+    // this.target_time = this.configService.target_time;
     // this.articles = this.articleService.get_articles();
     console.log('Articles imported:', this.articleService.articles.length);
 
@@ -109,7 +109,7 @@ export class ArticlesComponent implements OnInit {
   key_pressed_headline(event) {
     // console.log(event.keyCode + ' ', event.key);
     // reset headline placeholder
-    this.headline_placeholder = 'Search or start new (Hit Enter to start)';
+    this.headline_placeholder = 'Search or start here (this is the title)';
     switch (event.key) {
       case 'Enter':
         if (!event.shiftKey) {

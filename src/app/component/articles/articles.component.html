@@ -18,7 +18,7 @@
           >
         </div>
       </div> -->
-      <div class="title" *ngIf='show_list'>Just 50 words</div>
+      <div class="title" *ngIf='show_list'>Just {{configService.target_words}} words</div>
       <div class="list-group" id="article-list-container" [style.height.px]="listHeight">
         <span *ngFor="let article of articleService.filtered_articles; let i=index">
           <a href="#" class="list-group-item list-group-item-action flex-column align-items-start" 
@@ -54,11 +54,7 @@
             [article_title]="articleService.current_article ? articleService.current_article.title : ''"
             [article_content]="articleService.current_article ? articleService.current_article.content : ''"
           ></app-word-count>
-          <span class="btn btn-sm btn-outline-dark">
-            
-            <span class="counter time-counter">
-              <span class="oi oi-clock"></span> 23:42 </span> <span class="oi oi-caret-right"></span>
-          </span>
+          <app-writing-timer></app-writing-timer>
           <!-- <button type="button" class="btn btn-primary btn-sm">
             <span class="oi oi-pencil"></span> Edit </button> -->
           <button type="button" class="btn btn-dark btn-sm" (click)="new_article_button_click()">
@@ -67,7 +63,6 @@
           <button type="button" class="btn btn-small btn-link btn-sm">
             <span class="oi oi-menu"></span>
           </button>
-
         </div>
       </div>
       <div class="row">
@@ -94,7 +89,7 @@
           [style.height.px]="editorHeight"
           [(ngModel)]="current_article.content"
           (keyup)="key_pressed_textarea($event)"
-          placeholder="Hit Enter to continue writing this article&#10;Press SHIFT + Enter edit the top article on the left&#10;&#10;Remember, you just have to write 50 words to maintain your streak.&#10;&#10;You are awesome !!!"></textarea>
+          placeholder="Hit Enter to continue writing this article&#10;Press SHIFT + Enter to edit the selected article on the left&#10;&#10;Remember, you just have to write {{configService.target_words}} words to maintain your streak.&#10;&#10;You are awesome !!!"></textarea>
           <app-message></app-message>
         </div>
       </div>

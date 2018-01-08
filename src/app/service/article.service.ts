@@ -87,7 +87,7 @@ export class ArticleService {
   }
 
   auto_save_start() {
-    this.msgService.add('Will save automatically when you stop typing.');
+    // this.msgService.add('Will save automatically when you stop typing.');
 
     if (this.autosave_timeout) {
       clearTimeout(this.autosave_timeout);
