@@ -38,6 +38,16 @@ export class FileService {
       message = 'Contents saved automatically';
     }
     // message = message + ' in ' + article_file;
+
+    const date = new Date();
+    // const year = date.getFullYear();
+    // const month = date.getMonth() + 1;
+    // const day = date.getDate();
+    const hour = date.getHours();
+    const minutes = date.getMinutes();
+    const seconds = date.getSeconds();
+
+    message = message + ' at ' + hour + ':' + minutes + ':' + seconds;
     this.msgService.add(message, 'success');
   }
 

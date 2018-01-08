@@ -62,23 +62,30 @@ export class WordCountComponent implements OnInit {
     // const text = this.article_title + ' ' + this.article_content;
     const text = this.article_content;
     let word_count = this.wordCountService.get_word_count(text);
+    const half_way = this.target_words / 2;
+    const half_way_end = half_way + 10;
+    const full_way_end = this.target_words + 10;
     if (this.old_word_count) {
       word_count = word_count - this.old_word_count;
     }
     if (word_count < this.target_words) {
       this.word_count = this.target_words - word_count;
       this.label = 'Words left';
-      if (word_count < this.target_words / 2) {
+      if (word_count < half_way) {
         this.class = 'btn-danger';
       } else {
         this.class = 'btn-warning';
-        this.msgService.add('You are halfway there. Keep on writing.', 'warning');
+        if (word_count >= half_way && word_count <= half_way_end) {
+          this.msgService.add('You are halfway there. Keep on writing.', 'warning');
+        }
       }
     } else {
       this.word_count = word_count;
       this.label = 'Words typed';
       this.class = 'btn-outline-dark';
-      this.msgService.add('You did it! Proud of you.', 'success');
+      if (word_count <= full_way_end) {
+        this.msgService.add('You did it! Proud of you.', 'success');
+      }
     }
 
     // const name: SimpleChange = changes.name;
