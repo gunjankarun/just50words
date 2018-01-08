@@ -1,11 +1,13 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-// import { TemplateRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { NgxElectronModule } from 'ngx-electron';
 
 import { AppComponent } from './app.component';
 import { ArticlesComponent } from './component/articles/articles.component';
 import { MessageComponent } from './component/message/message.component';
+import { WordCountComponent } from './component/word-count/word-count.component';
+import { WritingTimerComponent } from './component/writing-timer/writing-timer.component';
 
 import { ArticleService } from './service/article.service';
 import { ConfigService } from './service/config.service';
@@ -15,9 +17,7 @@ import { WordCountService } from './service/word-count.service';
 
 import { FilterArticlesPipe } from './pipe/filter-articles.pipe';
 import { TimeAgoPipe } from './pipe/time-ago.pipe';
-import { WordCountComponent } from './component/word-count/word-count.component';
 import { WordCountPipe } from './pipe/word-count.pipe';
-import { WritingTimerComponent } from './component/writing-timer/writing-timer.component';
 
 
 @NgModule({
@@ -33,7 +33,8 @@ import { WritingTimerComponent } from './component/writing-timer/writing-timer.c
   ],
   imports: [
     BrowserModule,
-    FormsModule
+    FormsModule,
+    NgxElectronModule
   ],
   providers: [ArticleService, ConfigService, MessageService, FileService, WordCountService],
   bootstrap: [AppComponent]

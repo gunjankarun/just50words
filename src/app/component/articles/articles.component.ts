@@ -1,4 +1,5 @@
 import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
+import { ElectronService } from 'ngx-electron';
 import { Article } from '../../article';
 import { ArticleService } from '../../service/article.service';
 import { ConfigService } from '../../service/config.service';
@@ -32,8 +33,18 @@ export class ArticlesComponent implements OnInit {
     private configService: ConfigService,
     private msgService: MessageService,
     private fileService: FileService,
-    private elRef: ElementRef) {
+    private elRef: ElementRef,
+    private electronService: ElectronService
+  ) {
       // constructor
+  }
+
+  launch_window() {
+    if (this.electronService.isElectronApp) {
+      this.electronService.shell.openExternal('https://google.com');
+    }else {
+      console.log ('Not an electron app. hence could not launch_window');
+    }
   }
 
   ngOnInit() {
