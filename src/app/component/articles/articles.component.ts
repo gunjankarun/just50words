@@ -97,18 +97,13 @@ export class ArticlesComponent implements OnInit {
 
   key_pressed_textarea(event) {
     this.articleService.update_summary();
-    if (!this.articleService.current_article) {
-      // this.new_article();
-      // do nothing
-    } else {
-      this.articleService.auto_save_start();
-    }
-
+    this.articleService.save_article();
   }
 
   key_pressed_headline(event) {
     // console.log(event.keyCode + ' ', event.key);
     // reset headline placeholder
+    this.articleService.save_article();
     this.headline_placeholder = 'Search or start here (this is the title)';
     switch (event.key) {
       case 'Enter':

@@ -83,7 +83,12 @@ export class ArticleService {
   }
 
   save_article() {
-    this.msgService.add('Saving Article', this.current_article.title);
+    if (!this.current_article) {
+      // this.new_article();
+      // do nothing
+    } else {
+      this.auto_save_start();
+    }
   }
 
   auto_save_start() {

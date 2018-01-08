@@ -26,6 +26,9 @@
             *ngIf='article.title || article.summary'
             [class.active]="((i==0 && select_first_article) || (article==current_article))"
             >
+            <!-- <button type="button" class="btn btn-link btn-sm btn-delete-article">
+              <span class="oi oi-circle-x"></span>
+            </button> -->
               <div class="d-flex w-100 justify-content-between">
                 <h5 class="article-list-title">{{article.title}}</h5>
               </div>

@@ -22,7 +22,10 @@ export class FileService {
       }else {
         article_title = 'article';
       }
-      const article_file_name = article.title.split(/\s+/).join('-') + '-' + random_number;
+      let article_file_name = 'article';
+      if (article.title) {
+        article_file_name = article.title.split(/\s+/).join('-') + '-' + random_number;
+      }
       article_file = this.configService.article_folder + '/' + article_file_name;
       article.content_file = article_file;
     }

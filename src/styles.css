@@ -98,6 +98,14 @@ body{
     margin-bottom: 10px;
 }
 
+/* .btn-delete-article{
+    position: absolute;
+    top: 7px;
+    right: 0px;
+    color: red;
+    display: none;
+} */
+
 .btn-article-list{
     float: left;
     margin-left: -15px;
