@@ -21,10 +21,11 @@
       <div class="title" *ngIf='show_list'>Just {{configService.target_words}} words</div>
       <div class="list-group" id="article-list-container" [style.height.px]="listHeight">
         <span *ngFor="let article of articleService.filtered_articles; let i=index">
-          <a href="#" class="list-group-item list-group-item-action flex-column align-items-start" 
+          <span class="list-group-item list-group-item-action flex-column align-items-start" 
             (click)="select_article(article)"
             *ngIf='article.title || article.summary'
             [class.active]="((i==0 && select_first_article) || (article==current_article))"
+            style= "cursor: pointer;"
             >
             <!-- <button type="button" class="btn btn-link btn-sm btn-delete-article">
               <span class="oi oi-circle-x"></span>
@@ -39,7 +40,7 @@
                 <span class="badge badge-info">
                   <span class="oi oi-tags"></span> {{article.content| wordCount}}</span>
               </div>
-          </a>
+          </span>
         </span>
       </div>
     </div>
