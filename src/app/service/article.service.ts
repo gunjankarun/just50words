@@ -36,32 +36,37 @@ export class ArticleService {
         summary: 'One One One Four Lorem ipsum, dolor sit amet consectetur adipisicing elit. Voluptatibus ducimus adipisci ipsum illum numquam aliquam...',
         content: 'Lorem iOne One One Four Lorem ipsum dolor sit amet consectetur adipisicing elit. Commodi voluptatem quisquam impedit alias praesentium reprehenderit officiis quis error odio voluptas nam ab pariatur id assumenda cum quos, harum, sed quas!',
         content_file: null,
-        date_added: d1
+        date_added: d1,
+        date_updated: d1
       },
       {
         title: 'This is my second article',
         summary: 'Facere officia One Two Three Four earum repellat laboriosam amet iste quod explicabo distinctio! Totam minus at culpa illo...',
         content: 'Lorem ipsum One Two Three Four earum dolor sit amet consectetur adipisicing elit. Commodi voluptatem quisquam impedit alias praesentium reprehenderit officiis quis error odio voluptas nam ab pariatur id assumenda cum quos, harum, sed quas!',
         content_file: null,
-        date_added: d2
+        date_added: d2,
+        date_updated: d2
       },
       {
         title: 'This is my third article',
         summary: 'Officia earum repellat laboriosam amet iste quod explicabo distinctio! Totam minus at culpa illo...',
         content: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Commodi voluptatem quisquam impedit alias praesentium reprehenderit officiis quis error odio voluptas nam ab pariatur id assumenda cum quos, harum, sed quas!',
         content_file: null,
-        date_added: d3
+        date_added: d3,
+        date_updated: d3
       },
       {
         title: 'This is my fourth article',
         summary: 'Dolor sit amet consectetur adipisicing elit. Voluptatibus ducimus adipisci ipsum illum numam illium elit sit...',
         content: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Commodi voluptatem quisquam impedit alias praesentium reprehenderit officiis quis error odio voluptas nam ab pariatur id assumenda cum quos, harum, sed quas!',
         content_file: null,
-        date_added: d1
+        date_added: d1,
+        date_updated: d1
       },
     ];
 
     this.articles = all_articles;
+    this.sort_article_list();
     this.msgService.add('Loaded ' + this.articles.length + ' articles');
     console.log('Loaded articles ', this.articles.length);
   }
@@ -78,7 +83,8 @@ export class ArticleService {
       summary: null,
       content: null,
       content_file: null,
-      date_added: d
+      date_added: d,
+      date_updated: d
     };
   }
 
@@ -102,6 +108,7 @@ export class ArticleService {
       this.msgService.add('Starting auto save');
 
       this.fileService.save_article(this.current_article, true);
+      this.sort_article_list();
 
     }, this.autosave_interval);
   }
@@ -124,6 +131,16 @@ export class ArticleService {
         found = item.content.toLowerCase().indexOf(filter_str) !== -1;
       }
       return found;
+    });
+  }
+
+  sort_article_list() {
+    this.articles.sort(function (a, b) {
+      const d1 = new Date(a.date_updated);
+      const d2 = new Date(b.date_updated);
+      // console.log('Comparing dates ', d1);
+      // console.log('with ', d2);
+      return d1 > d2 ? -1 : d1 < d2 ? 1 : 0;
     });
   }
 

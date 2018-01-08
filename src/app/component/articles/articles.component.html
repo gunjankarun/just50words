@@ -35,7 +35,7 @@
               <div *ngIf='(article.summary)'>{{article.summary}}</div>
               <div class="text-right" >
                 <small class=" badge badge-warning">
-                  <span class="oi oi-clock"></span> {{article.date_added | timeAgo}}</small>
+                  <span class="oi oi-clock"></span> {{article.date_updated | timeAgo}}</small>
                 <span class="badge badge-info">
                   <span class="oi oi-tags"></span> {{article.content| wordCount}}</span>
               </div>

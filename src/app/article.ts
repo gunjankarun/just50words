@@ -4,4 +4,5 @@ export class Article {
     content_file: string;
     content: string;
     date_added: Date;
+    date_updated: Date;
 }

@@ -29,6 +29,8 @@ export class FileService {
       article_file = this.configService.article_folder + '/' + article_file_name;
       article.content_file = article_file;
     }
+    const d = new Date();
+    article.date_updated = d;
     const article_file_contents = JSON.stringify(article);
 
     let message = 'Contents saved successfully';
