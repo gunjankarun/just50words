@@ -166,3 +166,26 @@ input#headline {
 .footer-alert .close{
     font-size: 16px;
 }
+
+.word-count-missed{
+    background-color: red;
+    color:white;
+}
+
+.word-count-low{
+    background-color: greenyellow;
+}
+
+.word-count-medium{
+    background-color: lightgreen;
+}
+
+.word-count-high{
+    background-color: green;
+    color:white;
+}
+
+.word-count-very-high{
+    background-color: darkgreen;
+    color:white;
+}

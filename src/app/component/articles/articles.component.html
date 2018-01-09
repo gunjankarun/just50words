@@ -48,7 +48,7 @@
     <div class="col-sm right-content">
       <div class="row info-row" [class.celebrate]="celebrate">
         <div class="col-sm text-right">
-          
+          <app-writing-streak [show_list]='show_list'></app-writing-streak>
           <button type="button" class="btn btn-dark btn-sm float-left btn-article-list" 
             [innerHTML]="show_list_label"
             (click)="toggle_list()"

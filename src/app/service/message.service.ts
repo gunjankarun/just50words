@@ -23,6 +23,11 @@ export class MessageService {
     this.messages.push(message);
     this.show_message = true;
 
+    // console.log ('About to show notification');
+    // const myNotification = new Notification('Just 50 Words', {
+    //   body: message
+    // });
+
     if (this.message_timeout) {
       clearInterval(this.message_timeout);
     }

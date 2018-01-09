@@ -17,6 +17,11 @@ export class ConfigService {
   continuous_sessions = 4; // how many sessions in one set. Big break after these number of small breaks
   long_break = 10; // how long will the long break be after continuous session counts
 
+  // Streak related parameters
+  word_count_low = 100; // upto 100 words will be low
+  word_count_medium = 250; // upto 250 words will be medium
+  word_count_high = 500; // more than 500 words will be high
+
   constructor() {
 
   }
