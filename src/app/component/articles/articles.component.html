@@ -18,9 +18,17 @@
           >
         </div>
       </div> -->
-      <div class="title" *ngIf='show_list'>Just {{configService.target_words}} words</div>
+      <div class="title" *ngIf='show_list'>Just {{_configService.target_words}} words</div>
       <div class="list-group" id="article-list-container" [style.height.px]="listHeight">
-        <span *ngFor="let article of articleService.filtered_articles; let i=index">
+        <span class="list-group-item list-group-item-action flex-column align-items-start" *ngIf='!_articleService.articles'>
+          It appears that you do not have any articles/contents yet.
+          <br>
+          Click on 'New' Button or Start Typing the title and Hit ENTER to start a new article.
+          <hr>
+          <strong class="text-center">  You will see a list of your old articles here.</strong>
+        </span>
+
+        <span *ngFor="let article of _articleService.filtered_articles; let i=index">
           <span class="list-group-item list-group-item-action flex-column align-items-start" 
             (click)="select_article(article)"
             *ngIf='article.title || article.summary'
@@ -55,8 +63,8 @@
             >  </button>
             <!-- &nbsp;&nbsp;<div class="title" *ngIf='!show_list' style="float:left;">Just 50 Words</div> -->
           <app-word-count 
-            [article_title]="articleService.current_article ? articleService.current_article.title : ''"
-            [article_content]="articleService.current_article ? articleService.current_article.content : ''"
+            [article_title]="_articleService.current_article ? _articleService.current_article.title : ''"
+            [article_content]="_articleService.current_article ? _articleService.current_article.content : ''"
             [article]="current_article ? current_article : null"
           ></app-word-count>
           <app-writing-timer></app-writing-timer>
@@ -94,7 +102,7 @@
           [style.height.px]="editorHeight"
           [(ngModel)]="current_article.content"
           (keyup)="key_pressed_textarea($event)"
-          placeholder="Hit Enter to continue writing this article&#10;Press SHIFT + Enter to edit the selected article on the left&#10;&#10;Remember, you just have to write {{configService.target_words}} words to maintain your streak.&#10;&#10;You are awesome !!!"></textarea>
+          placeholder="Hit Enter to continue writing this article&#10;Press SHIFT + Enter to edit the selected article on the left&#10;&#10;Remember, you just have to write {{_configService.target_words}} words to maintain your streak.&#10;&#10;You are awesome !!!"></textarea>
           <app-message></app-message>
         </div>
       </div>

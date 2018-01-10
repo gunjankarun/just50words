@@ -13,10 +13,10 @@ export class MessageComponent implements OnInit {
     type: 'info'
   };
 
-  constructor(private msgService: MessageService) { }
+  constructor(private _msgService: MessageService) { }
 
   ngOnInit() {
-    this.current_message = this.msgService.current_message;
+    this.current_message = this._msgService.current_message;
   }
 
 }

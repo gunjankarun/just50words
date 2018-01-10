@@ -6,7 +6,7 @@ export class MessageService {
 
   messages: string[] = [];
   show_message = false;
-  message_timeout_interval = this.configService.message_dismiss_after * 1000;
+  message_timeout_interval = this._configService.message_dismiss_after * 1000;
   message_timeout: any;
 
   current_message: Message= {
@@ -14,7 +14,7 @@ export class MessageService {
     type: null
   };
 
-  constructor(private configService: ConfigService) { }
+  constructor(private _configService: ConfigService) { }
 
   add(message: string, type: string = 'warning') {
     // console.log('MSG: ', message);

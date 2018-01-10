@@ -9,7 +9,7 @@ export class ConfigService {
   article_folder = this.application_root + 'articles';
   article_summary_folder = this.application_root + 'articles';
   message_dismiss_after = 5; // number of seconds after which we dismiss the notification messages
-  auto_save_after = 3; // number of seconds to wait after the user stops typing to autosave articles
+  auto_save_after = 1; // number of seconds to wait after the user stops typing to autosave articles
 
   // Schedule related tasks
   work_session = 15; // minutes to work

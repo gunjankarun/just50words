@@ -16,7 +16,7 @@ export class WordCountComponent implements OnInit {
   @Input() article_content: string;
   @Input() article: Article;
 
-  target_words = this.configService.target_words;
+  target_words = this._configService.target_words;
 
   old_word_count = 0;
 
@@ -28,9 +28,9 @@ export class WordCountComponent implements OnInit {
   class = 'btn-outline-dark';
 
   constructor(
-    private configService: ConfigService,
-    private wordCountService: WordCountService,
-    private msgService: MessageService
+    private _configService: ConfigService,
+    private _wordCountService: WordCountService,
+    private _msgService: MessageService
   ) { }
 
   ngOnInit() {
@@ -43,7 +43,7 @@ export class WordCountComponent implements OnInit {
       const article = articleChange.currentValue;
       // const old_text = this.article.title + ' ' + this.article.content;
       const old_text = this.article.content;
-      this.old_word_count = this.wordCountService.get_word_count(old_text);
+      this.old_word_count = this._wordCountService.get_word_count(old_text);
       this.word_count = this.target_words;
       return false;
     }
@@ -59,9 +59,8 @@ export class WordCountComponent implements OnInit {
       this.article_content  = article_content_change.currentValue;
     }
 
-    // const text = this.article_title + ' ' + this.article_content;
     const text = this.article_content;
-    let word_count = this.wordCountService.get_word_count(text);
+    let word_count = this._wordCountService.get_word_count(text);
     const half_way = this.target_words / 2;
     const half_way_end = half_way + 10;
     const full_way_end = this.target_words + 10;
@@ -76,7 +75,7 @@ export class WordCountComponent implements OnInit {
       } else {
         this.class = 'btn-warning';
         if (word_count >= half_way && word_count <= half_way_end) {
-          this.msgService.add('You are halfway there. Keep on writing.', 'warning');
+          this._msgService.add('You are halfway there. Keep on writing.', 'warning');
         }
       }
     } else {
@@ -84,13 +83,8 @@ export class WordCountComponent implements OnInit {
       this.label = 'Words typed';
       this.class = 'btn-outline-dark';
       if (word_count <= full_way_end) {
-        this.msgService.add('You did it! Proud of you.', 'success');
+        this._msgService.add('You did it! Proud of you.', 'success');
       }
     }
-
-    // const name: SimpleChange = changes.name;
-    // console.log('prev value: ', name.previousValue);
-    // console.log('got name: ', name.currentValue);
-    // this._name = name.currentValue.toUpperCase();
   }
 }

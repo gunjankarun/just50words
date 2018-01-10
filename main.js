@@ -1,6 +1,7 @@
 const { app, BrowserWindow } = require('electron')
 const path = require('path')
 const url = require('url')
+require('./electron-src/file-operations');
 
 let win
 
@@ -15,7 +16,7 @@ function createWindow() {
     }))
 
     // Open the DevTools optionally:
-    // win.webContents.openDevTools()
+    win.webContents.openDevTools()
 
     win.on('closed', () => {
         win = null

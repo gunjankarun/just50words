@@ -29,49 +29,41 @@ export class ArticlesComponent implements OnInit {
   old_title: string;
   headline_placeholder = 'Search or start here (this is the title)';
 
-  constructor(private articleService: ArticleService,
-    private configService: ConfigService,
-    private msgService: MessageService,
-    private fileService: FileService,
-    private elRef: ElementRef,
-    private electronService: ElectronService
+  constructor(private _articleService: ArticleService,
+    private _configService: ConfigService,
+    private _msgService: MessageService,
+    private _elRef: ElementRef,
+    private _electronService: ElectronService
   ) {
       // constructor
   }
 
   launch_window() {
-    if (this.electronService.isElectronApp) {
-      this.electronService.shell.openExternal('https://google.com');
+    if (this._electronService.isElectronApp) {
+      this._electronService.shell.openExternal('https://google.com');
     }else {
       console.log ('Not an electron app. hence could not launch_window');
     }
   }
 
   ngOnInit() {
-    this.target_words = this.configService.target_words;
-    // this.target_time = this.configService.target_time;
-    // this.articles = this.articleService.get_articles();
-    console.log('Articles imported:', this.articleService.articles.length);
+    this.target_words = this._configService.target_words;
 
-    this.current_article = this.articleService.get_blank_article();
-    // this.articleService.current_article = this.current_article;
-    // this.articleService.articles.unshift(this.current_article);
-
-    this.articleService.filtered_articles = this.articleService.articles;
+    this.current_article = this._articleService.get_blank_article();
   }
 
   ngAfterViewInit() {
     console.log ('DOM loaded');
-    this.editor_object = this.elRef.nativeElement.querySelector('#editor');
-    this.headline_object = this.elRef.nativeElement.querySelector('#headline');
+    this.editor_object = this._elRef.nativeElement.querySelector('#editor');
+    this.headline_object = this._elRef.nativeElement.querySelector('#headline');
     // console.log(this.editor_object);
     // console.log(this.vc_editor.nativeElement.value);
   }
   select_article(article) {
-    this.articleService.current_article = article;
-    this.current_article = this.articleService.current_article;
+    this._articleService.current_article = article;
+    this.current_article = this._articleService.current_article;
     this.search_term = '';
-    this.msgService.add('Loaded article "' +  article.title + '"', 'info');
+    this._msgService.add('Loaded article "' +  article.title + '"', 'info');
     this.editor_object.focus();
   }
 
@@ -86,16 +78,19 @@ export class ArticlesComponent implements OnInit {
   }
 
   search_article(event) {
+    if (!this._articleService.articles) {
+      return ;
+    }
     // console.log('Search Article triggered', event);
     // Do not search on title typing if the user is already working on an article
-    if (this.articleService.current_article) {
+    if (this._articleService.current_article) {
       return false;
     }
     this.select_first_article = true;
-    this.msgService.add('Hit Enter/Return key to add/edit this article');
+    this._msgService.add('Hit Enter/Return key to add/edit this article');
     this.search_term = this.current_article.title;
-    this.articleService.filter_articles(this.search_term);
-    if (!this.articleService.filtered_articles.length) {
+    this._articleService.filter_articles(this.search_term);
+    if (!this._articleService.filtered_articles.length) {
       console.log('Search term with this article not found');
     }
   }
@@ -107,35 +102,36 @@ export class ArticlesComponent implements OnInit {
   }
 
   key_pressed_textarea(event) {
-    this.articleService.update_summary();
-    this.articleService.save_article();
+    this._articleService.update_summary();
+    this._articleService.save_article();
   }
 
   key_pressed_headline(event) {
     // console.log(event.keyCode + ' ', event.key);
-    // reset headline placeholder
-    this.articleService.save_article();
+
+    // Do not save articles if only the headline is being changed.
+    // this._articleService.save_article();
     this.headline_placeholder = 'Search or start here (this is the title)';
     switch (event.key) {
       case 'Enter':
         if (!event.shiftKey) {
           this.new_article();
         } else {
-          console.log('User clicked shift + Enter');
-          if (!this.articleService.filtered_articles.length) {
-            console.log('Going to create new article now');
-            if (!this.articleService.current_article) {
+          // console.log('User clicked shift + Enter');
+          if (!this._articleService.filtered_articles.length) {
+            // console.log('Going to create new article now');
+            if (!this._articleService.current_article) {
               this.new_article();
             }
           } else {
-            console.log('Selecting existing article to edit');
-            let selected_article = this.articleService.filtered_articles[0];
+            // console.log('Selecting existing article to edit');
+            const selected_article = this._articleService.filtered_articles[0];
             this.select_article(selected_article);
           }
         }
         this.editor_object.focus();
         // reset the filtered articles list
-        this.articleService.filtered_articles = this.articleService.articles;
+        this._articleService.filtered_articles = this._articleService.articles;
 
         // disable selecting the first article
         this.select_first_article = false;
@@ -156,16 +152,16 @@ export class ArticlesComponent implements OnInit {
   new_article_button_click() {
     this.old_title = '';
     this.headline_placeholder = 'Start typing here. Hit enter to save';
-    this.current_article = this.articleService.get_blank_article();
-    this.articleService.current_article = this.current_article;
-    this.articleService.articles.unshift(this.current_article);
+    this.current_article = this._articleService.get_blank_article();
+    this._articleService.current_article = this.current_article;
+    this._articleService.articles.unshift(this.current_article);
     this.headline_object.focus();
   }
 
   new_article() {
     console.log ('Creating new article');
     // first copy the current title
-    let temp_title = this.current_article.title;
+    const temp_title = this.current_article.title;
 
     // Now check if there was an old title
     if (this.old_title) {
@@ -173,10 +169,13 @@ export class ArticlesComponent implements OnInit {
       this.old_title = '';
     }
 
-    this.current_article = this.articleService.get_blank_article();
+    this.current_article = this._articleService.get_blank_article();
     this.current_article.title = temp_title;
-    this.articleService.current_article = this.current_article;
-    this.articleService.articles.unshift(this.current_article);
+    this._articleService.current_article = this.current_article;
+    if (!this._articleService.articles) {
+      this._articleService.articles = [];
+    }
+    this._articleService.articles.unshift(this.current_article);
   }
 
 }
