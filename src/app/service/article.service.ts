@@ -121,7 +121,7 @@ export class ArticleService {
     }
 
     this.autosave_timeout = setTimeout(() => {
-      this._msgService.add('Starting auto save');
+      // this._msgService.add('Starting auto save');
 
       this._fileService.save_article(this.current_article, true);
       this._fileService.save_articles(this.articles, true);
@@ -141,7 +141,7 @@ export class ArticleService {
       return;
     }
     // this.filtered_articles = this.articles;
-    // console.log('Searching for ' + filter_str + ' and filtered articles are ' + this.filtered_articles.length);
+    console.log('Searching for ' + filter_str + ' and filtered articles are ' + this.filtered_articles.length);
     filter_str = filter_str.toLowerCase();
     this.filtered_articles = this.articles.filter(function (item) {
       let found = false;

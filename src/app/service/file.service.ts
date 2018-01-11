@@ -38,7 +38,7 @@ export class FileService {
       article.content_file = article_file;
     }
     // const article_file_contents = JSON.stringify(article);
-    const article_file_contents = '# ' + article.title + '\r\n' + article.content;
+    const article_file_contents = '# ' + article.title + '\r\n\r\n' + article.content + '\r\n';
 
     const save_data = {
       file_name: article_file,

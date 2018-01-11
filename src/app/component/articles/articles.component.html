@@ -19,6 +19,22 @@
         </div>
       </div> -->
       <div class="title" *ngIf='show_list'>Just {{_configService.target_words}} words</div>
+      <div class="form-group text-center" *ngIf='_articleService.current_article'>
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <div class="input-group-text search-prefix" id="btnGroupAddon">
+              <small class="oi oi-magnifying-glass"></small>
+            </div>
+          </div>
+          <input type="text" 
+          class="form-control" 
+          id="search-box" 
+          [(ngModel)]="search_term" 
+          (ngModelChange)="search_article_from_search()"
+
+          placeholder="Search articles">
+        </div>
+      </div>
       <div class="list-group" id="article-list-container" [style.height.px]="listHeight">
         <span class="list-group-item list-group-item-action flex-column align-items-start" *ngIf='!_articleService.articles'>
           It appears that you do not have any articles/contents yet.
@@ -88,7 +104,7 @@
             [placeholder]="headline_placeholder"
             [(ngModel)]="current_article.title"
             (keyup)="key_pressed_headline($event)"
-            (ngModelChange)="search_article($event)"
+            (ngModelChange)="search_article_from_title($event, current_article.title)"
             (focus)="focus_set()"
           >
         </div>

@@ -21,7 +21,8 @@ export class ArticlesComponent implements OnInit {
   target_words: number;
   target_time: string;
   // articles: Article[];
-  search_term: string;
+  search_term = '';
+  search_term_1 = '';
   current_article: Article;
   show_list = true;
   select_first_article = false;
@@ -59,6 +60,7 @@ export class ArticlesComponent implements OnInit {
     // console.log(this.editor_object);
     // console.log(this.vc_editor.nativeElement.value);
   }
+
   select_article(article) {
     this._articleService.current_article = article;
     this.current_article = this._articleService.current_article;
@@ -77,7 +79,15 @@ export class ArticlesComponent implements OnInit {
     }
   }
 
-  search_article(event) {
+  search_article_from_search() {
+    console.log('Search term is ', this.search_term);
+    this._articleService.filter_articles(this.search_term);
+    // if (!this._articleService.filtered_articles.length) {
+    //   console.log('Search term with this article not found');
+    // }
+  }
+
+  search_article_from_title(event) {
     if (!this._articleService.articles) {
       return ;
     }
