@@ -10,7 +10,8 @@ export class MessageComponent implements OnInit {
 
   current_message: Message = {
     message: 'Waiting for msg',
-    type: 'info'
+    type: 'info',
+    msg_date: new Date()
   };
 
   constructor(private _msgService: MessageService) { }

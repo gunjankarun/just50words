@@ -5,6 +5,7 @@ import { ArticleService } from '../../service/article.service';
 import { ConfigService } from '../../service/config.service';
 import { MessageService } from '../../service/message.service';
 import { FileService } from '../../service/file.service';
+import { WordCountService } from '../../service/word-count.service';
 
 @Component({
   selector: 'app-articles',
@@ -15,6 +16,7 @@ export class ArticlesComponent implements OnInit {
 
   @Input() listHeight: number;
   @Input() editorHeight: number;
+  celebrate = false;
   editor_object: any;
   headline_object: any;
 
@@ -34,6 +36,7 @@ export class ArticlesComponent implements OnInit {
     private _configService: ConfigService,
     private _msgService: MessageService,
     private _elRef: ElementRef,
+    private _wordCountService: WordCountService,
     private _electronService: ElectronService
   ) {
       // constructor
@@ -49,7 +52,6 @@ export class ArticlesComponent implements OnInit {
 
   ngOnInit() {
     this.target_words = this._configService.target_words;
-
     this.current_article = this._articleService.get_blank_article();
   }
 
@@ -80,7 +82,7 @@ export class ArticlesComponent implements OnInit {
   }
 
   search_article_from_search() {
-    console.log('Search term is ', this.search_term);
+    // console.log('Search term is ', this.search_term);
     this._articleService.filter_articles(this.search_term);
     // if (!this._articleService.filtered_articles.length) {
     //   console.log('Search term with this article not found');
@@ -114,6 +116,7 @@ export class ArticlesComponent implements OnInit {
   key_pressed_textarea(event) {
     this._articleService.update_summary();
     this._articleService.save_article();
+    this.celebrate = this._wordCountService.celebrate;
   }
 
   key_pressed_headline(event) {
@@ -172,6 +175,7 @@ export class ArticlesComponent implements OnInit {
     console.log ('Creating new article');
     // first copy the current title
     const temp_title = this.current_article.title;
+    const temp_content = this.current_article.content;
 
     // Now check if there was an old title
     if (this.old_title) {
@@ -181,6 +185,13 @@ export class ArticlesComponent implements OnInit {
 
     this.current_article = this._articleService.get_blank_article();
     this.current_article.title = temp_title;
+    if (temp_content) {
+      const confirm_msg = `You are about to start a new article\nDo you want to clear the contents?\n\nOk will give you a blank slate.`;
+      const start_new = confirm(confirm_msg);
+      if (!start_new) {
+        this.current_article.content = temp_content;
+      }
+    }
     this._articleService.current_article = this.current_article;
     if (!this._articleService.articles) {
       this._articleService.articles = [];

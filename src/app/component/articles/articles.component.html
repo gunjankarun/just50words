@@ -81,7 +81,7 @@
           <app-word-count 
             [article_title]="_articleService.current_article ? _articleService.current_article.title : ''"
             [article_content]="_articleService.current_article ? _articleService.current_article.content : ''"
-            [article]="current_article ? current_article : null"
+            [article]="_articleService.current_article ? _articleService.current_article : null"
           ></app-word-count>
           <app-writing-timer></app-writing-timer>
           <!-- <button type="button" class="btn btn-primary btn-sm">

@@ -141,13 +141,17 @@ export class ArticleService {
       return;
     }
     // this.filtered_articles = this.articles;
-    console.log('Searching for ' + filter_str + ' and filtered articles are ' + this.filtered_articles.length);
+    // console.log('Searching for ' + filter_str + ' and filtered articles are ' + this.filtered_articles.length);
     filter_str = filter_str.toLowerCase();
     this.filtered_articles = this.articles.filter(function (item) {
       let found = false;
-      found = item.title.toLowerCase().indexOf(filter_str) !== -1;
+      if (item.title) {
+        found = item.title.toLowerCase().indexOf(filter_str) !== -1;
+      }
       if (!found) {
-        found = item.content.toLowerCase().indexOf(filter_str) !== -1;
+        if (item.content) {
+          found = item.content.toLowerCase().indexOf(filter_str) !== -1;
+        }
       }
       return found;
     });

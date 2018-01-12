@@ -11,7 +11,8 @@ export class MessageService {
 
   current_message: Message= {
     message: null,
-    type: null
+    type: null,
+    msg_date: new Date()
   };
 
   constructor(private _configService: ConfigService) { }
@@ -20,6 +21,7 @@ export class MessageService {
     // console.log('MSG: ', message);
     this.current_message.message = message;
     this.current_message.type = type;
+    this.current_message.msg_date = new Date();
     this.messages.push(message);
     this.show_message = true;
 

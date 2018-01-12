@@ -6,7 +6,18 @@ require('./electron-src/file-operations');
 let win
 
 function createWindow() {
-    win = new BrowserWindow({ width: 1000, height: 700 })
+    win = new BrowserWindow({ 
+        width: 1000, 
+        height: 700,
+        minWidth: 1000,
+        minHeight: 700,
+        backgroundColor: '#312450',
+        show: false
+    })
+        // background-color: rgb(207, 172, 126);
+    win.once('ready-to-show', () => {
+     win.show();
+ })
 
     // load the dist folder from Angular
     win.loadURL(url.format({
@@ -16,11 +27,13 @@ function createWindow() {
     }))
 
     // Open the DevTools optionally:
-    win.webContents.openDevTools()
+    // win.webContents.openDevTools()
 
     win.on('closed', () => {
         win = null
     })
+
+    require('./electron-src/main-menu');
 }
 
 app.on('ready', createWindow)
