@@ -8,7 +8,7 @@ import { ConfigService } from './config.service';
 export class ArticleService {
 
   articles: Article[];
-  filtered_articles: Article[];
+  // filtered_articles: Article[];
   current_article: Article;
   autosave_interval: number;
   autosave_timeout: any;
@@ -21,51 +21,13 @@ export class ArticleService {
     private _fileService: FileService,
     private _configService: ConfigService) {
 
-    this.load_articles();
+    // this.load_articles();
     this.autosave_interval = this._configService.auto_save_after * 1000;
     this.target_words = this._configService.target_words;
+    // this.current_article = this.get_blank_article();
    }
 
-  private load_articles() {
-    // let all_articles: Article[];
-    // const d1 = new Date('2018-01-08T09:30:51.01');
-    // const d2 = new Date('2018-01-07T09:30:51.01');
-    // const d3 = new Date('2017-08-07T19:30:51.01');
-    // all_articles = [
-    //   {
-    //     title: 'This is my first article',
-    //     summary: 'One One One Four Lorem ipsum, dolor sit amet consectetur adipisicing elit. Voluptatibus ducimus adipisci ipsum illum numquam aliquam...',
-    //     content: 'Lorem iOne One One Four Lorem ipsum dolor sit amet consectetur adipisicing elit. Commodi voluptatem quisquam impedit alias praesentium reprehenderit officiis quis error odio voluptas nam ab pariatur id assumenda cum quos, harum, sed quas!',
-    //     content_file: null,
-    //     date_added: d1,
-    //     date_updated: d1
-    //   },
-    //   {
-    //     title: 'This is my second article',
-    //     summary: 'Facere officia One Two Three Four earum repellat laboriosam amet iste quod explicabo distinctio! Totam minus at culpa illo...',
-    //     content: 'Lorem ipsum One Two Three Four earum dolor sit amet consectetur adipisicing elit. Commodi voluptatem quisquam impedit alias praesentium reprehenderit officiis quis error odio voluptas nam ab pariatur id assumenda cum quos, harum, sed quas!',
-    //     content_file: null,
-    //     date_added: d2,
-    //     date_updated: d2
-    //   },
-    //   {
-    //     title: 'This is my third article',
-    //     summary: 'Officia earum repellat laboriosam amet iste quod explicabo distinctio! Totam minus at culpa illo...',
-    //     content: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Commodi voluptatem quisquam impedit alias praesentium reprehenderit officiis quis error odio voluptas nam ab pariatur id assumenda cum quos, harum, sed quas!',
-    //     content_file: null,
-    //     date_added: d3,
-    //     date_updated: d3
-    //   },
-    //   {
-    //     title: 'This is my fourth article',
-    //     summary: 'Dolor sit amet consectetur adipisicing elit. Voluptatibus ducimus adipisci ipsum illum numam illium elit sit...',
-    //     content: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Commodi voluptatem quisquam impedit alias praesentium reprehenderit officiis quis error odio voluptas nam ab pariatur id assumenda cum quos, harum, sed quas!',
-    //     content_file: null,
-    //     date_added: d1,
-    //     date_updated: d1
-    //   },
-    // ];
-    // this.articles = all_articles;
+  load_articles(next) {
     const scope = this;
     scope._fileService.load_articles(function(err, articles){
       if (err) {
@@ -76,9 +38,10 @@ export class ArticleService {
         scope.articles = articles;
         scope.sort_article_list();
         const article_count = scope.articles.length;
-        scope.filtered_articles = scope.articles;
+        // scope.filtered_articles = scope.articles;
 
         scope._msgService.add('Loaded ' + article_count + ' articles');
+        next();
         // }
       }
     });
@@ -92,10 +55,10 @@ export class ArticleService {
   get_blank_article() {
     const d = new Date();
     return {
-      title: null,
-      summary: null,
-      content: null,
-      content_file: null,
+      title: '',
+      summary: '',
+      content: '',
+      content_file: '',
       date_added: d,
       date_updated: d
     };
@@ -134,27 +97,6 @@ export class ArticleService {
     if (this.autosave_timeout) {
       clearTimeout(this.autosave_timeout);
     }
-  }
-
-  filter_articles(filter_str: string) {
-    if (!this.articles) {
-      return;
-    }
-    // this.filtered_articles = this.articles;
-    // console.log('Searching for ' + filter_str + ' and filtered articles are ' + this.filtered_articles.length);
-    filter_str = filter_str.toLowerCase();
-    this.filtered_articles = this.articles.filter(function (item) {
-      let found = false;
-      if (item.title) {
-        found = item.title.toLowerCase().indexOf(filter_str) !== -1;
-      }
-      if (!found) {
-        if (item.content) {
-          found = item.content.toLowerCase().indexOf(filter_str) !== -1;
-        }
-      }
-      return found;
-    });
   }
 
   sort_article_list() {

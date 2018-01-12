@@ -1,5 +1,5 @@
-<p class="alert alert-{{current_message.type}} footer-alert" *ngIf='_msgService.current_message.message' >
-  {{_msgService.current_message.message}}
+<p class="alert alert-{{current_message.type}} footer-alert" *ngIf='current_message.message' >
+  {{current_message.message}}
 
   <!-- <button type="button" class="close" aria-label="Close">
     <span aria-hidden="true">&times;</span>

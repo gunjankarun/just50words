@@ -39,7 +39,7 @@ export class WritingStreakService {
     return streak_data;
   }
 
-  prepare_streak_data(num_days: number = 5) {
+  prepare_streak_data(num_days: number = 5, next) {
     const old_dates = [];
     const today = new Date();
     const today_date = today.getDate();
@@ -100,6 +100,7 @@ export class WritingStreakService {
       final_array.push(temp_strk);
     }, this);
     this.streaks = final_array;
+    next (null, this.streaks);
   }
 
 }

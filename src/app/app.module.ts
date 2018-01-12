@@ -20,6 +20,8 @@ import { TimeAgoPipe } from './pipe/time-ago.pipe';
 import { WordCountPipe } from './pipe/word-count.pipe';
 import { WritingStreakComponent } from './component/writing-streak/writing-streak.component';
 import { WritingStreakService } from './service/writing-streak.service';
+import { EditorService } from './service/editor.service';
+import { EditorComponent } from './component/editor/editor.component';
 
 
 @NgModule({
@@ -32,14 +34,15 @@ import { WritingStreakService } from './service/writing-streak.service';
     WordCountComponent,
     WordCountPipe,
     WritingTimerComponent,
-    WritingStreakComponent
+    WritingStreakComponent,
+    EditorComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
     NgxElectronModule
   ],
-  providers: [ArticleService, ConfigService, MessageService, FileService, WordCountService, WritingStreakService],
+  providers: [ArticleService, ConfigService, MessageService, FileService, WordCountService, WritingStreakService, EditorService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

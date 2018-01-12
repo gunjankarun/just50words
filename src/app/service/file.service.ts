@@ -17,7 +17,7 @@ export class FileService {
   ) { }
 
   save_article(article: Article, autosave = false) {
-    console.log('saving content: ', article.title);
+    // console.log('saving content: ', article.title);
     // let inputWords = article.title.split(/\s+/);
     let article_file: string;
     if (article.content_file) {
@@ -73,6 +73,8 @@ export class FileService {
 
   save(save_data, autosave) {
     // Now save this here
+    // this._msgService.add('Going to save the article now', 'primary');
+
     if (this._electronService.isElectronApp) {
       console.log('Electron app Sending to save');
       this.ipc.send('send-to-save', save_data);
@@ -103,7 +105,7 @@ export class FileService {
         scope._msgService.add(err_message, 'danger');
       });
     } else {
-      console.log('Cannot save file, not an electron app');
+      // console.log('Cannot save file, not an electron app');
     }
   }
 
@@ -137,8 +139,8 @@ export class FileService {
         scope._msgService.add(message, 'success');
         next(null, result);
       } catch (error) {
-        console.log('Could not parse JSON ', error);
-        const err_message = 'Could not parse JSON';
+        console.log('Loading error ', error);
+        const err_message = 'File loading error';
         scope._msgService.add(err_message, 'danger');
         next(error, null);
       }

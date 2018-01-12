@@ -18,8 +18,8 @@
           >
         </div>
       </div> -->
-      <div class="title" *ngIf='show_list'>Just {{_configService.target_words}} words</div>
-      <div class="form-group text-center" *ngIf='_articleService.current_article'>
+      <div class="title" *ngIf='show_list'>Just {{target_words}} words</div>
+      <div class="form-group text-center" *ngIf='current_article'>
         <div class="input-group">
           <div class="input-group-prepend">
             <div class="input-group-text search-prefix" id="btnGroupAddon">
@@ -30,13 +30,13 @@
           class="form-control" 
           id="search-box" 
           [(ngModel)]="search_term" 
-          (ngModelChange)="search_article_from_search()"
+          (keyup)="search_article_from_search($event)"
 
           placeholder="Search articles">
         </div>
       </div>
       <div class="list-group" id="article-list-container" [style.height.px]="listHeight">
-        <span class="list-group-item list-group-item-action flex-column align-items-start" *ngIf='!_articleService.articles'>
+        <span class="list-group-item list-group-item-action flex-column align-items-start" *ngIf='!articles'>
           It appears that you do not have any articles/contents yet.
           <br>
           Click on 'New' Button or Start Typing the title and Hit ENTER to start a new article.
@@ -44,7 +44,7 @@
           <strong class="text-center">  You will see a list of your old articles here.</strong>
         </span>
 
-        <span *ngFor="let article of _articleService.filtered_articles; let i=index">
+        <span *ngFor="let article of filtered_articles; let i=index">
           <span class="list-group-item list-group-item-action flex-column align-items-start" 
             (click)="select_article(article)"
             *ngIf='article.title || article.summary'
@@ -79,9 +79,9 @@
             >  </button>
             <!-- &nbsp;&nbsp;<div class="title" *ngIf='!show_list' style="float:left;">Just 50 Words</div> -->
           <app-word-count 
-            [article_title]="_articleService.current_article ? _articleService.current_article.title : ''"
-            [article_content]="_articleService.current_article ? _articleService.current_article.content : ''"
-            [article]="_articleService.current_article ? _articleService.current_article : null"
+            [article_title]="current_article ? current_article.title : ''"
+            [article_content]="current_article ? current_article.content : ''"
+            [article]="current_article ? current_article : null"
           ></app-word-count>
           <app-writing-timer></app-writing-timer>
           <!-- <button type="button" class="btn btn-primary btn-sm">
@@ -101,10 +101,10 @@
             id="headline" 
             spellcheck="true" 
             autofocus
-            [placeholder]="headline_placeholder"
+            placeholder="Start typing here"
             [(ngModel)]="current_article.title"
             (keyup)="key_pressed_headline($event)"
-            (ngModelChange)="search_article_from_title($event, current_article.title)"
+            (ngModelChange)="search_article_from_title($event)"
             (focus)="focus_set()"
           >
         </div>
@@ -118,7 +118,7 @@
           [style.height.px]="editorHeight"
           [(ngModel)]="current_article.content"
           (keyup)="key_pressed_textarea($event)"
-          placeholder="Hit Enter to continue writing this article&#10;Press SHIFT + Enter to edit the selected article on the left&#10;&#10;Remember, you just have to write {{_configService.target_words}} words to maintain your streak.&#10;&#10;You are awesome !!!"></textarea>
+          placeholder="Hit Enter to continue writing this article&#10;Press SHIFT + Enter to edit the selected article on the left&#10;&#10;Remember, you just have to write {{target_words}} words to maintain your streak.&#10;&#10;You are awesome !!!"></textarea>
           <app-message></app-message>
         </div>
       </div>

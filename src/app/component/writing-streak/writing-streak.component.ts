@@ -8,7 +8,7 @@ import { WritingStreakService } from '../../service/writing-streak.service';
 })
 export class WritingStreakComponent implements OnInit {
   @Input() show_list: boolean;
-  streak_data: any;
+  streaks: any;
 
   constructor(
     private _writingStreakService: WritingStreakService
@@ -17,8 +17,10 @@ export class WritingStreakComponent implements OnInit {
   }
 
   ngOnInit() {
-    this._writingStreakService.prepare_streak_data();
-    this.streak_data = this._writingStreakService.streaks;
+    const scope = this;
+    this._writingStreakService.prepare_streak_data(10, function(err, streaks){
+      scope.streaks = streaks;
+    });
   }
 
 }

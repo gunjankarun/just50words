@@ -14,7 +14,9 @@ export class MessageComponent implements OnInit {
     msg_date: new Date()
   };
 
-  constructor(private _msgService: MessageService) { }
+  constructor(private _msgService: MessageService) {
+    this.current_message = this._msgService.current_message;
+  }
 
   ngOnInit() {
     this.current_message = this._msgService.current_message;

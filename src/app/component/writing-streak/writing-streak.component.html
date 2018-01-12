@@ -3,7 +3,7 @@
   <!-- <span *ngFor='let day of [9,8,7,6,5,4,3,2,1]' class='badge badge-pill badge-success' style='margin-right: 2px; border-radius: 10px !important;'>
     {{day}}
   </span> -->
-  <span *ngFor='let streak_item of _writingStreakService.streaks; let i = index;'>
+  <span *ngFor='let streak_item of streaks; let i = index;'>
     <span class='badge badge-pill'
       *ngIf="(show_list && i < 5) || (!show_list && i < 15)"
       [ngClass]="streak_item.style"
