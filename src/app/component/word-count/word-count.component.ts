@@ -71,6 +71,14 @@ export class WordCountComponent implements OnInit {
     if (this.old_word_count) {
       word_count = word_count - this.old_word_count;
     }
+
+    if (word_count === this.target_words) {
+      if (this._configService.play_target_reached_sound) {
+        const audio = new Audio(this._configService.target_reached_sound);
+        audio.play();
+      }
+    }
+
     if (word_count < this.target_words) {
       this.word_count = this.target_words - word_count;
       this.label = 'Words left';

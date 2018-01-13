@@ -12,7 +12,9 @@ export class WritingTimerComponent implements OnInit {
   timer_label = '12:34';
   play_pause_icon = 'oi-media-play';
   class = 'btn-outline-dark';
+  class_old = '';
   session_label = 'Start';
+  session_label_old = '';
 
   total_time = 0;
   session_time = 0;
@@ -26,12 +28,12 @@ export class WritingTimerComponent implements OnInit {
 
 
 
-  target_time = this.configService.work_session * 60   ; // convert minutes to seconds
+  target_time = this._configService.work_session * 60   ; // convert minutes to seconds
 
   constructor(
-    private configService: ConfigService,
-    private msgService: MessageService,
-    private wordCountService: WordCountService
+    private _configService: ConfigService,
+    private _msgService: MessageService,
+    private _wordCountService: WordCountService
   ) {}
 
   ngOnInit() {
@@ -39,19 +41,28 @@ export class WritingTimerComponent implements OnInit {
   }
 
   toggle_timer() {
-    this.session_label = 'Write';
     if (this.timer_on) {
+      this.session_label_old = this.session_label;
+      this.class_old = this.class;
+      this.session_label = 'Resume';
       this.play_pause_icon = 'oi-media-play';
       this.stop_timer();
       this.timer_on = false;
       this.class = 'btn-secondary';
     }else {
+      if (this.session_count) {
+        this.session_label = this.session_label_old;
+        this.class = this.class_old;
+      } else {
+        this.session_label = 'Write';
+        this.class = 'btn-warning';
+      }
       this.play_pause_icon = 'oi-media-pause';
       this.tick_tock();
       this.timer_on = true;
-      this.class = 'btn-warning';
-
     }
+
+
   }
 
   tick_tock() {
@@ -64,6 +75,29 @@ export class WritingTimerComponent implements OnInit {
       if (this.session_time < this.target_time) {
         // do nothing
       } else {
+        // if current session is work, play the session over sound
+        if (this._configService.play_session_completed_sound) {
+          let audio: any;
+          switch (this.session_type) {
+            case 'work':
+              console.log('Playing work completed sound');
+              audio = new Audio(this._configService.work_session_complete_sound);
+              audio.play();
+              break;
+            case 'relax':
+              console.log('Playing relax completed sound');
+              audio = new Audio(this._configService.short_break_complete_sound);
+              audio.play();
+              break;
+            case 'long-relax':
+              console.log('Playing long-relax completed sound');
+              audio = new Audio(this._configService.long_break_complete_sound);
+              audio.play();
+              break;
+            default:
+              break;
+          }
+        }
         this.change_session();
       }
 
@@ -81,28 +115,31 @@ export class WritingTimerComponent implements OnInit {
   change_session() {
     // get session count and figure out if it is write or relax session and reset session count
     // reset session time
-    console.log('Changing session');
+    console.log('Changing session from ' + this.session_type);
     this.session_time = 0;
 
     if (this.session_type === 'work') {
-      this.session_type = 'relax';
-      this.session_label = 'Relax';
       this.break_count++;
-      if (this.break_count % this.configService.continuous_sessions) {
-        this.target_time = this.configService.short_break * 60;
-        this.msgService.add('Relax. Take a ' + this.configService.short_break + ' minutes break.');
+      this.session_count = this.break_count + 2;
+      if (this.break_count % this._configService.continuous_sessions) {
+        this.session_label = 'Relax';
+        this.session_type = 'relax';
+        this.target_time = this._configService.short_break * 60;
+        this._msgService.add('Relax. Take a ' + this._configService.short_break + ' minutes break.');
       }else {
-        this.target_time = this.configService.long_break * 60;
-        this.msgService.add('Good job. You completed '+ this.break_count + ' sessions. Take a ' + this.configService.long_break + ' minutes break.');
+        this.session_label = 'Break';
+        this.session_type = 'long-relax';
+        this.target_time = this._configService.long_break * 60;
+        this._msgService.add('Good job. You completed '+ this.break_count + ' sessions. Take a ' + this._configService.long_break + ' minutes break.');
       }
       this.class = 'btn-primary';
     }else {
       this.session_type = 'work';
-      this.session_label = 'Write';
-      this.target_time = this.configService.work_session * 60;
+      this.session_label = 'Write (' + this.break_count + ')';
+      this.target_time = this._configService.work_session * 60;
       this.class = 'btn-warning';
-      this.target_time = this.configService.work_session * 60;
-      this.msgService.add('Let\'s get back to writing. Write for ' + this.configService.work_session + ' minutes.');
+      this.target_time = this._configService.work_session * 60;
+      this._msgService.add('Let\'s get back to writing. Write for ' + this._configService.work_session + ' minutes.');
     }
   }
 
