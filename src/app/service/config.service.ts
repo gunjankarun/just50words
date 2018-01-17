@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 @Injectable()
 export class ConfigService {
   // Targets
-  target_words = 5;
+  target_words = 50;
   words_in_summary = 20;
   application_root = '/Users/gunjan/Projects/just50words/';
   article_folder = this.application_root + 'articles';
@@ -16,14 +16,14 @@ export class ConfigService {
   // Schedule related tasks
   play_session_completed_sound = true;
 
-  work_session = .25; // minutes to work
+  work_session = 10; // minutes to work
   work_session_complete_sound = 'assets/sound/filling.mp3';
 
-  short_break = .1; // short break sessions
+  short_break = 5; // short break sessions
   short_break_complete_sound = 'assets/sound/relentless.mp3';
 
   continuous_sessions = 2; // how many sessions in one set. Big break after these number of small breaks
-  long_break = .35; // how long will the long break be after continuous session counts
+  long_break = 15; // how long will the long break be after continuous session counts
   long_break_complete_sound = 'assets/sound/glass-breaking.mp3';
 
   // Streak related parameters

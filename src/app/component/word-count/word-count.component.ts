@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, OnInit, OnChanges, SimpleChanges, SimpleChange  } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, OnChanges, SimpleChanges, SimpleChange } from '@angular/core';
 
 import { ConfigService } from '../../service/config.service';
 import { WordCountService } from '../../service/word-count.service';
@@ -54,13 +54,13 @@ export class WordCountComponent implements OnInit {
 
     const article_title_change: SimpleChange = changes.article_title;
     if (article_title_change) {
-      this.article_title  = article_title_change.currentValue;
+      this.article_title = article_title_change.currentValue;
     }
 
     const article_content_change: SimpleChange = changes.article_content;
     if (article_content_change) {
       // console.log ('Content changed');
-      this.article_content  = article_content_change.currentValue;
+      this.article_content = article_content_change.currentValue;
     }
 
     const text = this.article_content;
@@ -97,7 +97,7 @@ export class WordCountComponent implements OnInit {
       if (word_count <= full_way_end) {
         this._wordCountService.celebrate = true;
         this._msgService.add('You did it! Proud of you.', 'success');
-      }else {
+      } else {
         this._wordCountService.celebrate = false;
       }
     }

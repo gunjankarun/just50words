@@ -8,6 +8,7 @@ import { MessageService } from '../../service/message.service';
   templateUrl: './writing-timer.component.html',
   styleUrls: ['./writing-timer.component.css']
 })
+
 export class WritingTimerComponent implements OnInit {
   timer_label = '12:34';
   play_pause_icon = 'oi-media-play';
