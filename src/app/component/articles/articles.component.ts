@@ -22,6 +22,7 @@ export class ArticlesComponent implements OnInit {
   celebrate = false;
   editor_object: any;
   headline_object: any;
+  headline_font = 'form-control font-large';
 
   target_words: number;
   target_time: string;
@@ -133,6 +134,12 @@ export class ArticlesComponent implements OnInit {
     this.update_summary();
     this.save_articles();
     this.celebrate = this._wordCountService.celebrate;
+    if (this._configService.play_keypress_sound) {
+      const audio = new Audio(this._configService.keypress_sound);
+      const abc = 'AAA';
+      audio.play();
+    }
+
   }
 
   key_pressed_headline(event) {
@@ -181,6 +188,8 @@ export class ArticlesComponent implements OnInit {
       default:
         break;
     }
+
+    this.update_font_class();
   }
 
   new_article_button_click() {
@@ -284,5 +293,16 @@ export class ArticlesComponent implements OnInit {
     this.search_term = '';
   }
 
+  update_font_class() {
+    const headline_length = this.current_article.title.length;
+    if (headline_length <= 45) {
+      this.headline_font = 'form-control font-large';
+    } else if (headline_length > 45 && headline_length <= 60) {
+      this.headline_font = 'form-control font-normal';
+    }else if (headline_length > 60 ) {
+      this.headline_font = 'form-control font-small';
+    }
+
+  }
 
 }

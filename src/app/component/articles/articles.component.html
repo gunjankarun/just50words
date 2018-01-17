@@ -97,10 +97,10 @@
       <div class="row">
         <div class="col-sm">
           <input type="text" 
-            class="form-control" 
             id="headline" 
             spellcheck="true" 
             autofocus
+            [class]='headline_font'
             placeholder="Start typing here"
             [(ngModel)]="current_article.title"
             (keyup)="key_pressed_headline($event)"

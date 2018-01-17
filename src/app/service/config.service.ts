@@ -13,6 +13,9 @@ export class ConfigService {
   target_reached_sound = 'assets/sound/notification-sound.mp3';
   play_target_reached_sound = true;
 
+  play_keypress_sound = false;
+  keypress_sound = 'assets/sound/tick.wav';
+
   // Schedule related tasks
   play_session_completed_sound = true;
 

@@ -142,9 +142,17 @@ input#headline, #editor{
 }
 
 input#headline {
-    font-size: 24px;
     font-family: 'Lora', serif;
-    /* font-style: italic; */
+}
+
+input#headline.font-large {
+    font-size: 24px;
+}
+input#headline.font-normal {
+    font-size: 19px;
+}
+input#headline.font-small {
+    font-size: 16px;
 }
 
 #editor{
