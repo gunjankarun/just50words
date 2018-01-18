@@ -13,14 +13,13 @@ import { WordCountService } from '../../service/word-count.service';
   styleUrls: ['./articles.component.css']
 })
 export class ArticlesComponent implements OnInit {
-
   @Input() listHeight: number;
   @Input() editorHeight: number;
+  @Input() editor_object: any;
 
   articles: Article[];
   filtered_articles: Article[];
   celebrate = false;
-  editor_object: any;
   headline_object: any;
   headline_font = 'form-control font-large';
 
@@ -35,19 +34,20 @@ export class ArticlesComponent implements OnInit {
   old_title: string;
   // headline_placeholder = 'Search or start here (this is the title)';
 
-  constructor(private _articleService: ArticleService,
+  constructor(
+    private _articleService: ArticleService,
     private _configService: ConfigService,
     private _msgService: MessageService,
     private _elRef: ElementRef,
     private _wordCountService: WordCountService,
     private _electronService: ElectronService
   ) {
-      // constructor
+    // constructor
 
     // this.current_article = this._articleService.get_blank_article();
     this.new_article();
     const scope = this;
-    this._articleService.load_articles(function(err, articles){
+    this._articleService.load_articles(function(err, articles) {
       scope.articles = scope._articleService.articles;
       // scope.filtered_articles = scope.articles;
       scope.reset_list();
@@ -57,8 +57,8 @@ export class ArticlesComponent implements OnInit {
   launch_window() {
     if (this._electronService.isElectronApp) {
       this._electronService.shell.openExternal('https://google.com');
-    }else {
-      console.log ('Not an electron app. hence could not launch_window');
+    } else {
+      console.log('Not an electron app. hence could not launch_window');
     }
   }
 
@@ -69,11 +69,12 @@ export class ArticlesComponent implements OnInit {
   }
 
   ngAfterViewInit() {
-    console.log ('DOM loaded');
-    this.editor_object = this._elRef.nativeElement.querySelector('#editor');
+    console.log('DOM loaded');
     this.headline_object = this._elRef.nativeElement.querySelector('#headline');
-    // console.log(this.editor_object);
-    // console.log(this.vc_editor.nativeElement.value);
+  }
+
+  create_editor_object(obj: any) {
+    this.editor_object = obj;
   }
 
   select_article(article) {
@@ -83,7 +84,7 @@ export class ArticlesComponent implements OnInit {
     this.current_article = article;
     this._articleService.current_article = this.current_article;
     this.reset_list();
-    this._msgService.add('Loaded article "' +  article.title + '"', 'info');
+    this._msgService.add('Loaded article "' + article.title + '"', 'info');
     this.editor_object.focus();
   }
 
@@ -131,25 +132,10 @@ export class ArticlesComponent implements OnInit {
   }
 
   key_pressed_textarea(event) {
+    // console.log('Keypressed in articles.component');
     this.update_summary();
     this.save_articles();
     this.celebrate = this._wordCountService.celebrate;
-
-    // Play the sound
-    if (this._configService.play_keypress_sound) {
-      const audio = new Audio(this._configService.keypress_sound);
-      const abc = 'AAA';
-      audio.play();
-    }
-
-    switch (event.key) {
-      case 'Enter':
-        // format text
-        this.format_text();
-        break;
-      default:
-        break;
-    }
   }
 
   key_pressed_headline(event) {
@@ -213,7 +199,7 @@ export class ArticlesComponent implements OnInit {
   }
 
   new_article() {
-    console.log ('Creating new article');
+    console.log('Creating new article');
     // make sure that the last empty item is trimmed
     this.trim_last_empty_item();
 
@@ -256,7 +242,7 @@ export class ArticlesComponent implements OnInit {
     // this.filtered_articles = this.articles;
     // console.log('Searching for ' + filter_str + ' and filtered articles are ' + this.filtered_articles.length);
     filter_str = filter_str.toLowerCase();
-    this.filtered_articles = this.articles.filter(function (item) {
+    this.filtered_articles = this.articles.filter(function(item) {
       let found = false;
       if (item.title) {
         found = item.title.toLowerCase().indexOf(filter_str) !== -1;
@@ -277,7 +263,7 @@ export class ArticlesComponent implements OnInit {
       this._articleService.articles = this.articles;
       this._articleService.current_article = this.current_article;
       this._articleService.save_article();
-    }else {
+    } else {
       console.log('Skipping save article');
     }
   }
@@ -309,89 +295,8 @@ export class ArticlesComponent implements OnInit {
       this.headline_font = 'form-control font-large';
     } else if (headline_length > 45 && headline_length <= 60) {
       this.headline_font = 'form-control font-normal';
-    }else if (headline_length > 60 ) {
+    } else if (headline_length > 60) {
       this.headline_font = 'form-control font-small';
     }
   }
-
-  format_text() {
-
-    const start_pos = this.editor_object.selectionStart;
-    const end_pos = this.editor_object.selectionEnd;
-    // console.log ('selection start = ' + start_pos + ' and sel end = ' + end_pos);
-    const content_till_cursor = this.current_article.content.substr(0, start_pos);
-    // console.log('content_till_cursor', content_till_cursor);
-    const lines = content_till_cursor.split('\n');
-    const last_line = lines.length ? lines[lines.length - 2] : '';
-    const index_space = last_line.search(/\S|$/);
-    // console.log('index space', index_space);
-    let spaces = '';
-    if (index_space) {
-      for (let i = 0; i < index_space; i++) {
-        spaces = spaces + ' ';
-      }
-    }
-
-    // get bullet chars
-    const first_two_chars: string = last_line.substr(index_space, 2);
-    const arr_first_two_chars = first_two_chars.split('');
-    // console.log('First two chars are ', arr_first_two_chars);
-    if (arr_first_two_chars && arr_first_two_chars.length === 2) {
-      if (arr_first_two_chars[1] === ' ') {
-        const first_char = arr_first_two_chars[0];
-        const letters = /^[0-9a-zA-Z]+$/;
-        const is_alphanumeric = first_char.match(letters);
-        // console.log('Alpha numeric is ', is_alphanumeric);
-        if (!is_alphanumeric){
-          spaces = spaces + arr_first_two_chars.join('');
-        }
-      }
-    }
-
-    // Now create numbered list
-    const numbers_found = last_line.match(/(^[\s\d]+)(.+$)/i);
-    console.log('Numbers found', numbers_found);
-    if (numbers_found) {
-      const number_found = numbers_found[1];
-      const number_separator: string = last_line.substr(number_found.length, 2);
-      const arr_number_separator = number_separator.split('');
-      if (arr_number_separator && arr_number_separator.length === 2) {
-        if (arr_number_separator[1] === ' ') {
-          const first_char = arr_number_separator[0];
-          if (first_char === '.') {
-            const new_number = +number_found + 1;
-            spaces = spaces + new_number + arr_number_separator.join('');
-            // todo: now need to parse all future lines and if number found in future lines, then we update those numbers as well
-          }
-        }
-      }
-    }
-
-    // Update the text with bullets or indents
-    if (spaces) {
-      this.current_article.content = content_till_cursor + spaces + this.current_article.content.substr(end_pos, this.current_article.content.length);
-      // console.log('About to set selection start = ' + start_pos + ' and sel end = ' + end_pos);
-      this.editor_object.setSelectionRange(start_pos, end_pos);
-      // this.editor.nativeElement.setSelectionRange(start_pos, start_pos);
-      // const elem = document.getElementById('editor');
-      // elem.focus();
-      // elem.setSelectionRange(start_pos, start_pos);
-    }
-  }
-
-  // setSelectionRange(input, selectionStart, selectionEnd) {
-  //   if (input.setSelectionRange) {
-  //     console.log('in selection range');
-  //     input.focus();
-  //     input.setSelectionRange(selectionStart, selectionEnd);
-  //   } else if (input.createTextRange) {
-  //     console.log('in createTextRange');
-  //     const range = input.createTextRange();
-  //     range.collapse(true);
-  //     range.moveEnd('character', selectionEnd);
-  //     range.moveStart('character', selectionStart);
-  //     range.select();
-  //   }
-  // }
-
 }

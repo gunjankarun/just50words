@@ -111,15 +111,12 @@
       </div>
       <div>
         <div class="form-group">
-          <textarea 
-          #edit1
-          class="form-control" 
-          id="editor" 
-          spellcheck="true" 
-          [style.height.px]="editorHeight"
-          [(ngModel)]="current_article.content"
-          (keyup)="key_pressed_textarea($event)"
-          placeholder="Hit Enter to continue writing this article&#10;Press SHIFT + Enter to edit the selected article on the left&#10;&#10;Remember, you just have to write {{target_words}} words to maintain your streak.&#10;&#10;You are awesome !!!"></textarea>
+          <app-editor
+            [editorHeight]="editorHeight"
+            (keyup)="key_pressed_textarea($event)"
+            (editor_object_created)="create_editor_object($event)"
+            [(content)]="this.current_article.content"
+          ></app-editor>
           <app-message></app-message>
         </div>
       </div>

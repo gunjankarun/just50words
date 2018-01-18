@@ -20,6 +20,7 @@ import { TimeAgoPipe } from './pipe/time-ago.pipe';
 import { WordCountPipe } from './pipe/word-count.pipe';
 import { WritingStreakComponent } from './component/writing-streak/writing-streak.component';
 import { WritingStreakService } from './service/writing-streak.service';
+import { EditorComponent } from './component/editor/editor.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import { WritingStreakService } from './service/writing-streak.service';
     WordCountComponent,
     WordCountPipe,
     WritingTimerComponent,
-    WritingStreakComponent
+    WritingStreakComponent,
+    EditorComponent
   ],
   imports: [
     BrowserModule,

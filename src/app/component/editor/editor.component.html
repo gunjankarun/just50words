@@ -1,0 +1,9 @@
+<textarea 
+  class="form-control" 
+  id="editor" 
+  spellcheck="true" 
+  [style.height.px]="editorHeight" 
+  (keyup)="on_keyup($event)"
+  [(ngModel)]="content"
+  (ngModelChange)="change_content($event)"
+></textarea>
