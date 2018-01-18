@@ -1,9 +1,11 @@
 import { Injectable } from '@angular/core';
+import { Constants } from '../constants';
 
 @Injectable()
 export class ConfigService {
   // Targets
   target_words = 50;
+  target_words_countdown_type = Constants.WORD_COUNT_TYPE.WORD_COUNT;
   words_in_summary = 20;
   application_root = '/Users/gunjan/Projects/just50words/';
   article_folder = this.application_root + 'articles';
@@ -18,6 +20,7 @@ export class ConfigService {
 
   // Schedule related tasks
   play_session_completed_sound = true;
+  session_celebration_duration = 3 ; // how long will the celebration banner last
 
   work_session = 10; // minutes to work
   work_session_complete_sound = 'assets/sound/filling.mp3';
@@ -34,8 +37,5 @@ export class ConfigService {
   word_count_medium = 250; // upto 250 words will be medium
   word_count_high = 500; // more than 500 words will be high
 
-  constructor() {
-
-  }
-
+  constructor() {}
 }

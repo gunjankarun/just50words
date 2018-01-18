@@ -1,4 +1,4 @@
-<span class="btn btn-sm" [ngClass]="class">
+<span class="btn btn-sm" [ngClass]="class" (click)="toggle_mode()">
   {{label}}
   <span class="badge badge-light counter word-counter">
     <span class="oi oi-tags"></span> {{word_count}} </span>

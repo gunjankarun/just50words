@@ -92,7 +92,7 @@ export class EditorComponent implements OnInit {
 
     // Now create numbered list
     const numbers_found = last_line.match(/(^[\s\d]+)(.+$)/i);
-    console.log('Numbers found', numbers_found);
+    // console.log('Numbers found', numbers_found);
     if (numbers_found) {
       const number_found = numbers_found[1];
       const number_separator: string = last_line.substr(number_found.length, 2);

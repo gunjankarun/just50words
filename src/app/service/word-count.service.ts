@@ -11,7 +11,7 @@ export class WordCountService {
       return 0;
     }
     let matches: any;
-    matches = text.match(/[\w\d]+/gi);
+    matches = text.trim().match(/[\w\d]+/gi);
     // console.log('matches=', matches);
     const word_count = matches ? matches.length : 0;
     return word_count;
