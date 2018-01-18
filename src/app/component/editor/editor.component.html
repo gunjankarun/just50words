@@ -3,6 +3,7 @@
   id="editor" 
   spellcheck="true" 
   [style.height.px]="editorHeight" 
+  [style.boxShadow]="write_or_die_class"
   (keyup)="on_keyup($event)"
   [(ngModel)]="content"
   (ngModelChange)="change_content($event)"

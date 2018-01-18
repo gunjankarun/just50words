@@ -12,7 +12,6 @@ import { WordCountService } from '../../service/word-count.service';
   templateUrl: './articles.component.html',
   styleUrls: ['./articles.component.css']
 })
-
 export class ArticlesComponent implements OnInit {
   @Input() listHeight: number;
   @Input() editorHeight: number;
@@ -267,5 +266,10 @@ export class ArticlesComponent implements OnInit {
     } else if (headline_length > 60) {
       this.headline_font = 'form-control font-small';
     }
+  }
+
+  nuke_content() {
+    console.log('Content Nuked');
+    this.current_article.content = '';
   }
 }

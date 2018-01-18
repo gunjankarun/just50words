@@ -7,6 +7,7 @@ import {
   ElementRef
 } from '@angular/core';
 import { ConfigService } from '../../service/config.service';
+import { MessageService } from '../../service/message.service';
 
 @Component({
   selector: 'app-editor',
@@ -19,12 +20,17 @@ export class EditorComponent implements OnInit {
   @Input() target_words = '';
   @Input() content = '';
   @Output() contentChange: EventEmitter<any> = new EventEmitter();
+  @Output() nuked: EventEmitter<any> = new EventEmitter();
   editor_object: any;
+  write_or_die_class = '';
+  write_or_die_interval = this._configService.write_or_die_interval ;
+  write_or_die_timer: any;
   @Output() editor_object_created: EventEmitter<any> = new EventEmitter();
 
   constructor(
     private _configService: ConfigService,
-    private _elRef: ElementRef
+    private _elRef: ElementRef,
+    private _msgService: MessageService
   ) {}
 
   ngOnInit() {
@@ -56,6 +62,11 @@ export class EditorComponent implements OnInit {
         break;
       default:
         break;
+    }
+
+    if (this._configService.write_or_die) {
+      this.write_or_die_reset();
+      this.write_or_die();
     }
   }
 
@@ -133,4 +144,41 @@ export class EditorComponent implements OnInit {
       // elem.setSelectionRange(start_pos, start_pos);
     }
   }
+
+  write_or_die() {
+    // Do not start the timer if there is no content.
+    const value = this.editor_object.value.trim();
+    if (!value) {
+      return;
+    }
+    if (this.write_or_die_timer) {
+      clearInterval(this.write_or_die_timer);
+    }
+    this.write_or_die_timer = setTimeout(() => {
+      // this._wordCountService.celebrate = false;
+      this.write_or_die_interval--;
+      const shadow_spread = -1 * this.write_or_die_interval;
+      this.write_or_die_class = 'inset 0px 0px 100px ' + shadow_spread + 'px red';
+      this._msgService.add('Nuking the contents in ' + this.write_or_die_interval + ' seconds. Start typing to save.', 'warning');
+      if (this.write_or_die_interval <= 0 ) {
+        console.log ('Time over');
+        this._msgService.add('Content NUKED!!!', 'danger');
+
+        const audio = new Audio(this._configService.write_or_die_nuked_sound);
+        audio.play();
+
+        this.nuked.emit();
+        clearInterval(this.write_or_die_timer);
+      }else {
+        this.write_or_die();
+      }
+    }, 1000);
+  }
+
+  write_or_die_reset() {
+    this.write_or_die_interval = this._configService.write_or_die_interval;
+    this.write_or_die_class = '';
+
+  }
+
 }
