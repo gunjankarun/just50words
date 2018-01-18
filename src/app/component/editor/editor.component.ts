@@ -24,7 +24,7 @@ export class EditorComponent implements OnInit {
   @Output() nuked: EventEmitter<any> = new EventEmitter();
   editor_object: any;
   write_or_nuke_class = '';
-  write_or_nuke_interval = this._configService.write_or_nuke_interval ;
+  write_or_nuke_interval = this._configService.write_or_nuke_interval;
   write_or_nuke_timer: any;
   @Output() editor_object_created: EventEmitter<any> = new EventEmitter();
 
@@ -138,13 +138,18 @@ export class EditorComponent implements OnInit {
         spaces +
         this.content.substr(end_pos, this.content.length);
       // console.log('About to set selection start = ' + start_pos + ' and sel end = ' + end_pos);
-      this.editor_object.setSelectionRange(start_pos, end_pos);
-      // this.editor.nativeElement.setSelectionRange(start_pos, start_pos);
-      // const elem = document.getElementById('editor');
-      // elem.focus();
-      // elem.setSelectionRange(start_pos, start_pos);
+      let pos_timer: any;
+      if (pos_timer) {
+        clearInterval(pos_timer);
+      }
+      pos_timer = setTimeout(() => {
+        const cursor_pos = start_pos + spaces.length;
+        this.editor_object.focus();
+        this.editor_object.setSelectionRange(cursor_pos, cursor_pos);
+      }, 10);
     }
   }
+
 
   write_or_nuke() {
     // Do not start the timer if word count is more than target words.
@@ -153,7 +158,7 @@ export class EditorComponent implements OnInit {
     }
     // console.log('word_count is ', this.word_count);
     // Do not start the timer if there is no content.
-    if (this.word_count === 0 ) {
+    if (this.word_count === 0) {
       return;
     }
     if (this.write_or_nuke_timer) {
@@ -163,17 +168,23 @@ export class EditorComponent implements OnInit {
       // this._wordCountService.celebrate = false;
       this.write_or_nuke_interval--;
       const shadow_spread = -1 * this.write_or_nuke_interval + 5;
-      this.write_or_nuke_class = 'inset 0px 0px 40px ' + shadow_spread + 'px red';
+      this.write_or_nuke_class =
+        'inset 0px 0px 40px ' + shadow_spread + 'px red';
 
       // Show the countdown timer only after half the timer is over.
-      if (this.write_or_nuke_interval <= this._configService.write_or_nuke_interval / 2) {
+      if (
+        this.write_or_nuke_interval <=
+        this._configService.write_or_nuke_interval / 2
+      ) {
         const remaining_words = this.target_words - this.word_count;
-        let msg = 'Nuking the contents in ' + this.write_or_nuke_interval + ' seconds.';
-        msg = msg + ' Type ' + remaining_words  + ' more words to disable nuking.';
+        let msg =
+          'Nuking the contents in ' + this.write_or_nuke_interval + ' seconds.';
+        msg =
+          msg + ' Type ' + remaining_words + ' more words to disable nuking.';
         this._msgService.add(msg, 'warning');
       }
-      if (this.write_or_nuke_interval <= 0 ) {
-        console.log ('Time over');
+      if (this.write_or_nuke_interval <= 0) {
+        console.log('Time over');
         this._msgService.add('Content NUKED!!!', 'danger');
 
         const audio = new Audio(this._configService.write_or_nuke_nuked_sound);
@@ -181,7 +192,7 @@ export class EditorComponent implements OnInit {
 
         this.nuked.emit();
         clearInterval(this.write_or_nuke_timer);
-      }else {
+      } else {
         this.write_or_nuke();
       }
     }, 1000);
@@ -191,5 +202,4 @@ export class EditorComponent implements OnInit {
     this.write_or_nuke_interval = this._configService.write_or_nuke_interval;
     this.write_or_nuke_class = '';
   }
-
 }

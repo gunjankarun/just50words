@@ -273,5 +273,6 @@ export class ArticlesComponent implements OnInit {
   nuke_content() {
     console.log('Content Nuked');
     this.current_article.content = '';
+    this.current_article.summary = '';
   }
 }
