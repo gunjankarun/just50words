@@ -146,8 +146,6 @@ export class ArticlesComponent implements OnInit {
     // console.log(event.keyCode + ' ', event.key);
 
     // Do not save articles if only the headline is being changed.
-    // this._articleService.save_article();
-    // this.headline_placeholder = 'Search or start here (this is the title)';
     switch (event.key) {
       case 'Enter':
         if (!event.shiftKey) {
@@ -169,10 +167,6 @@ export class ArticlesComponent implements OnInit {
         }
         this.editor_object.focus();
         // reset the filtered articles list
-        // this.filtered_articles = this.articles;
-
-        // disable selecting the first article
-        // this.select_first_article = false;
         break;
 
       case 's':
@@ -191,10 +185,6 @@ export class ArticlesComponent implements OnInit {
 
   new_article_button_click() {
     this.old_title = '';
-    // this.headline_placeholder = 'Start typing here';
-    // this.current_article = this._articleService.get_blank_article();
-    // this._articleService.current_article = this.current_article;
-    // this._articleService.articles.unshift(this.current_article);
     this.new_article();
     this.headline_object.focus();
   }
@@ -204,28 +194,7 @@ export class ArticlesComponent implements OnInit {
     // make sure that the last empty item is trimmed
     this.trim_last_empty_item();
 
-    // first copy the current title
-    // if (!this.current_article) {
-    //   this.current_article = this._articleService.get_blank_article();
-    // }
-    // const temp_title = this.current_article.title;
-    // const temp_content = this.current_article.content;
-
-    // // Now check if there was an old title
-    // if (this.old_title) {
-    //   this.current_article.title = this.old_title;
-    //   this.old_title = '';
-    // }
-
     this.current_article = this._articleService.get_blank_article();
-    // this.current_article.title = temp_title;
-    // if (temp_content) {
-    //   const confirm_msg = `You are about to start a new article\nDo you want to clear the contents?\n\nOk will give you a blank slate.`;
-    //   const start_new = confirm(confirm_msg);
-    //   if (!start_new) {
-    //     this.current_article.content = temp_content;
-    //   }
-    // }
 
     if (!this.articles) {
       this.articles = [];
@@ -240,8 +209,7 @@ export class ArticlesComponent implements OnInit {
     if (!this.articles) {
       return;
     }
-    // this.filtered_articles = this.articles;
-    // console.log('Searching for ' + filter_str + ' and filtered articles are ' + this.filtered_articles.length);
+
     filter_str = filter_str.toLowerCase();
     this.filtered_articles = this.articles.filter(function(item) {
       let found = false;

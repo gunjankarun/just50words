@@ -16,6 +16,7 @@ export class WritingTimerComponent implements OnInit {
   class_old = '';
   session_label = 'Start';
   session_label_old = '';
+  wait_to_start = false;
 
   total_time = 0;
   session_time = 0;
@@ -26,8 +27,6 @@ export class WritingTimerComponent implements OnInit {
   tick = 1000;
   timer_on = false;
   timer: any;
-
-
 
   target_time = this._configService.work_session * 60   ; // convert minutes to seconds
 
@@ -62,8 +61,6 @@ export class WritingTimerComponent implements OnInit {
       this.tick_tock();
       this.timer_on = true;
     }
-
-
   }
 
   tick_tock() {
@@ -71,7 +68,7 @@ export class WritingTimerComponent implements OnInit {
     this.timer = setTimeout(() => {
       this.total_time++;
       this.session_time++ ;
-      // console.log (' session type= ' + this.session_type + ' break count ' + this.break_count);
+      // console.log(' session_time= ' + this.session_time + ' target_time ' + this.target_time);
 
       if (this.session_time < this.target_time) {
         // do nothing
@@ -81,17 +78,17 @@ export class WritingTimerComponent implements OnInit {
           let audio: any;
           switch (this.session_type) {
             case 'work':
-              console.log('Playing work completed sound');
+              // console.log('Playing work completed sound');
               audio = new Audio(this._configService.work_session_complete_sound);
               audio.play();
               break;
             case 'relax':
-              console.log('Playing relax completed sound');
+              // console.log('Playing relax completed sound');
               audio = new Audio(this._configService.short_break_complete_sound);
               audio.play();
               break;
             case 'long-relax':
-              console.log('Playing long-relax completed sound');
+              // console.log('Playing long-relax completed sound');
               audio = new Audio(this._configService.long_break_complete_sound);
               audio.play();
               break;
@@ -99,7 +96,20 @@ export class WritingTimerComponent implements OnInit {
               break;
           }
         }
-        this.change_session();
+        // console.log('100');
+        if (this._configService.manually_start_session) {
+          // console.log('200');
+          if (this.session_type !== 'work') {
+            // console.log('300');
+            this.wait_to_start = true;
+          }
+        }
+
+        // if (!this.wait_to_start) {
+        //   console.log('400');
+          this.change_session();
+        // }
+
       }
 
       let display_time = this.session_time;
@@ -108,15 +118,20 @@ export class WritingTimerComponent implements OnInit {
       }
 
       this.timer_label = this.format_timer(display_time);
-      this.tick_tock();
+      if (!this.wait_to_start) {
+        this.tick_tock();
+      }else {
+        this.wait_to_start = false;
+      }
     }, this.tick);
 
   }
 
   change_session() {
+
     // get session count and figure out if it is write or relax session and reset session count
     // reset session time
-    console.log('Changing session from ' + this.session_type);
+    // console.log('500 Changing session from ', this.session_type);
     this.session_time = 0;
 
     if (this.session_type === 'work') {
@@ -143,6 +158,10 @@ export class WritingTimerComponent implements OnInit {
       this.target_time = this._configService.work_session * 60;
       this._msgService.add('Let\'s get back to writing. Write for ' + this._configService.work_session + ' minutes.');
     }
+
+    if (this.wait_to_start) {
+      this.toggle_timer();
+    }
   }
 
   reset_timer() {
@@ -152,6 +171,7 @@ export class WritingTimerComponent implements OnInit {
   }
 
   stop_timer() {
+    console.log('Stop timer is called');
     clearTimeout(this.timer);
     this.play_pause_icon = 'oi-media-play';
   }

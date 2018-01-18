@@ -16,6 +16,7 @@ import { ConfigService } from '../../service/config.service';
 export class EditorComponent implements OnInit {
   @Input() editorHeight = 200;
   @Output() keyup: EventEmitter<any> = new EventEmitter();
+  @Input() target_words = '';
   @Input() content = '';
   @Output() contentChange: EventEmitter<any> = new EventEmitter();
   editor_object: any;
@@ -43,6 +44,7 @@ export class EditorComponent implements OnInit {
     // Play the sound
     if (this._configService.play_keypress_sound) {
       const audio = new Audio(this._configService.keypress_sound);
+      audio.volume = 0.1;
       audio.play();
     }
 
@@ -84,8 +86,15 @@ export class EditorComponent implements OnInit {
       // const special_chars_separator: string = last_line.substr(0, special_chars.length);
       // console.log('special_chars', special_chars);
       const arr_special_chars_separator = special_chars.split('');
-      if (arr_special_chars_separator && arr_special_chars_separator.length >= 2) {
-        if (arr_special_chars_separator[arr_special_chars_separator.length - 1] === ' ') {
+      if (
+        arr_special_chars_separator &&
+        arr_special_chars_separator.length >= 2
+      ) {
+        if (
+          arr_special_chars_separator[
+            arr_special_chars_separator.length - 1
+          ] === ' '
+        ) {
           spaces = arr_special_chars_separator.join('');
         }
       }

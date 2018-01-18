@@ -116,6 +116,7 @@
         <div class="form-group">
           <app-editor
             [editorHeight]="editorHeight"
+            [target_words]="target_words"
             (keyup)="key_pressed_textarea($event)"
             (editor_object_created)="create_editor_object($event)"
             [(content)]="this.current_article.content"
