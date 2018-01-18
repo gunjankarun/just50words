@@ -12,6 +12,7 @@ import { WordCountService } from '../../service/word-count.service';
   templateUrl: './articles.component.html',
   styleUrls: ['./articles.component.css']
 })
+
 export class ArticlesComponent implements OnInit {
   @Input() listHeight: number;
   @Input() editorHeight: number;
@@ -45,12 +46,12 @@ export class ArticlesComponent implements OnInit {
     // constructor
 
     // this.current_article = this._articleService.get_blank_article();
-    this.new_article();
     const scope = this;
     this._articleService.load_articles(function(err, articles) {
       scope.articles = scope._articleService.articles;
       // scope.filtered_articles = scope.articles;
       scope.reset_list();
+      scope.new_article();
     });
   }
 

@@ -28,7 +28,7 @@ export class EditorComponent implements OnInit {
 
   ngOnInit() {
     this.editor_object = this._elRef.nativeElement.querySelector('#editor');
-    console.log('ngOnInit ', this.editor_object.value);
+    // console.log('ngOnInit ', this.editor_object.value);
     this.editor_object_created.emit(this.editor_object);
   }
 
