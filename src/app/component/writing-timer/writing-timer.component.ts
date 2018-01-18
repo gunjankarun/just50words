@@ -136,7 +136,8 @@ export class WritingTimerComponent implements OnInit {
       this.class = 'btn-primary';
     }else {
       this.session_type = 'work';
-      this.session_label = 'Write (' + this.break_count + ')';
+      const temp_count = this.break_count + 1;
+      this.session_label = 'Write [' + temp_count + ']';
       this.target_time = this._configService.work_session * 60;
       this.class = 'btn-warning';
       this.target_time = this._configService.work_session * 60;

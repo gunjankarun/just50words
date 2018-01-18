@@ -66,8 +66,10 @@ export class WordCountComponent implements OnInit {
     this.word_count = this.target_words;
     switch (this._configService.target_words_countdown_type) {
       case Constants.WORD_COUNT_TYPE.TO_TARGET:
-      case Constants.WORD_COUNT_TYPE.COUNT_DOWN:
         this.label = 'Words left';
+        break;
+      case Constants.WORD_COUNT_TYPE.COUNT_DOWN:
+        this.label = 'To type';
         this.word_count = this.target_words;
         break;
       case Constants.WORD_COUNT_TYPE.WORD_COUNT:
@@ -139,7 +141,7 @@ export class WordCountComponent implements OnInit {
         break;
 
       case Constants.WORD_COUNT_TYPE.COUNT_DOWN:
-        this.label = 'Words left';
+        this.label = 'To type';
         word_count = word_count % this.target_words;
         if (word_count === 0 && total_word_count > 0) {
           celebrate = true;

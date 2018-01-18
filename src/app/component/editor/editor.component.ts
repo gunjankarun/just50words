@@ -75,17 +75,18 @@ export class EditorComponent implements OnInit {
     }
 
     // get bullet chars
-    const first_two_chars: string = last_line.substr(index_space, 2);
-    const arr_first_two_chars = first_two_chars.split('');
-    // console.log('First two chars are ', arr_first_two_chars);
-    if (arr_first_two_chars && arr_first_two_chars.length === 2) {
-      if (arr_first_two_chars[1] === ' ') {
-        const first_char = arr_first_two_chars[0];
-        const letters = /^[0-9a-zA-Z]+$/;
-        const is_alphanumeric = first_char.match(letters);
-        // console.log('Alpha numeric is ', is_alphanumeric);
-        if (!is_alphanumeric) {
-          spaces = spaces + arr_first_two_chars.join('');
+    // const first_two_chars: string = last_line.substr(index_space, 2);
+    const find_special_chars = last_line.match(/(^[\W]+)(.+$)/i);
+    // console.log('Special chars found', find_special_chars);
+
+    if (find_special_chars) {
+      const special_chars = find_special_chars[1];
+      // const special_chars_separator: string = last_line.substr(0, special_chars.length);
+      // console.log('special_chars', special_chars);
+      const arr_special_chars_separator = special_chars.split('');
+      if (arr_special_chars_separator && arr_special_chars_separator.length >= 2) {
+        if (arr_special_chars_separator[arr_special_chars_separator.length - 1] === ' ') {
+          spaces = arr_special_chars_separator.join('');
         }
       }
     }

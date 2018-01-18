@@ -18,7 +18,13 @@
           >
         </div>
       </div> -->
-      <div class="title" *ngIf='show_list'>Just {{target_words}} words</div>
+      <div class="title" *ngIf='show_list'>Just {{target_words}} words
+              <button type="button" class="btn btn-small btn-link btn-sm" (click)='launch_window()'>
+                <span class="oi oi-menu"></span>
+              </button>
+
+      </div>
+
       <div class="form-group text-center" *ngIf='current_article'>
         <div class="input-group">
           <div class="input-group-prepend">
@@ -89,9 +95,6 @@
           <button type="button" class="btn btn-dark btn-sm" (click)="new_article_button_click()">
             <span class="oi oi-plus"></span> New 
           </button>
-          <button type="button" class="btn btn-small btn-link btn-sm" (click)='launch_window()'>
-            <span class="oi oi-menu"></span>
-          </button>
         </div>
       </div>
       <div class="row">
@@ -101,7 +104,7 @@
             spellcheck="true" 
             autofocus
             [class]='headline_font'
-            placeholder="Start typing here"
+            placeholder="What do you want to write about?"
             [(ngModel)]="current_article.title"
             (keyup)="key_pressed_headline($event)"
             (ngModelChange)="search_article_from_title($event)"

@@ -22,14 +22,14 @@ export class ConfigService {
   play_session_completed_sound = true;
   session_celebration_duration = 3 ; // how long will the celebration banner last
 
-  work_session = 10; // minutes to work
+  work_session = .5; // minutes to work
   work_session_complete_sound = 'assets/sound/filling.mp3';
 
-  short_break = 5; // short break sessions
+  short_break = .25; // short break sessions
   short_break_complete_sound = 'assets/sound/relentless.mp3';
 
   continuous_sessions = 2; // how many sessions in one set. Big break after these number of small breaks
-  long_break = 15; // how long will the long break be after continuous session counts
+  long_break = .15; // how long will the long break be after continuous session counts
   long_break_complete_sound = 'assets/sound/glass-breaking.mp3';
 
   // Streak related parameters
