@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 @Injectable()
 export class WordCountService {
   celebrate = false;
+  word_count = 0;
 
   constructor() { }
 

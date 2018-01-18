@@ -119,6 +119,7 @@
             [target_words]="target_words"
             (keyup)="key_pressed_textarea($event)"
             (nuked)="nuke_content()"
+            [word_count]="word_count"
             (editor_object_created)="create_editor_object($event)"
             [(content)]="this.current_article.content"
           ></app-editor>

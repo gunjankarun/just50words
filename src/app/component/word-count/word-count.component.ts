@@ -33,7 +33,9 @@ export class WordCountComponent implements OnInit {
     private _configService: ConfigService,
     private _wordCountService: WordCountService,
     private _msgService: MessageService
-  ) {}
+  ) {
+    this.word_count = this._wordCountService.word_count;
+  }
 
   toggle_mode() {
     console.log('Mode Toggled');
@@ -116,6 +118,7 @@ export class WordCountComponent implements OnInit {
     let celebrate = false;
     // let target = this.target_words;
     const total_word_count = this._wordCountService.get_word_count(text);
+    this._wordCountService.word_count = total_word_count;
     let word_count = total_word_count;
     // adjust for existing contents
     if (this.old_word_count) {

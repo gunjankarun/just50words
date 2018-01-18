@@ -19,9 +19,9 @@ export class ConfigService {
   keypress_sound = 'assets/sound/tick.wav';
 
   // Schedule related tasks
-  write_or_die = true; // if true then the user has to press a key within write_or_die_interval seconds
-  write_or_die_interval = 30; // number of seconds to wait for keystrokes before clearing the content
-  write_or_die_nuked_sound = 'assets/sound/glass-breaking.mp3';
+  write_or_nuke = true; // if true then the user has to press a key within write_or_nuke_interval seconds
+  write_or_nuke_interval = 30; // number of seconds to wait for keystrokes before clearing the content
+  write_or_nuke_nuked_sound = 'assets/sound/glass-breaking.mp3';
 
   manually_start_session = true; // Whether the session timer should pause before starting the next session
   play_session_completed_sound = true; // Should we play the sounds related to completed the sessions and breaks

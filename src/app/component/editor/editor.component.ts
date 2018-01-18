@@ -17,14 +17,15 @@ import { MessageService } from '../../service/message.service';
 export class EditorComponent implements OnInit {
   @Input() editorHeight = 200;
   @Output() keyup: EventEmitter<any> = new EventEmitter();
-  @Input() target_words = '';
+  @Input() target_words = 0;
   @Input() content = '';
+  @Input() word_count = 0;
   @Output() contentChange: EventEmitter<any> = new EventEmitter();
   @Output() nuked: EventEmitter<any> = new EventEmitter();
   editor_object: any;
-  write_or_die_class = '';
-  write_or_die_interval = this._configService.write_or_die_interval ;
-  write_or_die_timer: any;
+  write_or_nuke_class = '';
+  write_or_nuke_interval = this._configService.write_or_nuke_interval ;
+  write_or_nuke_timer: any;
   @Output() editor_object_created: EventEmitter<any> = new EventEmitter();
 
   constructor(
@@ -64,9 +65,9 @@ export class EditorComponent implements OnInit {
         break;
     }
 
-    if (this._configService.write_or_die) {
-      this.write_or_die_reset();
-      this.write_or_die();
+    if (this._configService.write_or_nuke) {
+      this.write_or_nuke_reset();
+      this.write_or_nuke();
     }
   }
 
@@ -145,40 +146,50 @@ export class EditorComponent implements OnInit {
     }
   }
 
-  write_or_die() {
-    // Do not start the timer if there is no content.
-    const value = this.editor_object.value.trim();
-    if (!value) {
+  write_or_nuke() {
+    // Do not start the timer if word count is more than target words.
+    if (this.word_count >= this.target_words) {
       return;
     }
-    if (this.write_or_die_timer) {
-      clearInterval(this.write_or_die_timer);
+    // console.log('word_count is ', this.word_count);
+    // Do not start the timer if there is no content.
+    if (this.word_count === 0 ) {
+      return;
     }
-    this.write_or_die_timer = setTimeout(() => {
+    if (this.write_or_nuke_timer) {
+      clearInterval(this.write_or_nuke_timer);
+    }
+    this.write_or_nuke_timer = setTimeout(() => {
       // this._wordCountService.celebrate = false;
-      this.write_or_die_interval--;
-      const shadow_spread = -1 * this.write_or_die_interval;
-      this.write_or_die_class = 'inset 0px 0px 100px ' + shadow_spread + 'px red';
-      this._msgService.add('Nuking the contents in ' + this.write_or_die_interval + ' seconds. Start typing to save.', 'warning');
-      if (this.write_or_die_interval <= 0 ) {
+      this.write_or_nuke_interval--;
+      const shadow_spread = -1 * this.write_or_nuke_interval + 5;
+      this.write_or_nuke_class = 'inset 0px 0px 40px ' + shadow_spread + 'px red';
+
+      // Show the countdown timer only after half the timer is over.
+      if (this.write_or_nuke_interval <= this._configService.write_or_nuke_interval / 2) {
+        const remaining_words = this.target_words - this.word_count;
+        let msg = 'Nuking the contents in ' + this.write_or_nuke_interval + ' seconds.';
+        msg = msg + ' Type ' + remaining_words  + ' more words to disable nuking.';
+        this._msgService.add(msg, 'warning');
+      }
+      if (this.write_or_nuke_interval <= 0 ) {
         console.log ('Time over');
         this._msgService.add('Content NUKED!!!', 'danger');
 
-        const audio = new Audio(this._configService.write_or_die_nuked_sound);
+        const audio = new Audio(this._configService.write_or_nuke_nuked_sound);
         audio.play();
 
         this.nuked.emit();
-        clearInterval(this.write_or_die_timer);
+        clearInterval(this.write_or_nuke_timer);
       }else {
-        this.write_or_die();
+        this.write_or_nuke();
       }
     }, 1000);
   }
 
-  write_or_die_reset() {
-    this.write_or_die_interval = this._configService.write_or_die_interval;
-    this.write_or_die_class = '';
-
+  write_or_nuke_reset() {
+    this.write_or_nuke_interval = this._configService.write_or_nuke_interval;
+    this.write_or_nuke_class = '';
   }
 
 }

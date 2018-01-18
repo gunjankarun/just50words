@@ -24,6 +24,7 @@ export class ArticlesComponent implements OnInit {
   headline_font = 'form-control font-large';
 
   target_words: number;
+  word_count = 0;
   target_time: string;
   // articles: Article[];
   search_term = '';
@@ -136,6 +137,7 @@ export class ArticlesComponent implements OnInit {
     this.update_summary();
     this.save_articles();
     this.celebrate = this._wordCountService.celebrate;
+    this.word_count = this._wordCountService.word_count;
   }
 
   key_pressed_headline(event) {
