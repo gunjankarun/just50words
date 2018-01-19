@@ -35,6 +35,7 @@ export class ArticlesComponent implements OnInit {
   old_title: string;
   // headline_placeholder = 'Search or start here (this is the title)';
   write_or_nuke_mode = this._configService.write_or_nuke;
+  write_or_nuke_show_button = this._configService.write_or_nuke_show_button;
 
   constructor(
     private _articleService: ArticleService,

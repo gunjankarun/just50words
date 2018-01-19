@@ -95,6 +95,7 @@
           <button 
             type="button" 
             class="btn btn-sm" 
+            *ngIf = "write_or_nuke_show_button"
             [class.btn-danger]='write_or_nuke_mode'
             (click)='toggle_write_or_nuke()'
             placement="left" ngbTooltip="Toggle 'Write or Nuke' mode"
