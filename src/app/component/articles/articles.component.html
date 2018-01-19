@@ -90,10 +90,22 @@
             [article]="current_article ? current_article : null"
           ></app-word-count>
           <app-writing-timer></app-writing-timer>
-          <!-- <button type="button" class="btn btn-primary btn-sm">
-            <span class="oi oi-pencil"></span> Edit </button> -->
+          <button 
+            type="button" 
+            class="btn btn-sm" 
+            [class.btn-danger]='write_or_nuke_mode'
+            (click)='toggle_write_or_nuke()'
+          >
+            <span class="oi oi-fire"></span>
+          </button>
           <button type="button" class="btn btn-dark btn-sm" (click)="new_article_button_click()">
-            <span class="oi oi-plus"></span> New 
+            <span class="oi oi-plus"></span> 
+          </button>
+          <button type="button" 
+            class="btn btn-warning btn-sm" 
+            *ngIf = "current_article.content"
+            (click)="delete_article()">
+            <span class="oi oi-trash"></span> 
           </button>
         </div>
       </div>

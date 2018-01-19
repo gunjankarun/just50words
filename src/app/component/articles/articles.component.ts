@@ -34,6 +34,7 @@ export class ArticlesComponent implements OnInit {
   show_list_label = '<span class="oi oi-caret-left"> </span>';
   old_title: string;
   // headline_placeholder = 'Search or start here (this is the title)';
+  write_or_nuke_mode = this._configService.write_or_nuke;
 
   constructor(
     private _articleService: ArticleService,
@@ -206,6 +207,21 @@ export class ArticlesComponent implements OnInit {
     this.select_first_article = false;
   }
 
+  delete_article() {
+    console.log('Deleting article');
+    const title = this.current_article.title ? this.current_article.title : 'this article';
+    const msg = 'Are you sure you want to delete:\n"' + title + '"\nWARNING: This cannot be undone.';
+    if (confirm(msg)) {
+      const scope = this;
+      this._articleService.delete_article(function(err, articles){
+        scope.articles = scope._articleService.articles;
+        scope.new_article();
+        scope.reset_list();
+        scope._msgService.add ('Deleted: ' + title, 'danger');
+      });
+    }
+  }
+
   filter_articles(filter_str: string) {
     if (!this.articles) {
       return;
@@ -256,6 +272,8 @@ export class ArticlesComponent implements OnInit {
   reset_list() {
     this.select_first_article = false;
     this.filtered_articles = this.articles;
+    this._articleService.articles = this.articles;
+    this._articleService.current_article = this.current_article;
     this.search_term = '';
   }
 
@@ -274,5 +292,18 @@ export class ArticlesComponent implements OnInit {
     console.log('Content Nuked');
     this.current_article.content = '';
     this.current_article.summary = '';
+  }
+
+  toggle_write_or_nuke() {
+    if (this.write_or_nuke_mode) {
+      this.write_or_nuke_mode = false;
+      this._msgService.add('Write or Nuke mode is disabled.', 'success');
+    } else {
+      this.write_or_nuke_mode = true;
+      const msg =
+        'WARNING: Write or Nuke mode is enabled. You will lose everything you type if you stop typing till target words';
+      this._msgService.add(msg, 'danger');
+    }
+    this._configService.write_or_nuke = this.write_or_nuke_mode;
   }
 }

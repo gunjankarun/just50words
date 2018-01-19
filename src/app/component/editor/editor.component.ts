@@ -65,8 +65,8 @@ export class EditorComponent implements OnInit {
         break;
     }
 
+    this.write_or_nuke_reset();
     if (this._configService.write_or_nuke) {
-      this.write_or_nuke_reset();
       this.write_or_nuke();
     }
   }
@@ -152,20 +152,28 @@ export class EditorComponent implements OnInit {
 
 
   write_or_nuke() {
+    if (!this._configService.write_or_nuke) {
+      this.write_or_nuke_reset();
+      this._msgService.add('Write or Nuke disabled', 'warning');
+      return;
+    }
     // Do not start the timer if word count is more than target words.
     if (this.word_count >= this.target_words) {
+      this.write_or_nuke_reset();
       return;
     }
     // console.log('word_count is ', this.word_count);
     // Do not start the timer if there is no content.
-    if (this.word_count === 0) {
+    if (this.word_count <= 0) {
       return;
     }
     if (this.write_or_nuke_timer) {
       clearInterval(this.write_or_nuke_timer);
     }
     this.write_or_nuke_timer = setTimeout(() => {
-      // this._wordCountService.celebrate = false;
+      if (!this.write_or_nuke) {
+
+      }
       this.write_or_nuke_interval--;
       const shadow_spread = -1 * this.write_or_nuke_interval + 5;
       this.write_or_nuke_class =
@@ -199,6 +207,9 @@ export class EditorComponent implements OnInit {
   }
 
   write_or_nuke_reset() {
+    if (this.write_or_nuke_timer) {
+      clearInterval(this.write_or_nuke_timer);
+    }
     this.write_or_nuke_interval = this._configService.write_or_nuke_interval;
     this.write_or_nuke_class = '';
   }

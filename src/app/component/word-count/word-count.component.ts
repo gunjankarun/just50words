@@ -118,12 +118,12 @@ export class WordCountComponent implements OnInit {
     let celebrate = false;
     // let target = this.target_words;
     const total_word_count = this._wordCountService.get_word_count(text);
-    this._wordCountService.word_count = total_word_count;
     let word_count = total_word_count;
     // adjust for existing contents
     if (this.old_word_count) {
       word_count = word_count - this.old_word_count;
     }
+    this._wordCountService.word_count = word_count;
 
     const half_way = this.target_words / 2;
     const half_way_end = half_way + 5;

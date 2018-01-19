@@ -76,6 +76,16 @@ export class ArticleService {
     }
   }
 
+  delete_article(next) {
+    const index: number = this.articles.indexOf(this.current_article);
+    console.log('Deleting item at index: ' + index);
+    if (index !== -1) {
+      this.articles.splice(index, 1);
+      this.save_article();
+    }
+    next(null, this.articles);
+  }
+
   auto_save_start() {
     // this.msgService.add('Will save automatically when you stop typing.');
 
