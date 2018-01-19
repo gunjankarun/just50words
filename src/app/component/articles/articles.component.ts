@@ -56,12 +56,13 @@ export class ArticlesComponent implements OnInit {
     });
   }
 
-  launch_window() {
-    if (this._electronService.isElectronApp) {
-      this._electronService.shell.openExternal('https://google.com');
-    } else {
-      console.log('Not an electron app. hence could not launch_window');
-    }
+  show_options() {
+    // will show options popup here
+    // if (this._electronService.isElectronApp) {
+    //   this._electronService.shell.openExternal('https://google.com');
+    // } else {
+    //   console.log('Not an electron app. hence could not launch_window');
+    // }
   }
 
   ngOnInit() {
@@ -209,15 +210,20 @@ export class ArticlesComponent implements OnInit {
 
   delete_article() {
     console.log('Deleting article');
-    const title = this.current_article.title ? this.current_article.title : 'this article';
-    const msg = 'Are you sure you want to delete:\n"' + title + '"\nWARNING: This cannot be undone.';
+    const title = this.current_article.title
+      ? this.current_article.title
+      : 'this article';
+    const msg =
+      'Are you sure you want to delete:\n"' +
+      title +
+      '"\nWARNING: This cannot be undone.';
     if (confirm(msg)) {
       const scope = this;
-      this._articleService.delete_article(function(err, articles){
+      this._articleService.delete_article(function(err, articles) {
         scope.articles = scope._articleService.articles;
         scope.new_article();
         scope.reset_list();
-        scope._msgService.add ('Deleted: ' + title, 'danger');
+        scope._msgService.add('Deleted: ' + title, 'danger');
       });
     }
   }
@@ -274,6 +280,7 @@ export class ArticlesComponent implements OnInit {
     this.filtered_articles = this.articles;
     this._articleService.articles = this.articles;
     this._articleService.current_article = this.current_article;
+    this.word_count = 0;
     this.search_term = '';
   }
 

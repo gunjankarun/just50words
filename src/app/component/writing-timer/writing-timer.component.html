@@ -1,7 +1,7 @@
 <span class="btn btn-sm" 
   [ngClass]= 'class' 
   (click)='toggle_timer()'
-  title = 'Click here to toggle timer'
+  placement="bottom" ngbTooltip="Toggle timer"
 >
   {{session_label}}
   <span class="counter time-counter badge">

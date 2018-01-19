@@ -21,6 +21,7 @@ export class WordCountComponent implements OnInit {
 
   old_word_count = 0;
   celebration_timeout: any;
+  tooltip_text = 'Toggle word count mode';
 
   // @Input() target_words = 50;
   // @Input() current_words = 50;
@@ -43,11 +44,13 @@ export class WordCountComponent implements OnInit {
       case Constants.WORD_COUNT_TYPE.TO_TARGET:
         this._configService.target_words_countdown_type =
           Constants.WORD_COUNT_TYPE.COUNT_DOWN;
+          // this.tooltip_text = 'Click to';
         this._msgService.add('Word count mode changed to "Countdown"');
         break;
       case Constants.WORD_COUNT_TYPE.COUNT_DOWN:
         this._configService.target_words_countdown_type =
           Constants.WORD_COUNT_TYPE.WORD_COUNT;
+          // this.tooltip_text = 'Mode: Countdown';
         this._msgService.add('Word count mode changed to "Word count"');
         break;
       case Constants.WORD_COUNT_TYPE.WORD_COUNT:

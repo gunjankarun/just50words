@@ -42,6 +42,7 @@ export class EditorComponent implements OnInit {
 
   change_content(event) {
     this.contentChange.emit(event);
+    this.write_or_nuke_reset();
   }
 
   on_keyup(event): void {
@@ -165,6 +166,7 @@ export class EditorComponent implements OnInit {
     // console.log('word_count is ', this.word_count);
     // Do not start the timer if there is no content.
     if (this.word_count <= 0) {
+      this.write_or_nuke_reset();
       return;
     }
     if (this.write_or_nuke_timer) {

@@ -2,6 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgxElectronModule } from 'ngx-electron';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { AppComponent } from './app.component';
 import { ArticlesComponent } from './component/articles/articles.component';
@@ -38,7 +39,8 @@ import { EditorComponent } from './component/editor/editor.component';
   imports: [
     BrowserModule,
     FormsModule,
-    NgxElectronModule
+    NgxElectronModule,
+    NgbModule.forRoot()
   ],
   providers: [ArticleService, ConfigService, MessageService, FileService, WordCountService, WritingStreakService],
   bootstrap: [AppComponent]

@@ -19,7 +19,9 @@
         </div>
       </div> -->
       <div class="title" *ngIf='show_list'>Just {{target_words}} words
-              <button type="button" class="btn btn-small btn-link btn-sm" (click)='launch_window()'>
+              <button type="button" class="btn btn-small btn-link btn-sm" (click)='show_options()'
+               placement="bottom" ngbTooltip="Options"
+              >
                 <span class="oi oi-menu"></span>
               </button>
 
@@ -95,16 +97,20 @@
             class="btn btn-sm" 
             [class.btn-danger]='write_or_nuke_mode'
             (click)='toggle_write_or_nuke()'
+            placement="left" ngbTooltip="Toggle 'Write or Nuke' mode"
           >
             <span class="oi oi-fire"></span>
           </button>
-          <button type="button" class="btn btn-dark btn-sm" (click)="new_article_button_click()">
+          <button type="button" class="btn btn-dark btn-sm" (click)="new_article_button_click()"
+           placement="left" ngbTooltip="Create a new article">
             <span class="oi oi-plus"></span> 
           </button>
           <button type="button" 
             class="btn btn-warning btn-sm" 
-            *ngIf = "current_article.content"
-            (click)="delete_article()">
+            *ngIf = "current_article.content || current_article.title"
+            (click)="delete_article()"
+            placement="left" ngbTooltip="Delete this article"
+            >
             <span class="oi oi-trash"></span> 
           </button>
         </div>
