@@ -15,7 +15,7 @@ import { MessageService } from '../../service/message.service';
   styleUrls: ['./editor.component.css']
 })
 export class EditorComponent implements OnInit {
-  @Input() editorHeight = 200;
+  @Input() height = 200;
   @Output() keyup: EventEmitter<any> = new EventEmitter();
   @Input() target_words = 0;
   @Input() content = '';
@@ -27,6 +27,8 @@ export class EditorComponent implements OnInit {
   write_or_nuke_interval = this._configService.write_or_nuke_interval;
   write_or_nuke_timer: any;
   @Output() editor_object_created: EventEmitter<any> = new EventEmitter();
+
+  editorMaxWidth = this._configService.editor_max_width;
 
   constructor(
     private _configService: ConfigService,
@@ -151,7 +153,6 @@ export class EditorComponent implements OnInit {
     }
   }
 
-
   write_or_nuke() {
     if (!this._configService.write_or_nuke) {
       this.write_or_nuke_reset();
@@ -174,7 +175,6 @@ export class EditorComponent implements OnInit {
     }
     this.write_or_nuke_timer = setTimeout(() => {
       if (!this.write_or_nuke) {
-
       }
       this.write_or_nuke_interval--;
       const shadow_spread = -1 * this.write_or_nuke_interval + 5;

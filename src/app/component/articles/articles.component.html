@@ -80,7 +80,7 @@
     <div class="col-sm right-content">
       <div class="row info-row" [class.celebrate]="celebrate">
         <div class="col-sm text-right">
-          <app-writing-streak [show_list]='show_list'></app-writing-streak>
+          <!-- <app-writing-streak [show_list]='show_list'></app-writing-streak> -->
           <button type="button" class="btn btn-dark btn-sm float-left btn-article-list" 
             [innerHTML]="show_list_label"
             (click)="toggle_list()"
@@ -121,6 +121,7 @@
           <input type="text" 
             id="headline" 
             spellcheck="true" 
+            [style.maxWidth.px]="editorMaxWidth"
             autofocus
             [class]='headline_font'
             placeholder="What do you want to write about?"
@@ -134,7 +135,7 @@
       <div>
         <div class="form-group">
           <app-editor
-            [editorHeight]="editorHeight"
+            [height]="editorHeight"
             [target_words]="target_words"
             (keyup)="key_pressed_textarea($event)"
             (nuked)="nuke_content()"

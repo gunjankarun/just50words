@@ -17,6 +17,8 @@ export class ArticlesComponent implements OnInit {
   @Input() editorHeight: number;
   @Input() editor_object: any;
 
+  editorMaxWidth = this._configService.editor_max_width;
+
   articles: Article[];
   filtered_articles: Article[];
   celebrate = false;

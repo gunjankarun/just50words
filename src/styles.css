@@ -139,6 +139,8 @@ input#headline, #editor{
     outline: none !important;
     box-shadow: none;
     background:transparent;
+    margin: 0 auto;
+    /* max-width: 800px; */
 }
 
 input#headline {

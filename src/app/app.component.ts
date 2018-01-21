@@ -34,7 +34,7 @@ export class AppComponent {
   set_screen() {
     this.innerHeight = (window.innerHeight);
     this.listHeight = this.innerHeight - (63 + 54);
-    this.editorHeight = this.innerHeight - 160;
+    this.editorHeight = this.innerHeight - (159);
   }
 
 }

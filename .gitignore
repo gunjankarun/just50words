@@ -4,6 +4,7 @@
 /dist
 /tmp
 /out-tsc
+/release-builds
 
 # dependencies
 /node_modules
@@ -45,3 +46,4 @@ Thumbs.db
 #user files
 _assets
 articles
+articles_bkup
