@@ -1,6 +1,8 @@
 const { app, BrowserWindow } = require('electron')
 const path = require('path')
 const url = require('url')
+global.application_root = path.join(__dirname, '/');
+
 require('./electron-src/file-operations');
 
 let win
@@ -11,7 +13,7 @@ function createWindow() {
         height: 700,
         minWidth: 1000,
         minHeight: 700,
-        backgroundColor: '#312450',
+        backgroundColor: '#ffffff',
         show: false
     })
         // background-color: rgb(207, 172, 126);

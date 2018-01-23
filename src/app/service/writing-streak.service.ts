@@ -5,7 +5,7 @@ import { ConfigService } from './config.service';
 export class WritingStreakService {
   streaks = [];
   today = new Date();
-  target_words = this._configService.target_words;
+  target_words = this._configService.getConfig('target_words');
 
   current_day_block = {
     date: this.today,

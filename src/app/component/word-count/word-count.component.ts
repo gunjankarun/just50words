@@ -1,4 +1,5 @@
 import { Component, Input, Output, EventEmitter, OnInit, OnChanges, SimpleChanges, SimpleChange } from '@angular/core';
+import { Subject } from 'rxjs/Subject';
 
 import { ConfigService } from '../../service/config.service';
 import { WordCountService } from '../../service/word-count.service';
@@ -16,8 +17,9 @@ export class WordCountComponent implements OnInit {
   @Input() article_title: string;
   @Input() article_content: string;
   @Input() article: Article;
-
-  target_words = this._configService.target_words;
+  config: any;
+  config_subscription: any;
+  target_words = 0;
 
   old_word_count = 0;
   celebration_timeout: any;
@@ -36,26 +38,65 @@ export class WordCountComponent implements OnInit {
     private _msgService: MessageService
   ) {
     this.word_count = this._wordCountService.word_count;
+    this.config = this._configService.config;
+    this.target_words = this.config.target_words;
+
+    this.config_subscription = _configService.configChange.subscribe(
+      new_config => {
+        this.config = new_config;
+        console.log(
+          'Detected the change in word-count.component with word count',
+          new_config.target_words
+        );
+        this.target_words = new_config.target_words;
+        console.log('new target_words =', this.target_words);
+
+        this.word_count = this.target_words;
+        switch (this.config.target_words_countdown_type) {
+          case Constants.WORD_COUNT_TYPE.TO_TARGET:
+            this.label = 'Words left';
+            break;
+          case Constants.WORD_COUNT_TYPE.COUNT_DOWN:
+            this.label = 'To type';
+            this.word_count = this.target_words;
+            break;
+          case Constants.WORD_COUNT_TYPE.WORD_COUNT:
+            this.label = 'Words typed';
+            this.word_count = 0;
+            break;
+
+          default:
+            break;
+        }
+
+      }
+    );
   }
 
   toggle_mode() {
     console.log('Mode Toggled');
-    switch (this._configService.target_words_countdown_type) {
+    switch (this._configService.getConfig('target_words_countdown_type')) {
       case Constants.WORD_COUNT_TYPE.TO_TARGET:
-        this._configService.target_words_countdown_type =
-          Constants.WORD_COUNT_TYPE.COUNT_DOWN;
-          // this.tooltip_text = 'Click to';
+        this._configService.setConfig(
+          'target_words_countdown_type',
+          Constants.WORD_COUNT_TYPE.COUNT_DOWN
+        );
+        // this.tooltip_text = 'Click to';
         this._msgService.add('Word count mode changed to "Countdown"');
         break;
       case Constants.WORD_COUNT_TYPE.COUNT_DOWN:
-        this._configService.target_words_countdown_type =
-          Constants.WORD_COUNT_TYPE.WORD_COUNT;
-          // this.tooltip_text = 'Mode: Countdown';
+        this._configService.setConfig(
+          'target_words_countdown_type',
+          Constants.WORD_COUNT_TYPE.WORD_COUNT
+        );
+        // this.tooltip_text = 'Mode: Countdown';
         this._msgService.add('Word count mode changed to "Word count"');
         break;
       case Constants.WORD_COUNT_TYPE.WORD_COUNT:
-        this._configService.target_words_countdown_type =
-          Constants.WORD_COUNT_TYPE.TO_TARGET;
+        this._configService.setConfig(
+          'target_words_countdown_type',
+          Constants.WORD_COUNT_TYPE.TO_TARGET
+        );
         this._msgService.add(
           'Word count mode changed to "Countdown to target"'
         );
@@ -68,23 +109,12 @@ export class WordCountComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.word_count = this.target_words;
-    switch (this._configService.target_words_countdown_type) {
-      case Constants.WORD_COUNT_TYPE.TO_TARGET:
-        this.label = 'Words left';
-        break;
-      case Constants.WORD_COUNT_TYPE.COUNT_DOWN:
-        this.label = 'To type';
-        this.word_count = this.target_words;
-        break;
-      case Constants.WORD_COUNT_TYPE.WORD_COUNT:
-        this.label = 'Words typed';
-        this.word_count = 0;
-        break;
+    // Do nothing.
+  }
 
-      default:
-        break;
-    }
+  ngOnDestroy() {
+    // prevent memory leak when component destroyed
+    this.config_subscription.unsubscribe();
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -133,7 +163,7 @@ export class WordCountComponent implements OnInit {
     let full_way_end = this.target_words + 5;
 
     // console.log('Processing ', word_count);
-    switch (this._configService.target_words_countdown_type) {
+    switch (this._configService.getConfig('target_words_countdown_type')) {
       case Constants.WORD_COUNT_TYPE.TO_TARGET:
         if (word_count < this.target_words) {
           this.label = 'Words left';
@@ -173,7 +203,7 @@ export class WordCountComponent implements OnInit {
 
     if (word_count < this.target_words) {
       if (
-        this._configService.target_words_countdown_type !==
+        this._configService.getConfig('target_words_countdown_type') !==
         Constants.WORD_COUNT_TYPE.WORD_COUNT
       ) {
         this.word_count = this.target_words - word_count;
@@ -199,8 +229,10 @@ export class WordCountComponent implements OnInit {
 
     // Lets celebrate by playing sound
     if (celebrate) {
-      if (this._configService.play_target_reached_sound) {
-        const audio = new Audio(this._configService.target_reached_sound);
+      if (this._configService.getConfig('play_target_reached_sound')) {
+        const audio = new Audio(
+          this._configService.getConfig('target_reached_sound')
+        );
         audio.play();
       }
       this._wordCountService.celebrate = true;
@@ -212,7 +244,7 @@ export class WordCountComponent implements OnInit {
       }
       this.celebration_timeout = setTimeout(() => {
         this._wordCountService.celebrate = false;
-      }, this._configService.session_celebration_duration * 1000);
+      }, this._configService.getConfig('session_celebration_duration') * 1000);
     }
   }
 }

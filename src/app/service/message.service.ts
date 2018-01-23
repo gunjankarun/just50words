@@ -6,7 +6,7 @@ export class MessageService {
 
   messages: string[] = [];
   show_message = false;
-  message_timeout_interval = this._configService.message_dismiss_after * 1000;
+  message_timeout_interval = this._configService.getConfig('message_dismiss_after') * 1000;
   message_timeout: any;
 
   current_message: Message= {

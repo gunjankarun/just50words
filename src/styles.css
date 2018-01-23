@@ -88,7 +88,7 @@ body{
 
 .right-content{
     /* background-color: papayawhip; */
-    background-image: url('assets/images/bg-dirty-paper.jpg');
+    /* background-image: url('assets/images/bg-dirty-paper.jpg'); */
     background-size: cover;
     background-position: center center;
     /* margin-left: -15px; */
@@ -164,7 +164,7 @@ input#headline.font-small {
     font-size: 18px;
     line-height: 1.5em;
     height:455px;
-    margin-bottom: 61px;
+    margin-bottom: 58px;
 }
 
 .footer-alert{

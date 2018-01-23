@@ -1,11 +1,13 @@
 import {
   Component,
   OnInit,
+  OnDestroy,
   Input,
   Output,
   EventEmitter,
   ElementRef
 } from '@angular/core';
+import { Subject } from 'rxjs/Subject';
 import { ConfigService } from '../../service/config.service';
 import { MessageService } from '../../service/message.service';
 
@@ -22,19 +24,41 @@ export class EditorComponent implements OnInit {
   @Input() word_count = 0;
   @Output() contentChange: EventEmitter<any> = new EventEmitter();
   @Output() nuked: EventEmitter<any> = new EventEmitter();
+
+  config = this._configService.config;
+  config_subscription: any;
+
   editor_object: any;
   write_or_nuke_class = '';
-  write_or_nuke_interval = this._configService.write_or_nuke_interval;
+  write_or_nuke_interval = this._configService.getConfig(
+    'write_or_nuke_interval'
+  );
   write_or_nuke_timer: any;
   @Output() editor_object_created: EventEmitter<any> = new EventEmitter();
 
-  editorMaxWidth = this._configService.editor_max_width;
+  editorMaxWidth = this._configService.getConfig('editor_max_width');
+  editor_text_color = this._configService.getConfig('editor_text_color');
 
   constructor(
     private _configService: ConfigService,
     private _elRef: ElementRef,
     private _msgService: MessageService
-  ) {}
+  ) {
+    this.config_subscription = _configService.configChange.subscribe(
+      new_config => {
+        this.config = new_config;
+        this.target_words = new_config.target_words;
+        this.editorMaxWidth = new_config.editor_max_width;
+        this.editor_text_color = new_config.editor_text_color;
+        this.write_or_nuke_interval = new_config.write_or_nuke_interval;
+      }
+    );
+  }
+
+  ngOnDestroy() {
+    // prevent memory leak when component destroyed
+    this.config_subscription.unsubscribe();
+  }
 
   ngOnInit() {
     this.editor_object = this._elRef.nativeElement.querySelector('#editor');
@@ -52,8 +76,12 @@ export class EditorComponent implements OnInit {
     this.keyup.emit([event]);
 
     // Play the sound
-    if (this._configService.play_keypress_sound) {
-      const audio = new Audio(this._configService.keypress_sound);
+    const play_keypress_sound = this._configService.getConfig(
+      'play_keypress_sound'
+    );
+    const keypress_sound = this._configService.getConfig('keypress_sound');
+    if (play_keypress_sound) {
+      const audio = new Audio(keypress_sound);
       audio.volume = 0.1;
       audio.play();
     }
@@ -69,7 +97,7 @@ export class EditorComponent implements OnInit {
     }
 
     this.write_or_nuke_reset();
-    if (this._configService.write_or_nuke) {
+    if (this._configService.getConfig('write_or_nuke')) {
       this.write_or_nuke();
     }
   }
@@ -154,7 +182,7 @@ export class EditorComponent implements OnInit {
   }
 
   write_or_nuke() {
-    if (!this._configService.write_or_nuke) {
+    if (!this._configService.getConfig('write_or_nuke')) {
       this.write_or_nuke_reset();
       this._msgService.add('Write or Nuke disabled', 'warning');
       return;
@@ -184,7 +212,7 @@ export class EditorComponent implements OnInit {
       // Show the countdown timer only after half the timer is over.
       if (
         this.write_or_nuke_interval <=
-        this._configService.write_or_nuke_interval / 2
+        this._configService.getConfig('write_or_nuke_interval') / 2
       ) {
         const remaining_words = this.target_words - this.word_count;
         let msg =
@@ -192,12 +220,20 @@ export class EditorComponent implements OnInit {
         msg =
           msg + ' Type ' + remaining_words + ' more words to disable nuking.';
         this._msgService.add(msg, 'warning');
+        // play warning sound
+        const audio = new Audio(
+          this._configService.getConfig('write_or_nuke_warning_sound')
+        );
+        // audio.volume = 0.1;
+        audio.play();
       }
       if (this.write_or_nuke_interval <= 0) {
         console.log('Time over');
         this._msgService.add('Content NUKED!!!', 'danger');
 
-        const audio = new Audio(this._configService.write_or_nuke_nuked_sound);
+        const audio = new Audio(
+          this._configService.getConfig('write_or_nuke_nuked_sound')
+        );
         audio.play();
 
         this.nuked.emit();
@@ -212,7 +248,9 @@ export class EditorComponent implements OnInit {
     if (this.write_or_nuke_timer) {
       clearInterval(this.write_or_nuke_timer);
     }
-    this.write_or_nuke_interval = this._configService.write_or_nuke_interval;
+    this.write_or_nuke_interval = this._configService.getConfig(
+      'write_or_nuke_interval'
+    );
     this.write_or_nuke_class = '';
   }
 }

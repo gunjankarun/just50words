@@ -2,11 +2,12 @@
   class="form-control" 
   id="editor" 
   spellcheck="true" 
+  [style.color]="editor_text_color"
   [style.height.px]="height" 
   [style.boxShadow]="write_or_nuke_class"
   [style.maxWidth.px]="editorMaxWidth"
   (keyup)="on_keyup($event)"
   [(ngModel)]="content"
   (ngModelChange)="change_content($event)"
-  placeholder="&#10;&#10;&#10;Remember, you just have to write {{target_words}} words to maintain your streak.&#10;&#10;You are awesome !!!"
+  placeholder="&#10;&#10;&#10;Remember, you just have to write {{target_words}} words to complete the target today.&#10;&#10;You are awesome !!!"
 ></textarea>

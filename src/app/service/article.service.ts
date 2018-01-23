@@ -3,9 +3,11 @@ import { Article } from '../article';
 import { MessageService } from './message.service';
 import { FileService } from './file.service';
 import { ConfigService } from './config.service';
+import { Subject } from 'rxjs/Subject';
 
 @Injectable()
 export class ArticleService {
+  config_subscription: any;
 
   articles: Article[];
   // filtered_articles: Article[];
@@ -14,25 +16,34 @@ export class ArticleService {
   autosave_timeout: any;
   target_words: number;
 
-
-
   constructor(
     private _msgService: MessageService,
     private _fileService: FileService,
-    private _configService: ConfigService) {
-
+    private _configService: ConfigService
+  ) {
     // this.load_articles();
-    this.autosave_interval = this._configService.auto_save_after * 1000;
-    this.target_words = this._configService.target_words;
-    // this.current_article = this.get_blank_article();
-   }
+    this.autosave_interval =
+      this._configService.getConfig('auto_save_after') * 1000;
+    this.target_words = this._configService.getConfig('target_words');
+    this.config_subscription = _configService.configChange.subscribe(
+      new_config => {
+        this.autosave_interval = new_config.auto_save_after;
+        this.target_words = new_config.target_words;
+      }
+    );
+  }
+
+  ngOnDestroy() {
+    // prevent memory leak when component destroyed
+    this.config_subscription.unsubscribe();
+  }
 
   load_articles(next) {
     const scope = this;
-    scope._fileService.load_articles(function(err, articles){
+    scope._fileService.load_articles(function(err, articles) {
       if (err) {
         console.log('Error in loading articles', err);
-      }else {
+      } else {
         console.log('Articles received', articles.length);
         // if (articles) {
         scope.articles = articles;
@@ -98,7 +109,6 @@ export class ArticleService {
 
       this._fileService.save_article(this.current_article, true);
       this._fileService.save_articles(this.articles, true);
-
     }, this.autosave_interval);
   }
 
@@ -115,7 +125,7 @@ export class ArticleService {
       // console.log('But articles are null so quitting sorting');
       return false;
     }
-    this.articles.sort(function (a, b) {
+    this.articles.sort(function(a, b) {
       const d1 = new Date(a.date_updated);
       const d2 = new Date(b.date_updated);
       // console.log('Comparing dates ', d1);
@@ -127,12 +137,16 @@ export class ArticleService {
   update_summary() {
     if (this.current_article && this.current_article.content) {
       const inputWords = this.current_article.content.split(/\s+/);
-      if (inputWords.length > this._configService.words_in_summary) {
-        this.current_article.summary = inputWords.slice(0, this._configService.words_in_summary).join(' ') + '\u2026';
+      if (
+        inputWords.length > this._configService.getConfig('words_in_summary')
+      ) {
+        this.current_article.summary =
+          inputWords
+            .slice(0, this._configService.getConfig('words_in_summary'))
+            .join(' ') + '\u2026';
       } else {
         this.current_article.summary = this.current_article.content;
       }
     }
   }
-
 }

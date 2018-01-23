@@ -43,12 +43,28 @@ ipc.on('read-file', function (event, args) {
   let data = '';
   try {
     data = fs.readFileSync(file_path, 'utf8');
-    console.log('loaded file', file_path);
+    // console.log('loaded file', file_path);
     event.sender.send('file-read', data);
   } catch (error) {
     console.log('Error loading file ', file_path);
     event.sender.send('file-read-error', error);
   }
 })
+
+ipc.on('read-config-file', function(event, args) {
+  // console.log('About to read file in main service');
+  // console.log('Value of args is :', args);
+  const file_path = args.file_name;
+  let data = '';
+  try {
+    data = fs.readFileSync(file_path, 'utf8');
+    console.log('loaded file', file_path);
+    // global.config=data;
+    event.sender.send('config-file-read', data);
+  } catch (error) {
+    console.log('Error loading config file ', file_path);
+    event.sender.send('config-file-read-error', error);
+  }
+});
 
 

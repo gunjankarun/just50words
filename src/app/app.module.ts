@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, APP_INITIALIZER } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgxElectronModule } from 'ngx-electron';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
@@ -9,6 +9,7 @@ import { ArticlesComponent } from './component/articles/articles.component';
 import { MessageComponent } from './component/message/message.component';
 import { WordCountComponent } from './component/word-count/word-count.component';
 import { WritingTimerComponent } from './component/writing-timer/writing-timer.component';
+// import { AppConfig } from './app.config';
 
 import { ArticleService } from './service/article.service';
 import { ConfigService } from './service/config.service';
@@ -36,13 +37,22 @@ import { EditorComponent } from './component/editor/editor.component';
     WritingStreakComponent,
     EditorComponent
   ],
-  imports: [
-    BrowserModule,
-    FormsModule,
-    NgxElectronModule,
-    NgbModule.forRoot()
+  imports: [BrowserModule, FormsModule, NgxElectronModule, NgbModule.forRoot()],
+  providers: [
+    ArticleService,
+    ConfigService,
+    MessageService,
+    FileService,
+    WordCountService,
+    WritingStreakService,
+    // AppConfig,
+    {
+      provide: APP_INITIALIZER,
+      useFactory: (config: ConfigService) => () => config.load_config(),
+      deps: [ConfigService],
+      multi: true
+    }
   ],
-  providers: [ArticleService, ConfigService, MessageService, FileService, WordCountService, WritingStreakService],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {}

@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { ElectronService } from 'ngx-electron';
+import { Subject } from 'rxjs/Subject';
 import { Article } from '../../article';
 import { ArticleService } from '../../service/article.service';
 import { ConfigService } from '../../service/config.service';
@@ -17,7 +18,10 @@ export class ArticlesComponent implements OnInit {
   @Input() editorHeight: number;
   @Input() editor_object: any;
 
-  editorMaxWidth = this._configService.editor_max_width;
+  config = this._configService.config;
+  config_subscription: any;
+
+  editorMaxWidth = this._configService.getConfig('editor_max_width');
 
   articles: Article[];
   filtered_articles: Article[];
@@ -36,8 +40,10 @@ export class ArticlesComponent implements OnInit {
   show_list_label = '<span class="oi oi-caret-left"> </span>';
   old_title: string;
   // headline_placeholder = 'Search or start here (this is the title)';
-  write_or_nuke_mode = this._configService.write_or_nuke;
-  write_or_nuke_show_button = this._configService.write_or_nuke_show_button;
+  write_or_nuke_mode: boolean;
+  write_or_nuke_show_button: boolean;
+  editor_bg = this._configService.getConfig('editor_bg');
+  editor_text_color = this._configService.getConfig('editor_text_color');
 
   constructor(
     private _articleService: ArticleService,
@@ -48,6 +54,20 @@ export class ArticlesComponent implements OnInit {
     private _electronService: ElectronService
   ) {
     // constructor
+    this.config = this._configService.config;
+    // Listen for configuration changes
+    this.config_subscription = _configService.configChange.subscribe(
+      new_config => {
+        this.config = new_config;
+        this.target_words = new_config.target_words;
+
+        this.editorMaxWidth = new_config.editor_max_width;
+        this.write_or_nuke_mode = new_config.write_or_nuke;
+        this.write_or_nuke_show_button = new_config.write_or_nuke_show_button;
+        this.editor_bg = new_config.editor_bg;
+        this.editor_text_color = new_config.editor_text_color;
+      }
+    );
 
     // this.current_article = this._articleService.get_blank_article();
     const scope = this;
@@ -57,6 +77,11 @@ export class ArticlesComponent implements OnInit {
       scope.reset_list();
       scope.new_article();
     });
+  }
+
+  ngOnDestroy() {
+    // prevent memory leak when component destroyed
+    this.config_subscription.unsubscribe();
   }
 
   show_options() {
@@ -69,9 +94,7 @@ export class ArticlesComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.target_words = this._configService.target_words;
-    // this.current_article = this._articleService.current_article;
-    // this.new_article();
+    // this.target_words = this._configService.getConfig('target_words');
   }
 
   ngAfterViewInit() {
@@ -314,6 +337,6 @@ export class ArticlesComponent implements OnInit {
         'WARNING: Write or Nuke mode is enabled. You will lose everything you type if you stop typing till target words';
       this._msgService.add(msg, 'danger');
     }
-    this._configService.write_or_nuke = this.write_or_nuke_mode;
+    this._configService.setConfig('write_or_nuke', this.write_or_nuke_mode);
   }
 }
