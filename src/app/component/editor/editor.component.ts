@@ -73,6 +73,17 @@ export class EditorComponent implements OnInit {
     this.write_or_nuke_reset();
   }
 
+  on_tab_press(event): void {
+    // console.log(event.keyCode + ' ', event.key);
+    event.preventDefault();
+    const s = this.editor_object.selectionStart;
+    this.content =
+      this.content.substring(0, this.editor_object.selectionStart) +
+      '    ' +
+      this.content.substring(this.editor_object.selectionEnd);
+    this.editor_object.selectionEnd = s + 1;
+  }
+
   on_keyup(event): void {
     // console.log('content', this.content);
     this.keyup.emit([event]);
@@ -91,18 +102,16 @@ export class EditorComponent implements OnInit {
     // format text
     switch (event.key) {
       case 'Enter':
-        // format text
-        this.format_text();
+        if (!event.shiftKey) {
+          // format text only when the user has not pressed the shift and enter
+          this.format_text();
+        }
         break;
       default:
         break;
     }
 
     this.write_or_nuke_reset();
-    console.log(
-      'write_or_nuke on keypress is ',
-      this._configService.getConfig('write_or_nuke')
-    );
     if (this._configService.getConfig('write_or_nuke')) {
       this.write_or_nuke();
     }
@@ -220,7 +229,7 @@ export class EditorComponent implements OnInit {
         this.write_or_nuke_interval <=
         this._configService.getConfig('write_or_nuke_interval') / 2
       ) {
-        console.log('target_words=' + this.target_words + ' word_count=' + this.word_count);
+
         const remaining_words = this.target_words - this.word_count;
         let msg =
           'Nuking the contents in ' + this.write_or_nuke_interval + ' seconds.';
