@@ -120,91 +120,89 @@ export class ConfigService {
       console.log('100 Loading config', config_data);
 
       // scope.config = config_data;
-      if (config_data.target_words) {
+      if (config_data.hasOwnProperty('target_words')) {
         scope.config.target_words = config_data.target_words;
       }
-      if (config_data.target_words_countdown_type) {
+      if (config_data.hasOwnProperty('target_words_countdown_type')) {
         scope.config.target_words_countdown_type =
           config_data.target_words_countdown_type;
       }
-      if (config_data.editor_bg) {
+      if (config_data.hasOwnProperty('editor_bg')) {
         scope.config.editor_bg = config_data.editor_bg;
       }
-      if (config_data.editor_text_color) {
+      if (config_data.hasOwnProperty('editor_text_color')) {
         scope.config.editor_text_color = config_data.editor_text_color;
       }
-      if (config_data.target_reached_sound) {
+      if (config_data.hasOwnProperty('target_reached_sound')) {
         scope.config.target_reached_sound = config_data.target_reached_sound;
       }
-      if (config_data.play_target_reached_sound) {
+      if (config_data.hasOwnProperty('play_target_reached_sound')) {
         scope.config.play_target_reached_sound =
           config_data.play_target_reached_sound;
       }
-      if (config_data.editor_max_width) {
+      if (config_data.hasOwnProperty('editor_max_width')) {
         scope.config.editor_max_width = config_data.editor_max_width;
       }
-      if (config_data.play_keypress_sound) {
+      if (config_data.hasOwnProperty('play_keypress_sound')) {
         scope.config.play_keypress_sound = config_data.play_keypress_sound;
       }
-      if (config_data.keypress_sound) {
+      if (config_data.hasOwnProperty('keypress_sound')) {
         scope.config.keypress_sound = config_data.keypress_sound;
       }
-      if (config_data.write_or_nuke) {
+      if (config_data.hasOwnProperty('write_or_nuke')) {
         scope.config.write_or_nuke = config_data.write_or_nuke;
       }
-      if (config_data.write_or_nuke_interval) {
+      if (config_data.hasOwnProperty('write_or_nuke_interval')) {
         scope.config.write_or_nuke_interval =
           config_data.write_or_nuke_interval;
       }
-      if (config_data.write_or_nuke_show_button) {
+      if (config_data.hasOwnProperty('write_or_nuke_show_button')) {
         scope.config.write_or_nuke_show_button =
           config_data.write_or_nuke_show_button;
       }
-      console.log('Inside config file read and this.write_or_nuke_show_button', scope.config.write_or_nuke_show_button);
 
-      if (config_data.write_or_nuke_warning_sound) {
+      if (config_data.hasOwnProperty('write_or_nuke_warning_sound')) {
         scope.config.write_or_nuke_warning_sound =
           config_data.write_or_nuke_warning_sound;
       }
-      if (config_data.write_or_nuke_nuked_sound) {
+      if (config_data.hasOwnProperty('write_or_nuke_nuked_sound')) {
         scope.config.write_or_nuke_nuked_sound =
           config_data.write_or_nuke_nuked_sound;
       }
-      if (config_data.manually_start_session) {
+      if (config_data.hasOwnProperty('manually_start_session')) {
         scope.config.manually_start_session =
           config_data.manually_start_session;
       }
-      if (config_data.play_session_completed_sound) {
+      if (config_data.hasOwnProperty('play_session_completed_sound')) {
         scope.config.play_session_completed_sound =
           config_data.play_session_completed_sound;
       }
-      if (config_data.session_celebration_duration) {
+      if (config_data.hasOwnProperty('session_celebration_duration')) {
         scope.config.session_celebration_duration =
           config_data.session_celebration_duration;
       }
-      if (config_data.work_session) {
+      if (config_data.hasOwnProperty('work_session')) {
         scope.config.work_session = config_data.work_session;
       }
-      if (config_data.work_session_complete_sound) {
+      if (config_data.hasOwnProperty('work_session_complete_sound')) {
         scope.config.work_session_complete_sound =
           config_data.work_session_complete_sound;
       }
-      if (config_data.short_break) {
+      if (config_data.hasOwnProperty('short_break')) {
         scope.config.short_break = config_data.short_break;
       }
-      if (config_data.short_break_complete_sound) {
+      if (config_data.hasOwnProperty('short_break_complete_sound')) {
         scope.config.short_break_complete_sound =
           config_data.short_break_complete_sound;
       }
-      if (config_data.continuous_sessions) {
+      if (config_data.hasOwnProperty('continuous_sessions')) {
         scope.config.continuous_sessions = config_data.continuous_sessions;
       }
-      if (config_data.long_break) {
+      if (config_data.hasOwnProperty('long_break')) {
         scope.config.long_break = config_data.long_break;
       }
-      if (config_data.long_break_complete_sound) {
-        scope.config.long_break_complete_sound =
-          config_data.long_break_complete_sound;
+      if (config_data.hasOwnProperty('long_break_complete_sound')) {
+        scope.config.long_break_complete_sound = config_data.long_break_complete_sound;
       }
       console.log('Config updated. New config.word_count = ', scope.config.target_words);
       scope.configChange.next(scope.config);

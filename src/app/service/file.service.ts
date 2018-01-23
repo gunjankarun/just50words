@@ -13,7 +13,6 @@ export class FileService {
   article_folder = this.application_root + 'articles';
   article_summary_folder = this.application_root + 'articles';
   article_file = this.article_folder + '/_articles';
-
   config_file = this.application_root + 'config/_config.json';
 
   constructor(
@@ -25,7 +24,12 @@ export class FileService {
     if (this._electronService.isElectronApp) {
       const remote = this._electronService.remote;
       this.application_root = remote.getGlobal('application_root');
-      // console.log('this.application_root is ', this.application_root);
+      console.log('\n100: this.application_root is ', this.application_root);
+      this.article_folder = this.application_root + 'articles';
+      this.article_summary_folder = this.application_root + 'articles';
+      this.article_file = this.article_folder + '/_articles';
+      this.config_file = this.application_root + 'config/_config.json';
+      console.log('200 and config file is ', this.config_file);
     }
   }
 
@@ -217,7 +221,7 @@ export class FileService {
       //   console.log ('Not loading articles because not Electron');
       //   return ;
       // }
-      // console.log('About to load config from ' + this.config_file);
+      console.log('About to load config from ' + this.config_file);
       const scope = this;
 
       const load_data = {

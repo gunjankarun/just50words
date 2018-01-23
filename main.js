@@ -1,7 +1,7 @@
 const { app, BrowserWindow } = require('electron')
 const path = require('path')
 const url = require('url')
-global.application_root = path.join(__dirname, '/');
+global.application_root = 'dada';
 
 require('./electron-src/file-operations');
 
@@ -18,8 +18,8 @@ function createWindow() {
     })
         // background-color: rgb(207, 172, 126);
     win.once('ready-to-show', () => {
-     win.show();
- })
+        win.show();
+    })
 
     // load the dist folder from Angular
     win.loadURL(url.format({
@@ -36,6 +36,10 @@ function createWindow() {
     })
 
     require('./electron-src/main-menu');
+    const userDataPath = app.getPath('userData');
+    console.log('000 userDataPath is', userDataPath);
+    // We'll use the `configName` property to set the file name and path.join to bring it all together as a string
+    global.application_root = path.join(userDataPath, '/');
 }
 
 app.on('ready', createWindow)
