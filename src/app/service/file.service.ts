@@ -254,6 +254,7 @@ export class FileService {
         }
       });
     } else {
+      console.log('Loading old config');
       const old_data = `
     {
       "target_words": 60,

@@ -17,22 +17,20 @@ import { MessageService } from '../../service/message.service';
   styleUrls: ['./editor.component.css']
 })
 export class EditorComponent implements OnInit {
+  config = this._configService.config;
+  config_subscription: any;
+
   @Input() height = 200;
   @Output() keyup: EventEmitter<any> = new EventEmitter();
-  @Input() target_words = 0;
+  @Input() target_words = this.config.target_words;
   @Input() content = '';
   @Input() word_count = 0;
   @Output() contentChange: EventEmitter<any> = new EventEmitter();
   @Output() nuked: EventEmitter<any> = new EventEmitter();
 
-  config = this._configService.config;
-  config_subscription: any;
-
   editor_object: any;
   write_or_nuke_class = '';
-  write_or_nuke_interval = this._configService.getConfig(
-    'write_or_nuke_interval'
-  );
+  write_or_nuke_interval = this.config.write_or_nuke_interval;
   write_or_nuke_timer: any;
   @Output() editor_object_created: EventEmitter<any> = new EventEmitter();
 
@@ -51,6 +49,10 @@ export class EditorComponent implements OnInit {
         this.editorMaxWidth = new_config.editor_max_width;
         this.editor_text_color = new_config.editor_text_color;
         this.write_or_nuke_interval = new_config.write_or_nuke_interval;
+        console.log(
+          '500 Content updated and write or nuke is ',
+          this.config.write_or_nuke
+        );
       }
     );
   }
@@ -97,6 +99,10 @@ export class EditorComponent implements OnInit {
     }
 
     this.write_or_nuke_reset();
+    console.log(
+      'write_or_nuke on keypress is ',
+      this._configService.getConfig('write_or_nuke')
+    );
     if (this._configService.getConfig('write_or_nuke')) {
       this.write_or_nuke();
     }
@@ -214,6 +220,7 @@ export class EditorComponent implements OnInit {
         this.write_or_nuke_interval <=
         this._configService.getConfig('write_or_nuke_interval') / 2
       ) {
+        console.log('target_words=' + this.target_words + ' word_count=' + this.word_count);
         const remaining_words = this.target_words - this.word_count;
         let msg =
           'Nuking the contents in ' + this.write_or_nuke_interval + ' seconds.';

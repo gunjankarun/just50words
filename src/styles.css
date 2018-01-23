@@ -167,6 +167,17 @@ input#headline.font-small {
     margin-bottom: 58px;
 }
 
+::-webkit-scrollbar {
+  /* -webkit-appearance: none; */
+  width: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  /* border-radius: 5px; */
+  background-color: rgba(0,0,0,.1);
+  /* -webkit-box-shadow: 0 0 1px rgba(255,255,255,.5); */
+}
+
 .footer-alert{
     font-size: 12px;
     padding: 5px;

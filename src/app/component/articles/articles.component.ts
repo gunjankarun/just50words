@@ -21,7 +21,7 @@ export class ArticlesComponent implements OnInit {
   config = this._configService.config;
   config_subscription: any;
 
-  editorMaxWidth = this._configService.getConfig('editor_max_width');
+  editorMaxWidth = this.config.editor_max_width;
 
   articles: Article[];
   filtered_articles: Article[];
@@ -29,7 +29,7 @@ export class ArticlesComponent implements OnInit {
   headline_object: any;
   headline_font = 'form-control font-large';
 
-  target_words: number;
+  target_words= this.config.target_words;
   word_count = 0;
   target_time: string;
   // articles: Article[];
@@ -40,10 +40,10 @@ export class ArticlesComponent implements OnInit {
   show_list_label = '<span class="oi oi-caret-left"> </span>';
   old_title: string;
   // headline_placeholder = 'Search or start here (this is the title)';
-  write_or_nuke_mode: boolean;
-  write_or_nuke_show_button: boolean;
-  editor_bg = this._configService.getConfig('editor_bg');
-  editor_text_color = this._configService.getConfig('editor_text_color');
+  write_or_nuke_mode = this.config.write_or_nuke;
+  write_or_nuke_show_button = this.config.write_or_nuke_show_button;
+  editor_bg = this.config.editor_bg;
+  editor_text_color = this.config.editor_text_color;
 
   constructor(
     private _articleService: ArticleService,
@@ -64,6 +64,7 @@ export class ArticlesComponent implements OnInit {
         this.editorMaxWidth = new_config.editor_max_width;
         this.write_or_nuke_mode = new_config.write_or_nuke;
         this.write_or_nuke_show_button = new_config.write_or_nuke_show_button;
+        console.log('Inside Editor Constructor and write_or_nuke_show_button=', this.write_or_nuke_show_button);
         this.editor_bg = new_config.editor_bg;
         this.editor_text_color = new_config.editor_text_color;
       }
@@ -332,10 +333,12 @@ export class ArticlesComponent implements OnInit {
       this.write_or_nuke_mode = false;
       this._msgService.add('Write or Nuke mode is disabled.', 'success');
     } else {
-      this.write_or_nuke_mode = true;
-      const msg =
-        'WARNING: Write or Nuke mode is enabled. You will lose everything you type if you stop typing till target words';
-      this._msgService.add(msg, 'danger');
+      if(confirm('When you enable "Write or Nuke" mode, you have to keep on typing until you complete the target number of words.\nIf you stop typing for more than 30 seconds, you will lose whatever you have written so far.\n.Are you sure you want to continue?')){
+        this.write_or_nuke_mode = true;
+        const msg =
+          'WARNING: Write or Nuke mode is enabled. You will lose everything you type if you stop typing till target words';
+        this._msgService.add(msg, 'danger');
+      }
     }
     this._configService.setConfig('write_or_nuke', this.write_or_nuke_mode);
   }

@@ -160,6 +160,8 @@ export class ConfigService {
         scope.config.write_or_nuke_show_button =
           config_data.write_or_nuke_show_button;
       }
+      console.log('Inside config file read and this.write_or_nuke_show_button', scope.config.write_or_nuke_show_button);
+
       if (config_data.write_or_nuke_warning_sound) {
         scope.config.write_or_nuke_warning_sound =
           config_data.write_or_nuke_warning_sound;
