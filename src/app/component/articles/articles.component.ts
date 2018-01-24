@@ -333,7 +333,7 @@ export class ArticlesComponent implements OnInit {
       this.write_or_nuke_mode = false;
       this._msgService.add('Write or Nuke mode is disabled.', 'success');
     } else {
-      if(confirm('When you enable "Write or Nuke" mode, you have to keep on typing until you complete the target number of words.\nIf you stop typing for more than 30 seconds, you will lose whatever you have written so far.\n.Are you sure you want to continue?')){
+      if(confirm('When you enable "Write or Nuke" mode, you cannot stop typing until you complete the target number of words.\nIf you stop typing for more than 30 seconds, you will lose whatever you have written so far.\nAre you sure you want to continue?')){
         this.write_or_nuke_mode = true;
         const msg =
           'WARNING: Write or Nuke mode is enabled. You will lose everything you type if you stop typing till target words';

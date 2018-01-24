@@ -83,7 +83,19 @@ export class EditorComponent implements OnInit {
       this.content.substring(0, this.editor_object.selectionStart) +
       '    ' +
       this.content.substring(this.editor_object.selectionEnd);
-    this.editor_object.selectionEnd = s + 1;
+    this.editor_object.focus();
+
+    let pos_timer: any;
+    if (pos_timer) {
+      clearInterval(pos_timer);
+    }
+
+    pos_timer = setTimeout(() => {
+      this.editor_object.focus();
+      const cursor_pos = s + 4;
+      this.editor_object.setSelectionRange(cursor_pos, cursor_pos);
+    }, 10);
+
   }
 
   on_keyup(event): void {
@@ -112,7 +124,7 @@ export class EditorComponent implements OnInit {
     }
 
     this.write_or_nuke_reset();
-    console.log('600 about to test write or nuke', this.config.write_or_nuke);
+    // console.log('600 about to test write or nuke', this.config.write_or_nuke);
     if (this.config.write_or_nuke) {
       this.write_or_nuke();
     }
@@ -134,6 +146,10 @@ export class EditorComponent implements OnInit {
         spaces = spaces + ' ';
       }
     }
+
+    // See if the user had selected some text.
+    console.log('Selection Start = ', start_pos);
+    console.log('Selection End = ', end_pos);
 
     // get bullet chars
     // const first_two_chars: string = last_line.substr(index_space, 2);
@@ -169,11 +185,11 @@ export class EditorComponent implements OnInit {
       if (arr_number_separator && arr_number_separator.length === 2) {
         if (arr_number_separator[1] === ' ') {
           const first_char = arr_number_separator[0];
-          if (first_char === '.') {
+          // if (first_char === '.') {
             const new_number = +number_found + 1;
             spaces = spaces + new_number + arr_number_separator.join('');
             // todo: now need to parse all future lines and if number found in future lines, then we update those numbers as well
-          }
+          // }
         }
       }
     }

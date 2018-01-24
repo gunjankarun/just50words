@@ -1,6 +1,6 @@
 {
   "editor_bg": "url('assets/images/bg-dirty-paper.jpg')",
-  "editor_text_color": "blue",
+  "editor_text_color": "black",
   "target_words": 100,
   "target_words_countdown_type": "to_target",
   "target_reached_sound": "assets/sound/notification-sound.mp3",

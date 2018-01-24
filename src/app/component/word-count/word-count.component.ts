@@ -154,8 +154,15 @@ export class WordCountComponent implements OnInit {
     let word_count = total_word_count;
     // adjust for existing contents
     if (this.old_word_count) {
+      // if the user deleted something from old content then ignore the negative data
+      if (this.old_word_count > word_count) {
+        this.old_word_count = word_count;
+      }
+
       word_count = word_count - this.old_word_count;
     }
+
+
     this._wordCountService.word_count = word_count;
 
     const half_way = this.target_words / 2;
