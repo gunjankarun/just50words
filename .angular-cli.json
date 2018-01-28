@@ -17,9 +17,11 @@
       "test": "test.ts",
       "tsconfig": "tsconfig.app.json",
       "testTsconfig": "tsconfig.spec.json",
-      "prefix": "app",
+      "prefix": "",
       "styles": [
-        "styles.css"
+        "styles.css",
+        "bootstrap.min.css",
+        "fonts.css"
       ],
       "scripts": [],
       "environmentSource": "environments/environment.ts",
@@ -55,6 +57,18 @@
   },
   "defaults": {
     "styleExt": "css",
-    "component": {}
+    "prefixInterfaces": false,
+    "inline": {
+      "style": false,
+      "template": false
+    },
+    "spec": {
+      "class": true,
+      "component": true,
+      "directive": true,
+      "module": true,
+      "pipe": true,
+      "service": true
+    }
   }
 }
