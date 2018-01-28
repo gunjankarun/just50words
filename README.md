@@ -1,8 +1,8 @@
-# Just50words
+# Just60words
 
-A simple to use editor that I am building to help me write at least 50 words daily.
+A simple to use editor that I am building to help me write at least 60 words daily.
 
-This is a desktop app that  
+This is a desktop app that
 
 - enables you to write articles in a distraction free environment, 
 - motivates you to write more by showing the count of words
