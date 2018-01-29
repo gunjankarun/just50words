@@ -181,20 +181,19 @@ export class EditorComponent implements OnInit {
       if (arr_number_separator && arr_number_separator.length === 2) {
         if (arr_number_separator[1] === ' ') {
           const first_char = arr_number_separator[0];
-          const first_char_pos = first_char.match(/(^[\W]+)(.+$)/i);
-          console.log('first char pos: ', first_char_pos);
-          if (first_char === '.' || first_char === ')' || first_char === ']' || first_char === '>' || first_char === '#' || first_char === ':') {
-            // console.log("spaces", spaces);
+          const is_special_char = first_char.match(/\W/i);
+          if (is_special_char) {
             const new_number = +number_found + 1;
             spaces = spaces + new_number + arr_number_separator.join('');
-            // console.log("spaces", spaces);
-            // todo: now need to parse all future lines and if number found in future lines, then we update those numbers as well
-            // }
             this.format_number_bullet(start_pos, end_pos, new_number, first_char);
           }
         }
       }
     }
+
+    // continue text starting with step or item
+    // const step_found = last_line.match(/(^[\sstep\d]+)(.+$)/i);
+    // console.log('step_found: ', step_found);
 
     // Update the text with bullets or indents
     if (spaces) {

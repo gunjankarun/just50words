@@ -16,7 +16,7 @@ export class FileService {
   config_file = this.application_root + 'config/_config.json';
 
   constructor(// private _msgService: MessageService,
-              private _electronService:ElectronService) {
+              private _electronService: ElectronService) {
     console.log('Application folder is ', this.application_root);
     console.log('Article folder is ', this.article_folder);
     if (this._electronService.isElectronApp) {
@@ -31,10 +31,10 @@ export class FileService {
     }
   }
 
-  save_article(article:Article, autosave = false) {
+  save_article(article: Article, autosave = false) {
     // console.log('saving content: ', article.title);
     // let inputWords = article.title.split(/\s+/);
-    let article_file:string;
+    let article_file: string;
     if (article.content_file) {
       article_file = article.content_file;
     } else {
@@ -65,7 +65,7 @@ export class FileService {
     this.save(save_data, autosave);
   }
 
-  save_articles(articles:Article[], autosave = false) {
+  save_articles(articles: Article[], autosave = false) {
     // console.log('saving articles: ');
     const file_contents = JSON.stringify(articles);
     const save_data = {
@@ -115,7 +115,7 @@ export class FileService {
     }
   }
 
-  load_articles(next):any {
+  load_articles(next): any {
     if (this._electronService.isElectronApp) {
       //   console.log ('Not loading articles because not Electron');
       //   return ;
@@ -139,7 +139,7 @@ export class FileService {
 
       scope.ipc.on('file-read', function (evt, args) {
         // console.log('IPC Renderer says, file read');
-        let result:any;
+        let result: any;
         try {
           result = JSON.parse(args);
           const message = 'Json Parsed successfully';
@@ -197,7 +197,7 @@ export class FileService {
           "date_updated": "2018-01-12T10:40:46.490Z"
         }
       ]`;
-      let result:any;
+      let result: any;
       try {
         result = JSON.parse(old_data);
         const message = 'OLD data Json Parsed successfully';
@@ -213,7 +213,7 @@ export class FileService {
   }
 
   // Configuration related data
-  load_config(next):any {
+  load_config(next): any {
     if (this._electronService.isElectronApp) {
       //   console.log ('Not loading articles because not Electron');
       //   return ;
@@ -237,7 +237,7 @@ export class FileService {
 
       scope.ipc.on('config-file-read', function (evt, args) {
         console.log('IPC Renderer says, config-file read');
-        let result:any;
+        let result: any;
         try {
           result = JSON.parse(args);
           const message = 'Config Json Parsed successfully';
@@ -258,11 +258,11 @@ export class FileService {
       console.log('Loading old config');
       const old_data = `
     {
-      "target_words": 60,
+      "target_words": 50,
       "target_words_countdown_type": "to_target"
     }
       `;
-      let result:any;
+      let result: any;
       try {
         result = JSON.parse(old_data);
         const message = 'OLD config data Json Parsed successfully';
