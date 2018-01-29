@@ -10,6 +10,7 @@ import {
 import { Subject } from 'rxjs/Subject';
 import { ConfigService } from '../../service/config.service';
 import { MessageService } from '../../service/message.service';
+import { AudioService } from '../../service/audio.service';
 
 @Component({
   selector: 'app-editor',
@@ -39,6 +40,7 @@ export class EditorComponent implements OnInit {
 
   constructor(private _configService: ConfigService,
               private _elRef: ElementRef,
+              private _audioService: AudioService,
               private _msgService: MessageService) {
     this.config_subscription = _configService.configChange.subscribe(
       new_config => {
@@ -47,6 +49,9 @@ export class EditorComponent implements OnInit {
         this.target_words = new_config.target_words;
         this.editorMaxWidth = new_config.editor_max_width;
         this.editor_text_color = new_config.editor_text_color;
+        this.config.play_keypress_sound = new_config.play_keypress_sound;
+        this.config.keypress_sound = new_config.keypress_sound;
+        
         // this.write_or_nuke = new_config.write_or_nuke;
         this.write_or_nuke_interval = new_config.write_or_nuke_interval;
         console.log(
@@ -104,9 +109,7 @@ export class EditorComponent implements OnInit {
     const play_keypress_sound = this.config.play_keypress_sound;
     const keypress_sound = this.config.keypress_sound;
     if (play_keypress_sound) {
-      const audio = new Audio(keypress_sound);
-      audio.volume = 0.1;
-      audio.play();
+      this._audioService.playSound(keypress_sound, 0.1);
     }
 
     // format text
@@ -278,20 +281,12 @@ export class EditorComponent implements OnInit {
           msg + ' Type ' + remaining_words + ' more words to disable nuking.';
         this._msgService.add(msg, 'warning');
         // play warning sound
-        const audio = new Audio(
-          this.config.write_or_nuke_warning_sound
-        );
-        // audio.volume = 0.1;
-        audio.play();
+        this._audioService.playSound(this.config.write_or_nuke_warning_sound);
       }
       if (this.write_or_nuke_interval <= 0) {
         console.log('Time over');
         this._msgService.add('Content NUKED!!!', 'danger');
-
-        const audio = new Audio(
-          this.config.write_or_nuke_nuked_sound
-        );
-        audio.play();
+        this._audioService.playSound(this.config.write_or_nuke_nuked_sound);
 
         this.nuked.emit();
         clearInterval(this.write_or_nuke_timer);

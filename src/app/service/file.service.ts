@@ -17,17 +17,17 @@ export class FileService {
 
   constructor(// private _msgService: MessageService,
               private _electronService: ElectronService) {
-    console.log('Application folder is ', this.application_root);
-    console.log('Article folder is ', this.article_folder);
+    // console.log('Application folder is ', this.application_root);
+    // console.log('Article folder is ', this.article_folder);
     if (this._electronService.isElectronApp) {
       const remote = this._electronService.remote;
       this.application_root = remote.getGlobal('application_root');
-      console.log('\n100: this.application_root is ', this.application_root);
+      // console.log('\n100: this.application_root is ', this.application_root);
       this.article_folder = this.application_root + 'articles';
       this.article_summary_folder = this.application_root + 'articles';
       this.article_file = this.article_folder + '/_articles';
       this.config_file = this.application_root + 'config/_config.json';
-      console.log('200 and config file is ', this.config_file);
+      // console.log('200 and config file is ', this.config_file);
     }
   }
 
@@ -255,10 +255,11 @@ export class FileService {
         }
       });
     } else {
-      console.log('Loading old config');
+      // console.log('Loading old config');
       const old_data = `
     {
       "target_words": 50,
+      "mute_all_sound": true,
       "target_words_countdown_type": "to_target"
     }
       `;
@@ -266,12 +267,12 @@ export class FileService {
       try {
         result = JSON.parse(old_data);
         const message = 'OLD config data Json Parsed successfully';
-        console.log(message, result);
+        // console.log(message, result);
         // this._msgService.add(message, 'success');
         next(null, result);
         return;
       } catch (error) {
-        console.log('Loading error in OLD config data JSON', error);
+        // console.log('Loading error in OLD config data JSON', error);
         // const err_message = 'Config file loading error';
         // this._msgService.add(err_message, 'danger');
         next(error, null);

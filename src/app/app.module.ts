@@ -23,6 +23,7 @@ import { WordCountPipe } from './pipe/word-count.pipe';
 import { WritingStreakComponent } from './component/writing-streak/writing-streak.component';
 import { WritingStreakService } from './service/writing-streak.service';
 import { EditorComponent } from './component/editor/editor.component';
+import { AudioService } from './service/audio.service';
 
 @NgModule({
   declarations: [
@@ -51,7 +52,8 @@ import { EditorComponent } from './component/editor/editor.component';
       useFactory: (config: ConfigService) => () => config.load_config(),
       deps: [ConfigService],
       multi: true
-    }
+    },
+    AudioService
   ],
   bootstrap: [AppComponent]
 })

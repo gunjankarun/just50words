@@ -7,6 +7,7 @@ import { WordCountService } from '../../service/word-count.service';
 import { Article } from '../../article';
 import { MessageService } from '../../service/message.service';
 import { Constants } from '../../constants';
+import { AudioService } from '../../service/audio.service';
 
 @Component({
   selector: 'app-word-count',
@@ -35,7 +36,8 @@ export class WordCountComponent implements OnInit {
   constructor(
     private _configService: ConfigService,
     private _wordCountService: WordCountService,
-    private _msgService: MessageService
+    private _msgService: MessageService,
+    private _audioService: AudioService
   ) {
     this.word_count = this._wordCountService.word_count;
     this.config = this._configService.config;
@@ -52,6 +54,8 @@ export class WordCountComponent implements OnInit {
         console.log('new target_words =', this.target_words);
 
         this.word_count = this.target_words;
+        this.config.target_reached_sound = new_config.target_reached_sound;
+
         switch (this.config.target_words_countdown_type) {
           case Constants.WORD_COUNT_TYPE.TO_TARGET:
             this.label = 'Words left';
@@ -236,11 +240,8 @@ export class WordCountComponent implements OnInit {
 
     // Lets celebrate by playing sound
     if (celebrate) {
-      if (this._configService.getConfig('play_target_reached_sound')) {
-        const audio = new Audio(
-          this._configService.getConfig('target_reached_sound')
-        );
-        audio.play();
+      if (this.config.target_reached_sound) {
+        this._audioService.playSound(this.config.target_reached_sound);
       }
       this._wordCountService.celebrate = true;
       this._msgService.add('You did it! Proud of you.', 'success');

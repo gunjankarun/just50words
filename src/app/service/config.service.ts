@@ -14,6 +14,7 @@ export class ConfigService {
     target_words: 50,
     target_words_countdown_type: 'to_target',
     target_reached_sound: 'assets/sound/notification-sound.mp3',
+    mute_all_sound: true,
     play_target_reached_sound: true,
     editor_max_width: 800,
     play_keypress_sound: true,
@@ -117,7 +118,7 @@ export class ConfigService {
     // load the configuration data
     const scope = this;
     this._fileService.load_config(function(err, config_data) {
-      console.log('100 Loading config', config_data);
+      // console.log('100 Loading config', config_data);
 
       // scope.config = config_data;
       if (config_data.hasOwnProperty('target_words')) {
@@ -132,6 +133,9 @@ export class ConfigService {
       }
       if (config_data.hasOwnProperty('editor_text_color')) {
         scope.config.editor_text_color = config_data.editor_text_color;
+      }
+      if (config_data.hasOwnProperty('mute_all_sound')) {
+        scope.config.mute_all_sound = config_data.mute_all_sound;
       }
       if (config_data.hasOwnProperty('target_reached_sound')) {
         scope.config.target_reached_sound = config_data.target_reached_sound;
@@ -204,7 +208,7 @@ export class ConfigService {
       if (config_data.hasOwnProperty('long_break_complete_sound')) {
         scope.config.long_break_complete_sound = config_data.long_break_complete_sound;
       }
-      console.log('Config updated. New config.word_count = ', scope.config.target_words);
+
       scope.configChange.next(scope.config);
     });
   }
