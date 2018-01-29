@@ -10,10 +10,10 @@ export class FileService {
   ipc = this._electronService.ipcRenderer;
 
   application_root = '';
-  article_folder = this.application_root + 'articles';
+  article_folder = this.application_root + 'data';
   article_summary_folder = this.application_root + 'articles';
   article_file = this.article_folder + '/_articles';
-  config_file = this.application_root + 'config/_config.json';
+  config_file = this.application_root + 'data/_config.json';
 
   constructor(// private _msgService: MessageService,
               private _electronService: ElectronService) {

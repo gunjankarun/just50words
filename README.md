@@ -51,6 +51,7 @@ That is all this editor is about. Just 50 words, everyday. That takes less than 
 Almost everything in the editor can be customized by editing the config.json file.
 
 WARNING: The config.json file has to be a valid JSON. So you will have to ensure that there are no errors in the JSON. In a future version I will create a UI to manage config settings.
+I strongly recommend using json editors like https://jsoneditoronline.org/ to edit and verify this json file before using it in the app.
 
 ## Location of the file
 ### Windows
@@ -60,37 +61,91 @@ WARNING: The config.json file has to be a valid JSON. So you will have to ensure
 ## List of properties that can be updated
 ### Look and feel related settings
 
-      - editor_bg = 'url("assets/images/bg-dirty-paper.jpg")'; // background image for the editor or use a color 'black'; // background image for the editor
-      - editor_text_color = 'black';
-      - editor_max_width = 800; // max width of editor in pixels
-      - play_keypress_sound = true;
-      - keypress_sound = 'assets/sound/tick.wav';
+      - editor_bg: 'url("assets/images/bg-dirty-paper.jpg")' 
+      // background image for the editor. When using image, url url('image_url')
+      // or use a solid color like 'black', 'white' etc.; 
+      // you can use color names or hex codes like #fffff for white etc from http://htmlcolorcodes.com/color-names/
+      
+      
+      - editor_text_color: 'black'
+      // color of the text. Use any html5 color names or html color codes.
+      // you can use color names or hex codes like #fffff for white etc from http://htmlcolorcodes.com/color-names/
+
+      - editor_max_width: 800 
+      // max width of editor in pixels. This width is used to add padding to the editor when the width of editor is more than this pixel.
+
+      - mute_all_sounds: false 
+      // global setting to mute all sounds (key press sounds, target complete sound etc.) irrespective of their individual settings
+      
+      - play_keypress_sound: true
+      // Play the sound of typewriter key press as you type. Helps to focus on writing
+      
+      - keypress_sound: 'assets/sound/tick.wav'
+      // this is the sound file that will be played when you press any key. If you want to use your own sound, put the absolute file path here.
 
 ### Target related settings
-      - target_words = 50;
-      - target_words_countdown_type = Constants.WORD_COUNT_TYPE.WORD_COUNT;
-      - target_reached_sound = 'assets/sound/notification-sound.mp3';
-      - play_target_reached_sound = true;
+      - target_words: 50
+      // This is the target of words you want to write each day for each article. This will affect the write or nuke feature and also the word countdowns etc
+
+      - target_words_countdown_type: Constants.WORD_COUNT_TYPE.WORD_COUNT;
+      // There are three kinds of word countdowns that can be see in the editor. The possible values are
+      // 'to_target' - This will start a countdown from -target to zero and then will show actual words typed after target is reached. For example, until target is reached, it will be -50 to 0 and then 51 onwards
+      // 'word_count' - This will be show the actual word count. It will always start from zero and will show a success message as soon as target words are typed.
+      // 'countdown' - This will show a countdown from -target to zero. When target is reached, it will start the countdown again.
+
+      - play_target_reached_sound: true
+      // Do you want to play a sound when you have typed the target number of words
+
+      - target_reached_sound: 'assets/sound/notification-sound.mp3'
+      // What sound to play when the target is reached. If you want to use your own sound, put the absolute file path here.
 
 
 ### "Write or Nuke" related settings
-      - write_or_nuke = true; // if true then the user has to press a key within write_or_nuke_interval seconds
-      - write_or_nuke_interval = 30; // number of seconds to wait for keystrokes before clearing the content
-      - write_or_nuke_nuked_sound = 'assets/sound/glass-breaking.mp3';
-      - write_or_nuke_warning_sound = 'assets/sound/pin_dropping-Brian_Rocca-2084700791.mp3';
-      - write_or_nuke_show_button = true; // Show or hide the write or nuke button on main screen.
+      - write_or_nuke: true 
+      // Do you want to enable the write or nuke feature. 
+      // WARNING: If you enable it then you must not stop typing until your target number of words are complete. Otherwise it will delete everything from that article.
+
+      - write_or_nuke_interval: 30
+      // Number of seconds to wait before nuking the content. So if it is 30 then the contents will be nuked if you stop typing for more than 30 seconds.
+
+      - write_or_nuke_show_button: true 
+      // Show or hide the write or nuke button on main screen. Many people prefer to hide this button because it makes it difficult to disable this feature. If you select true, then the editor will show a button on the main screen that will let you disable the Write or Nuke option to prevent clearing of content.
+
+      - write_or_nuke_warning_sound: 'assets/sound/pin_dropping-Brian_Rocca-2084700791.mp3'
+      // what sound to play a few seconds before nuking the content. If you want to use your own sound, put the absolute file path here.
+
+      - write_or_nuke_nuked_sound: 'assets/sound/glass-breaking.mp3'
+      // what sound to play when the countent is nuked. If you want to use your own sound, put the absolute file path here.
+
 
 ### Timer interval related settings
-      - manually_start_session = true; // Whether the session timer should pause before starting the next session
-      - play_session_completed_sound = true; // Should we play the sounds related to completed the sessions and breaks
-      - session_celebration_duration = 3; // how long will the celebration banner last
-      - work_session = 15; // minutes to work
-      - work_session_complete_sound = 'assets/sound/relentless.mp3';
-      - short_break = 5; // short break sessions
+      - manually_start_session: true
+      // If you set this to true, then once a work and break session is over, the timer will pause. This allows you to start the timer when you start working again. If you set it to false, the timer will start automatically.
+
+      - play_session_completed_sound: true
+      // Should we play the sounds related to completed the sessions and breaks. If you want to use your own sound, put the absolute file path here.
+
+      - work_session: 15
+      // how many minutes would be there in the work session.
+
+      - work_session_complete_sound: 'assets/sound/relentless.mp3'
+      // Do you want to play a notification sound when work session is complete. If you want to use your own sound, put the absolute file path here.
+
+      - short_break: 5
+      // how many minutes will the short break last 
+
       - short_break_complete_sound = 'assets/sound/filling.mp3';
-      - continuous_sessions = 3; // how many sessions in one set. Big break after these number of small breaks
-      - long_break = 15; // how long will the long break be after continuous session counts
+      // do you want to play a notification sound when short break is over.
+
+      - continuous_sessions = 3; 
+      // how many sessions (work session + short break) should be there in one set. 
+      // you can configure a bigger break after these number of small breaks
+
+      - long_break = 15; 
+      // how long (in minutes) will the long break be after continuous session counts
+
       - long_break_complete_sound = 'assets/sound/filling.mp3';
+      // what sound to play when the long break is over. If you want to use your own sound, put the absolute file path here.
 
 # Planned Features
 What you see here is part of the long journey that I have planned for Just 50 words. Most of these are doable, I just need more time to build them. Some of them are wishful thinking, but they are here anyway.
