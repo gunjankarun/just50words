@@ -9,21 +9,20 @@
               <small class="oi oi-magnifying-glass"></small>
             </div>
           </div>
-          <input 
-            type="text" 
-            class="form-control" 
-            id="search-box" 
+          <input
+            type="text"
+            class="form-control"
+            id="search-box"
             placeholder="Search articles"
             [(ngModel)]="search_term"
           >
         </div>
       </div> -->
       <div class="title" *ngIf='show_list'>Just {{target_words}} words
-              <button type="button" class="btn btn-small btn-link btn-sm" (click)='show_options()'
-               placement="bottom" ngbTooltip="Options"
-              >
-                <span class="oi oi-menu"></span>
-              </button>
+        <button type="button" class="btn btn-small btn-link btn-sm" (click)='show_options()'
+                placement="bottom" ngbTooltip="Options">
+          <span class="oi oi-menu"></span>
+        </button>
       </div>
       <div class="form-group text-center" *ngIf='current_article'>
         <div class="input-group">
@@ -32,13 +31,13 @@
               <small class="oi oi-magnifying-glass"></small>
             </div>
           </div>
-          <input type="text" 
-          class="form-control" 
-          id="search-box" 
-          [(ngModel)]="search_term" 
-          (keyup)="search_article_from_search($event)"
+          <input type="text"
+                 class="form-control"
+                 id="search-box"
+                 [(ngModel)]="search_term"
+                 (keyup)="search_article_from_search($event)"
 
-          placeholder="Search articles">
+                 placeholder="Search articles">
         </div>
       </div>
       <div class="list-group" id="article-list-container" [style.height.px]="listHeight">
@@ -47,16 +46,15 @@
           <br>
           Click on 'New' Button or Start Typing the title and Hit ENTER to start a new article.
           <hr>
-          <strong class="text-center">  You will see a list of your old articles here.</strong>
+          <strong class="text-center"> You will see a list of your old articles here.</strong>
         </span>
 
         <span *ngFor="let article of filtered_articles; let i=index">
-          <span class="list-group-item list-group-item-action flex-column align-items-start" 
-            (click)="select_article(article)"
-            *ngIf='article.title || article.summary'
-            [class.active]="((i==0 && select_first_article) || (article==current_article))"
-            style= "cursor: pointer;"
-            >
+          <span class="list-group-item list-group-item-action flex-column align-items-start"
+                (click)="select_article(article)"
+                *ngIf='article.title || article.summary'
+                [class.active]="((i==0 && select_first_article) || (article==current_article))"
+                style="cursor: pointer;">
             <!-- <button type="button" class="btn btn-link btn-sm btn-delete-article">
               <span class="oi oi-circle-x"></span>
             </button> -->
@@ -64,9 +62,10 @@
                 <h5 class="article-list-title">{{article.title}}</h5>
               </div>
               <div *ngIf='(article.summary)'>{{article.summary}}</div>
-              <div class="text-right" >
+              <div class="text-right">
                 <small class=" badge badge-warning">
-                  <span class="oi oi-clock"></span> {{article.date_updated | timeAgo}}</small>
+                  <span class="oi oi-clock"></span> {{article.date_updated | timeAgo}}
+                </small>
                 <span class="badge badge-info">
                   <span class="oi oi-tags"></span> {{article.content| wordCount}}</span>
               </div>
@@ -79,56 +78,52 @@
       <div class="row info-row" [class.celebrate]="celebrate">
         <div class="col-sm text-right">
           <!-- <app-writing-streak [show_list]='show_list'></app-writing-streak> -->
-          <button type="button" class="btn btn-dark btn-sm float-left btn-article-list" 
-            [innerHTML]="show_list_label"
-            (click)="toggle_list()"
-            >  </button>
-            <!-- &nbsp;&nbsp;<div class="title" *ngIf='!show_list' style="float:left;">Just 50 Words</div> -->
-          <app-word-count 
+          <button type="button" class="btn btn-dark btn-sm float-left btn-article-list"
+                  [innerHTML]="show_list_label"
+                  (click)="toggle_list()"></button>
+          <!-- &nbsp;&nbsp;<div class="title" *ngIf='!show_list' style="float:left;">Just 50 Words</div> -->
+          <app-word-count
             [article_title]="current_article ? current_article.title : ''"
             [article_content]="current_article ? current_article.content : ''"
-            [article]="current_article ? current_article : null"
-          ></app-word-count>
+            [article]="current_article ? current_article : null">
+          </app-word-count>
           <app-writing-timer></app-writing-timer>
-          <button 
-            type="button" 
-            class="btn btn-sm" 
-            *ngIf = "write_or_nuke_show_button"
+          <button
+            type="button"
+            class="btn btn-sm"
+            *ngIf="write_or_nuke_show_button"
             [class.btn-danger]='write_or_nuke_mode'
             (click)='toggle_write_or_nuke()'
-            placement="left" ngbTooltip="Toggle 'Write or Nuke' mode"
-          >
+            placement="left" ngbTooltip="Toggle 'Write or Nuke' mode">
             <span class="oi oi-fire"></span>
           </button>
           <button type="button" class="btn btn-dark btn-sm" (click)="new_article_button_click()"
-           placement="left" ngbTooltip="Create a new article">
-            <span class="oi oi-plus"></span> 
+                  placement="left" ngbTooltip="Create a new article">
+            <span class="oi oi-plus"></span>
           </button>
-          <button type="button" 
-            class="btn btn-warning btn-sm" 
-            *ngIf = "current_article.content || current_article.title"
-            (click)="delete_article()"
-            placement="left" ngbTooltip="Delete this article"
-            >
-            <span class="oi oi-trash"></span> 
+          <button type="button"
+                  class="btn btn-warning btn-sm"
+                  *ngIf="current_article.content || current_article.title"
+                  (click)="delete_article()"
+                  placement="left" ngbTooltip="Delete this article">
+            <span class="oi oi-trash"></span>
           </button>
         </div>
       </div>
       <div class="row">
         <div class="col-sm">
-          <input type="text" 
-            id="headline" 
-            spellcheck="true" 
-            [style.maxWidth.px]="editorMaxWidth"
-            [style.color]="editor_text_color"
-            autofocus
-            [class]='headline_font'
-            placeholder="What do you want to write about?"
-            [(ngModel)]="current_article.title"
-            (keyup)="key_pressed_headline($event)"
-            (ngModelChange)="search_article_from_title($event)"
-            (focus)="focus_set()"
-          >
+          <input type="text"
+                 id="headline"
+                 spellcheck="true"
+                 [style.maxWidth.px]="editorMaxWidth"
+                 [style.color]="editor_text_color"
+                 autofocus
+                 [class]='headline_font'
+                 placeholder="What do you want to write about?"
+                 [(ngModel)]="current_article.title"
+                 (keyup)="key_pressed_headline($event)"
+                 (ngModelChange)="search_article_from_title($event)"
+                 (focus)="focus_set()">
         </div>
       </div>
       <div>
@@ -140,8 +135,8 @@
             (nuked)="nuke_content()"
             [word_count]="word_count"
             (editor_object_created)="create_editor_object($event)"
-            [(content)]="this.current_article.content"
-          ></app-editor>
+            [(content)]="this.current_article.content">
+          </app-editor>
           <app-message></app-message>
         </div>
       </div>

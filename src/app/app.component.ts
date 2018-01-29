@@ -6,7 +6,7 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'Just 50 Words';
+  title = 'Just 60 Words';
   innerHeight: number;
   listHeight: number;
   editorHeight: number;
@@ -28,7 +28,7 @@ export class AppComponent {
 
   /**
    * Set's screen's height to handle resize events
-   * 
+   *
    * @memberof AppComponent
    */
   set_screen() {

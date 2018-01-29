@@ -37,11 +37,9 @@ export class EditorComponent implements OnInit {
   editorMaxWidth = this.config.editor_max_width;
   editor_text_color = this.config.editor_text_color;
 
-  constructor(
-    private _configService: ConfigService,
-    private _elRef: ElementRef,
-    private _msgService: MessageService
-  ) {
+  constructor(private _configService: ConfigService,
+              private _elRef: ElementRef,
+              private _msgService: MessageService) {
     this.config_subscription = _configService.configChange.subscribe(
       new_config => {
         this.config = new_config;
@@ -134,9 +132,7 @@ export class EditorComponent implements OnInit {
     const start_pos = this.editor_object.selectionStart;
     const end_pos = this.editor_object.selectionEnd;
     // console.log ('selection start = ' + start_pos + ' and sel end = ' + end_pos);
-    const content_till_cursor = this.content.substr(0, start_pos);
-    // console.log('content_till_cursor', content_till_cursor);
-    const lines = content_till_cursor.split('\n');
+    const lines = this.content.substr(0, start_pos).split('\n');
     const last_line = lines.length ? lines[lines.length - 2] : '';
     const index_space = last_line.search(/\S|$/);
     // console.log('index space', index_space);
@@ -167,8 +163,8 @@ export class EditorComponent implements OnInit {
       ) {
         if (
           arr_special_chars_separator[
-            arr_special_chars_separator.length - 1
-          ] === ' '
+          arr_special_chars_separator.length - 1
+            ] === ' '
         ) {
           spaces = arr_special_chars_separator.join('');
         }
@@ -185,11 +181,17 @@ export class EditorComponent implements OnInit {
       if (arr_number_separator && arr_number_separator.length === 2) {
         if (arr_number_separator[1] === ' ') {
           const first_char = arr_number_separator[0];
-          // if (first_char === '.') {
+          const first_char_pos = first_char.match(/(^[\W]+)(.+$)/i);
+          console.log('first char pos: ', first_char_pos);
+          if (first_char === '.' || first_char === ')' || first_char === ']' || first_char === '>' || first_char === '#' || first_char === ':') {
+            // console.log("spaces", spaces);
             const new_number = +number_found + 1;
             spaces = spaces + new_number + arr_number_separator.join('');
+            // console.log("spaces", spaces);
             // todo: now need to parse all future lines and if number found in future lines, then we update those numbers as well
-          // }
+            // }
+            this.format_number_bullet(start_pos, end_pos, new_number, first_char);
+          }
         }
       }
     }
@@ -197,7 +199,7 @@ export class EditorComponent implements OnInit {
     // Update the text with bullets or indents
     if (spaces) {
       this.content =
-        content_till_cursor +
+        this.content.substr(0, start_pos) +
         spaces +
         this.content.substr(end_pos, this.content.length);
       // console.log('About to set selection start = ' + start_pos + ' and sel end = ' + end_pos);
@@ -210,6 +212,29 @@ export class EditorComponent implements OnInit {
         this.editor_object.focus();
         this.editor_object.setSelectionRange(cursor_pos, cursor_pos);
       }, 10);
+    }
+  }
+
+  format_number_bullet(start, end, number, number_separator) {
+    const before_lines = this.content.substr(0, start);
+    const after_lines = this.content.substr(end, this.content.length).split('\n');
+    for (let i = 1; i < after_lines.length; i++) {
+      const numbers_found = after_lines[i].match(/(^[\s\d]+)(.+$)/i);
+      if (numbers_found) {
+        const number_found = numbers_found[1];
+        const _number_separator: string = after_lines[i].substr(number_found.length, 2);
+        const arr_number_separator = _number_separator.split('');
+        if (arr_number_separator && arr_number_separator.length === 2) {
+          if (arr_number_separator[1] === ' ') {
+            if (arr_number_separator[0] === number_separator) {
+              after_lines[i] = ++number + numbers_found[2];
+              this.content = before_lines + after_lines.join('\n');
+            }
+          }
+        }
+      } else {
+        break;
+      }
     }
   }
 
