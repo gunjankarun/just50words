@@ -170,13 +170,14 @@ export class EditorComponent implements OnInit {
       }
     }
 
+
     // Now create numbered list
     let number_bullet_found = false;
     let new_number = 0;
     let first_char = '';
     let spaces_before_number = 0;
-    const numbers_found = last_line.match(/(^[\s\d]+)(.+$)/i);
-    // console.log('Numbers found', numbers_found);
+    const numbers_found = last_line.match(/(^[\s]+[\d]+)(.+$)/i);
+    console.log('Numbers found', numbers_found);
     if (numbers_found) {
       const number_found = numbers_found[1];
       spaces_before_number = number_found.split(' ').length - 1;
@@ -198,7 +199,8 @@ export class EditorComponent implements OnInit {
 
     // continue text starting with step or item
     // const step_found = last_line.match(/(^[\sstep\d]+)(.+$)/i);
-    // console.log('step_found: ', step_found);
+
+    console.log('500 spaces are: ', spaces);
 
     // Update the text with bullets or indents
     if (spaces) {
@@ -241,7 +243,8 @@ export class EditorComponent implements OnInit {
     }
 
     for (let i = 0; i < after_lines.length; i++) {
-      const numbers_found = after_lines[i].match(/(^[\s\d]+)(.+$)/i);
+      const numbers_found = after_lines[i].match(/(^[\s]+[\d]+)(.+$)/i);
+      console.log('Number found ', numbers_found);
       if (numbers_found) {
         const number_found = numbers_found[1];
         const _number_separator: string = after_lines[i].substr(number_found.length, 2);
