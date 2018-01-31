@@ -241,9 +241,9 @@ export class ArticlesComponent implements OnInit {
       ? this.current_article.title
       : 'this article';
     const msg =
-      'Are you sure you want to delete:\n"' +
+      'Are you sure you want to delete ' +
       title +
-      '"\nWARNING: This cannot be undone.';
+      '\nWARNING: This cannot be undone.';
     if (confirm(msg)) {
       const scope = this;
       this._articleService.delete_article(function(err, articles) {

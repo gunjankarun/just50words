@@ -100,7 +100,8 @@ if (process.platform === 'darwin') {
         label: name,
         submenu: [
             {
-                role: 'about'
+            label: 'About Just 50 Words',
+            click () { require('electron').shell.openExternal('https://electron.atom.io') }
             },
             {
                 type: 'separator'

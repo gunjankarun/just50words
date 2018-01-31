@@ -102,7 +102,7 @@ export class EditorComponent implements OnInit {
   }
 
   on_keyup(event): void {
-    // console.log('content', this.content);
+    // console.log('in KEYUP function', this.content);
     this.keyup.emit([event]);
 
     // Play the sound
@@ -146,10 +146,6 @@ export class EditorComponent implements OnInit {
       }
     }
 
-    // See if the user had selected some text.
-    console.log('Selection Start = ', start_pos);
-    console.log('Selection End = ', end_pos);
-
     // get bullet chars
     // const first_two_chars: string = last_line.substr(index_space, 2);
     const find_special_chars = last_line.match(/(^[\W]+)(.+$)/i);
@@ -174,21 +170,28 @@ export class EditorComponent implements OnInit {
       }
     }
 
+
     // Now create numbered list
-    const numbers_found = last_line.match(/(^[\s\d]+)(.+$)/i);
-    // console.log('Numbers found', numbers_found);
+    let number_bullet_found = false;
+    let new_number = 0;
+    let first_char = '';
+    let spaces_before_number = 0;
+    const numbers_found = last_line.match(/(^[\s]+[\d]+)(.+$)/i);
+    console.log('Numbers found', numbers_found);
     if (numbers_found) {
       const number_found = numbers_found[1];
+      spaces_before_number = number_found.split(' ').length - 1;
       const number_separator: string = last_line.substr(number_found.length, 2);
       const arr_number_separator = number_separator.split('');
       if (arr_number_separator && arr_number_separator.length === 2) {
         if (arr_number_separator[1] === ' ') {
-          const first_char = arr_number_separator[0];
+          first_char = arr_number_separator[0];
           const is_special_char = first_char.match(/\W/i);
           if (is_special_char) {
-            const new_number = +number_found + 1;
+            number_bullet_found = true;
+            new_number = +number_found + 1;
             spaces = spaces + new_number + arr_number_separator.join('');
-            this.format_number_bullet(start_pos, end_pos, new_number, first_char);
+            // this.format_number_bullet(start_pos, end_pos, new_number, first_char, spaces_before_number);
           }
         }
       }
@@ -196,48 +199,88 @@ export class EditorComponent implements OnInit {
 
     // continue text starting with step or item
     // const step_found = last_line.match(/(^[\sstep\d]+)(.+$)/i);
-    // console.log('step_found: ', step_found);
+
+    console.log('500 spaces are: ', spaces);
 
     // Update the text with bullets or indents
     if (spaces) {
-      this.content =
-        this.content.substr(0, start_pos) +
-        spaces +
-        this.content.substr(end_pos, this.content.length);
-      // console.log('About to set selection start = ' + start_pos + ' and sel end = ' + end_pos);
-      let pos_timer: any;
-      if (pos_timer) {
-        clearInterval(pos_timer);
+      // This preserves the undo redo queue
+      document.execCommand('insertText', false, spaces);
+      // console.log('300 this.content is: ' , this.content);
+      const cursor_pos = start_pos + spaces.length;
+      if (number_bullet_found) {
+        this.format_number_bullet(cursor_pos, cursor_pos, new_number, first_char, spaces_before_number);
       }
-      pos_timer = setTimeout(() => {
-        const cursor_pos = start_pos + spaces.length;
-        this.editor_object.focus();
-        this.editor_object.setSelectionRange(cursor_pos, cursor_pos);
-      }, 10);
+      // this.content = this.editor_object.value;
+      // this.content =
+      //   this.content.substr(0, start_pos) +
+      //   spaces +
+      //   this.content.substr(end_pos, this.content.length);
+      // console.log('About to set selection start = ' + start_pos + ' and sel end = ' + end_pos);
+      // let pos_timer: any;
+      // if (pos_timer) {
+      //   clearInterval(pos_timer);
+      // }
+      // pos_timer = setTimeout(() => {
+        // const cursor_pos = start_pos + spaces.length;
+        // this.editor_object.focus();
+        // this.editor_object.setSelectionRange(cursor_pos, cursor_pos);
+      // }, 10);
     }
   }
 
-  format_number_bullet(start, end, number, number_separator) {
-    const before_lines = this.content.substr(0, start);
-    const after_lines = this.content.substr(end, this.content.length).split('\n');
-    for (let i = 1; i < after_lines.length; i++) {
-      const numbers_found = after_lines[i].match(/(^[\s\d]+)(.+$)/i);
+  format_number_bullet(start, end, number, number_separator, spaces_before_number) {
+    let old_start_pos = start + 1;
+    const before_lines = this.content.substr(0, old_start_pos);
+
+    const after_lines = this.content.substr(old_start_pos, this.content.length).split('\n');
+
+    let blank_spaces = '';
+    if (spaces_before_number) {
+      for (let x = 0; x < spaces_before_number; x++) {
+        blank_spaces = blank_spaces + ' ';
+      }
+    }
+
+    for (let i = 0; i < after_lines.length; i++) {
+      const numbers_found = after_lines[i].match(/(^[\s]+[\d]+)(.+$)/i);
+      console.log('Number found ', numbers_found);
       if (numbers_found) {
         const number_found = numbers_found[1];
         const _number_separator: string = after_lines[i].substr(number_found.length, 2);
+        const space_count = number_found.split(' ').length - 1;
         const arr_number_separator = _number_separator.split('');
         if (arr_number_separator && arr_number_separator.length === 2) {
           if (arr_number_separator[1] === ' ') {
-            if (arr_number_separator[0] === number_separator) {
-              after_lines[i] = ++number + numbers_found[2];
-              this.content = before_lines + after_lines.join('\n');
+            if (spaces_before_number === space_count) {
+              const old_number = number;
+              number = number + 1;
+              this.editor_object.setSelectionRange(old_start_pos, old_start_pos + number_found.length);
+              document.execCommand('delete');
+
+              this.editor_object.setSelectionRange(old_start_pos, old_start_pos);
+              document.execCommand('insertText', false, blank_spaces + number);
+
+              // because insertText changed the selection start so getting new cursor location
+              const new_start_pos = this.editor_object.selectionStart;
+
+              // Adding 1 because split removes the \n character
+              old_start_pos = new_start_pos + numbers_found[2].length + 1 ;
+
+            }else {
+              // stop searching immediately as soon as the numbers are not found.
+              break;
             }
           }
         }
       } else {
+        // stop searching immediately as soon as the numbers are not found.
         break;
       }
     }
+
+    // Let's set the cursor back to the position where the user hit enter
+    this.editor_object.setSelectionRange(start, start);
   }
 
   write_or_nuke() {

@@ -260,8 +260,9 @@ export class FileService {
       const old_data = `
     {
       "target_words": 50,
-      "mute_all_sound": true,
-      "target_words_countdown_type": "to_target"
+      "mute_all_sound": false,
+      "target_words_countdown_type": "to_target",
+      "write_or_nuke": false
     }
       `;
       let result: any;
