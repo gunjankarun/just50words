@@ -231,7 +231,7 @@ export class ArticlesComponent implements OnInit {
     }
     this._articleService.current_article = this.current_article;
     this.articles.unshift(this.current_article);
-    this.save_articles();
+    // this.save_articles();
     this.select_first_article = false;
   }
 

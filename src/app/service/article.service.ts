@@ -47,11 +47,12 @@ export class ArticleService {
         console.log('Articles received', articles.length);
         // if (articles) {
         scope.articles = articles;
-        scope.sort_article_list();
-        const article_count = scope.articles.length;
-        // scope.filtered_articles = scope.articles;
-
-        scope._msgService.add('Loaded ' + article_count + ' articles');
+        if (scope.articles.length) {
+          scope.sort_article_list();
+          const article_count = scope.articles.length;
+          // scope.filtered_articles = scope.articles;
+          scope._msgService.add('Loaded ' + article_count + ' articles');
+        }
         next();
         // }
       }
