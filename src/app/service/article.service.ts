@@ -40,6 +40,7 @@ export class ArticleService {
 
   load_articles(next) {
     const scope = this;
+    // scope.articles = ;
     scope._fileService.load_articles(function(err, articles) {
       if (err) {
         console.log('Error in loading articles', err);

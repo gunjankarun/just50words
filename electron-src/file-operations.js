@@ -74,6 +74,7 @@ ipc.on('find-file', function(event, args) {
   }
 });
 
+
 ipc.on('create-data-folder', function(event, args) {
   const folder_name = args.file_name;
   console.log('About to create data folder in main service from ', folder_name);
@@ -89,3 +90,74 @@ ipc.on('create-data-folder', function(event, args) {
     event.sender.send('not-created-data-folder', error);
   }
 });
+
+// Check default folders and files
+ipc.on('create-defaults', function(event, args) {
+  console.log('About to create default folders and files');
+
+  const data_folder_name = args.data_folder_name;
+  const article_file_name = args.article_file_name;
+  const article_file_data = args.article_file_data;
+  const config_file_name = args.config_file_name;
+  const config_file_data = args.config_file_data;
+
+  console.log('First check if data folder exists or not');
+  if (!file_exists(data_folder_name)) {
+    // create data folder
+    make_dir(data_folder_name);
+  }
+
+  // if (!file_exists(article_file_name)) {
+  //   // create article file
+  //   save_file(article_file_name, article_file_data);
+  // }
+
+  if (!file_exists(config_file_name)) {
+    // create config file
+    save_file(config_file_name, config_file_data);
+  }
+
+  event.sender.send('created-defaults','');
+});
+
+function file_exists(file_name) {
+  try {
+    if (fs.existsSync(file_name)) {
+      console.log('found ', file_name);
+      return true;
+    } else {
+      console.log('Not found ' + file_name);
+      return false;
+    }
+    // console.log('loaded file' + file_path, data);
+  } catch (error) {
+    console.log('Error finding  ' + file_name, error);
+    return false;
+  }
+}
+
+function make_dir(dir_name){
+  try {
+    fs.mkdirSync(dir_name);
+    console.log('Data folder not found so not creating a new one');
+    return true;
+  } catch (error) {
+    console.log('Error creating data folder ' + dir_name, error);
+    return false;
+  }
+
+}
+
+function save_file(file_name, file_contents){
+  fs.writeFileSync(file_name, file_contents, function(error) {
+    if (error) {
+      // throw error
+      console.log('There was an error in saving file', error);
+      return false;
+    } else {
+      console.log('Saved file', file_name);
+      return true;
+    }
+  });
+  
+}

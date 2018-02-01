@@ -9,16 +9,19 @@ export class FileService {
 
   application_root = '';
   data_folder = 'data';
+  article_file_name = '_articles';
+  config_file_name = '_config.json';
+
   article_folder = this.application_root + this.data_folder;
   // article_summary_folder = this.application_root + data_folder;
-  article_file = this.article_folder + '/_articles';
-  config_file = this.article_folder + '/_config.json';
+  article_file = this.article_folder + '/' + this.article_file_name;
+  config_file = this.article_folder + '/' + this.config_file_name;
 
   constructor(
     // private _msgService: MessageService,
     private _electronService: ElectronService
   ) {
-    // console.log('Application folder is ', this.application_root);
+    console.log('Application folder is ', this.application_root);
     // console.log('Article folder is ', this.article_folder);
     if (this._electronService.isElectronApp) {
       const remote = this._electronService.remote;
@@ -136,8 +139,26 @@ export class FileService {
       scope.ipc.send('read-file', load_data);
 
       scope.ipc.on('file-read-error-article', function(evt, args) {
-        console.log('IPC Renderer says, file NOT read', args);
-        next(null, []);
+        console.log('IPC Renderer says, file NOT read so loading default articles', args);
+        const default_articles = `[
+        {
+          "title": "",
+          "summary": "",
+          "content": "",
+          "content_file": "",
+          "date_added": "",
+          "date_updated": ""
+        }
+        ]`;
+        console.log('default_articles=', default_articles);
+        let result: any;
+        try {
+          result = JSON.parse(default_articles);
+          next(null, result);
+        } catch (error) {
+          const err_message = 'File loading error';
+          next(error, null);
+        }
       });
 
       scope.ipc.on('file-read-article', function(evt, args) {
@@ -216,7 +237,7 @@ export class FileService {
   }
 
   // Configuration related data
-  load_config(next): any {
+  load_config(config, next): any {
     if (this._electronService.isElectronApp) {
       console.log('About to load config from ' + this.config_file);
       const scope = this;
@@ -231,8 +252,9 @@ export class FileService {
 
       scope.ipc.on('file-read-error-config', function(evt, args) {
         console.log('IPC Renderer says, config-file NOT read', args);
-        const err_message = 'Could not load config-contents';
-        console.log(err_message);
+        scope.create_default_files(config, function(err, msg){
+          console.log('created defaults');
+        });
         // scope._msgService.add(err_message, 'danger');
       });
 
@@ -284,32 +306,6 @@ export class FileService {
   }
 
   /**
-   * Check if a config file exists or not
-   * @param config : the config object
-   * @param next : the callback function
-   */
-  check_config_file(config: any, next) {
-    const scope = this;
-    const load_data = { file_name: scope.config_file, file_type: 'configfile' };
-
-    console.log(
-      'Checking if config file is available or not ',
-      scope.config_file
-    );
-    scope.ipc.send('find-file', load_data);
-
-    scope.ipc.on('not-found-file-configfile', function(evt, args) {
-      console.log('IPC Renderer says, could not find config file', args);
-      // Since config file does not exist, let us try to create it.
-      scope.save_config_file(config, next);
-    });
-    scope.ipc.on('found-file-configfile', function(evt, args) {
-      console.log('IPC Renderer says, config file found', args);
-      scope.load_config(next);
-    });
-  }
-
-  /**
    * This creates the default config file
    */
   save_config_file(config: any, next) {
@@ -340,45 +336,28 @@ export class FileService {
    * @param config
    * @param next callback function
    */
-  check_data_folder(config, next) {
+  create_default_files(config, next) {
     const scope = this;
     const load_data = {
-      file_name: scope.article_folder,
-      file_type: 'datafolder'
+      data_folder_name: scope.article_folder,
+      article_file_name: this.article_file,
+      article_file_data: '',
+      config_file_name: this.config_file,
+      config_file_data: JSON.stringify(config)
     };
 
-    console.log(
-      'Checking if data folder is available or not ',
-      scope.article_folder
-    );
+    console.log('default to save is ', load_data);
 
     if (scope._electronService.isElectronApp) {
-      // 
-    }
-    scope.ipc.send('find-file', load_data);
+      // run only in electron
 
-    scope.ipc.on('not-found-file-datafolder', function(evt, args) {
-      console.log('IPC Renderer says, could not find data folder', args);
-      console.log('Since folder does not exist, let us try to create it.');
-      scope.ipc.send('create-data-folder', load_data);
-    });
-    scope.ipc.on('found-file-datafolder', function(evt, args) {
-      console.log('IPC Renderer says, data folder found', args);
-      console.log('Now checking for config file.');
-      scope.check_config_file(config, next);
-    });
+      console.log('Sending create-defaults to file operations');
+      scope.ipc.send('create-defaults', load_data);
 
-    scope.ipc.on('created-data-folder', function(evt, args) {
-      console.log('IPC Renderer says, created data folder', args);
-      // Since data folder is created right now, let us try to create the default config file.
-      scope.save_config_file(config, next);
-    });
-    scope.ipc.on('not-created-data-folder', function(evt, args) {
-      console.log(
-        'IPC Renderer says, data folder could not be created so not checking for config file',
-        args
-      );
-      next(args, null);
-    });
+      scope.ipc.on('created-defaults', function(evt, args) {
+        console.log('IPC Renderer says, created defaults', args);
+        next();
+      });
+    } // end of if iselectron app
   }
 }

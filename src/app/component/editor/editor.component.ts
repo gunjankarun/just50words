@@ -200,8 +200,6 @@ export class EditorComponent implements OnInit {
     // continue text starting with step or item
     // const step_found = last_line.match(/(^[\sstep\d]+)(.+$)/i);
 
-    console.log('500 spaces are: ', spaces);
-
     // Update the text with bullets or indents
     if (spaces) {
       // This preserves the undo redo queue
