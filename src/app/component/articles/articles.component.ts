@@ -18,6 +18,7 @@ export class ArticlesComponent implements OnInit {
   @Input() editorHeight: number;
   @Input() editor_object: any;
 
+  @ViewChild('articleList') private articleListContainer: ElementRef;
   config = this._configService.config;
   config_subscription: any;
 
@@ -29,7 +30,7 @@ export class ArticlesComponent implements OnInit {
   headline_object: any;
   headline_font = 'form-control font-large';
 
-  target_words= this.config.target_words;
+  target_words = this.config.target_words;
   word_count = 0;
   target_time: string;
   // articles: Article[];
@@ -64,7 +65,10 @@ export class ArticlesComponent implements OnInit {
         this.editorMaxWidth = new_config.editor_max_width;
         this.write_or_nuke_mode = new_config.write_or_nuke;
         this.write_or_nuke_show_button = new_config.write_or_nuke_show_button;
-        console.log('Inside Editor Constructor and write_or_nuke_show_button=', this.write_or_nuke_show_button);
+        console.log(
+          'Inside Editor Constructor and write_or_nuke_show_button=',
+          this.write_or_nuke_show_button
+        );
         this.editor_bg = new_config.editor_bg;
         this.editor_text_color = new_config.editor_text_color;
       }
@@ -110,7 +114,6 @@ export class ArticlesComponent implements OnInit {
   select_article(article) {
     // make sure that the last empty item is trimmed
     this.trim_last_empty_item();
-
     this.current_article = article;
     this._articleService.current_article = this.current_article;
     this.reset_list();
@@ -282,6 +285,7 @@ export class ArticlesComponent implements OnInit {
       this._articleService.articles = this.articles;
       this._articleService.current_article = this.current_article;
       this._articleService.save_article();
+      this.articleListContainer.nativeElement.scrollTop = 0;
     } else {
       console.log('Skipping save article');
     }
@@ -333,7 +337,11 @@ export class ArticlesComponent implements OnInit {
       this.write_or_nuke_mode = false;
       this._msgService.add('Write or Nuke mode is disabled.', 'success');
     } else {
-      if(confirm('When you enable "Write or Nuke" mode, you cannot stop typing until you complete the target number of words.\nIf you stop typing for more than 30 seconds, you will lose whatever you have written so far.\nAre you sure you want to continue?')){
+      if (
+        confirm(
+          'When you enable "Write or Nuke" mode, you cannot stop typing until you complete the target number of words.\nIf you stop typing for more than 30 seconds, you will lose whatever you have written so far.\nAre you sure you want to continue?'
+        )
+      ) {
         this.write_or_nuke_mode = true;
         const msg =
           'WARNING: Write or Nuke mode is enabled. You will lose everything you type if you stop typing till target words';
