@@ -45,19 +45,14 @@ export class EditorComponent implements OnInit {
     this.config_subscription = _configService.configChange.subscribe(
       new_config => {
         this.config = new_config;
-        console.log('490 ', this.config);
         this.target_words = new_config.target_words;
         this.editorMaxWidth = new_config.editor_max_width;
         this.editor_text_color = new_config.editor_text_color;
         this.config.play_keypress_sound = new_config.play_keypress_sound;
         this.config.keypress_sound = new_config.keypress_sound;
-        
+
         // this.write_or_nuke = new_config.write_or_nuke;
         this.write_or_nuke_interval = new_config.write_or_nuke_interval;
-        console.log(
-          '500 Content updated and write or nuke is ',
-          this.config.write_or_nuke
-        );
       }
     );
   }
@@ -69,7 +64,6 @@ export class EditorComponent implements OnInit {
 
   ngOnInit() {
     this.editor_object = this._elRef.nativeElement.querySelector('#editor');
-    // console.log('ngOnInit ', this.editor_object.value);
     this.editor_object_created.emit(this.editor_object);
   }
 
@@ -125,7 +119,6 @@ export class EditorComponent implements OnInit {
     }
 
     this.write_or_nuke_reset();
-    // console.log('600 about to test write or nuke', this.config.write_or_nuke);
     if (this.config.write_or_nuke) {
       this.write_or_nuke();
     }
@@ -134,11 +127,11 @@ export class EditorComponent implements OnInit {
   format_text() {
     const start_pos = this.editor_object.selectionStart;
     const end_pos = this.editor_object.selectionEnd;
-    // console.log ('selection start = ' + start_pos + ' and sel end = ' + end_pos);
+
     const lines = this.content.substr(0, start_pos).split('\n');
     const last_line = lines.length ? lines[lines.length - 2] : '';
     const index_space = last_line.search(/\S|$/);
-    // console.log('index space', index_space);
+
     let spaces = '';
     if (index_space) {
       for (let i = 0; i < index_space; i++) {
@@ -149,12 +142,8 @@ export class EditorComponent implements OnInit {
     // get bullet chars
     // const first_two_chars: string = last_line.substr(index_space, 2);
     const find_special_chars = last_line.match(/(^[\W]+)(.+$)/i);
-    // console.log('Special chars found', find_special_chars);
-
     if (find_special_chars) {
       const special_chars = find_special_chars[1];
-      // const special_chars_separator: string = last_line.substr(0, special_chars.length);
-      // console.log('special_chars', special_chars);
       const arr_special_chars_separator = special_chars.split('');
       if (
         arr_special_chars_separator &&
@@ -176,56 +165,36 @@ export class EditorComponent implements OnInit {
     let new_number = 0;
     let first_char = '';
     let spaces_before_number = 0;
-    const numbers_found = last_line.match(/(^[\s]+[\d]+)(.+$)/i);
-    console.log('Numbers found', numbers_found);
+    const numbers_found = last_line.match(/(^[\s\d]+)(.+$)/i);
     if (numbers_found) {
       const number_found = numbers_found[1];
       spaces_before_number = number_found.split(' ').length - 1;
-      const number_separator: string = last_line.substr(number_found.length, 2);
-      const arr_number_separator = number_separator.split('');
-      if (arr_number_separator && arr_number_separator.length === 2) {
-        if (arr_number_separator[1] === ' ') {
-          first_char = arr_number_separator[0];
-          const is_special_char = first_char.match(/\W/i);
-          if (is_special_char) {
-            number_bullet_found = true;
-            new_number = +number_found + 1;
-            spaces = spaces + new_number + arr_number_separator.join('');
-            // this.format_number_bullet(start_pos, end_pos, new_number, first_char, spaces_before_number);
+      if (number_found.trim().length > 0) {
+        const number_separator: string = last_line.substr(number_found.length, 2);
+        const arr_number_separator = number_separator.split('');
+        if (arr_number_separator && arr_number_separator.length === 2) {
+          if (arr_number_separator[1] === ' ') {
+            first_char = arr_number_separator[0];
+            const is_special_char = first_char.match(/\W/i);
+            if (is_special_char) {
+              number_bullet_found = true;
+              new_number = +number_found + 1;
+              spaces = spaces + new_number + arr_number_separator.join('');
+              // this.format_number_bullet(start_pos, end_pos, new_number, first_char, spaces_before_number);
+            }
           }
         }
       }
     }
 
-    // continue text starting with step or item
-    // const step_found = last_line.match(/(^[\sstep\d]+)(.+$)/i);
-
-    console.log('500 spaces are: ', spaces);
-
     // Update the text with bullets or indents
     if (spaces) {
       // This preserves the undo redo queue
       document.execCommand('insertText', false, spaces);
-      // console.log('300 this.content is: ' , this.content);
       const cursor_pos = start_pos + spaces.length;
       if (number_bullet_found) {
         this.format_number_bullet(cursor_pos, cursor_pos, new_number, first_char, spaces_before_number);
       }
-      // this.content = this.editor_object.value;
-      // this.content =
-      //   this.content.substr(0, start_pos) +
-      //   spaces +
-      //   this.content.substr(end_pos, this.content.length);
-      // console.log('About to set selection start = ' + start_pos + ' and sel end = ' + end_pos);
-      // let pos_timer: any;
-      // if (pos_timer) {
-      //   clearInterval(pos_timer);
-      // }
-      // pos_timer = setTimeout(() => {
-        // const cursor_pos = start_pos + spaces.length;
-        // this.editor_object.focus();
-        // this.editor_object.setSelectionRange(cursor_pos, cursor_pos);
-      // }, 10);
     }
   }
 
@@ -243,8 +212,7 @@ export class EditorComponent implements OnInit {
     }
 
     for (let i = 0; i < after_lines.length; i++) {
-      const numbers_found = after_lines[i].match(/(^[\s]+[\d]+)(.+$)/i);
-      console.log('Number found ', numbers_found);
+      const numbers_found = after_lines[i].match(/(^[\s\d]+)(.+$)/i);
       if (numbers_found) {
         const number_found = numbers_found[1];
         const _number_separator: string = after_lines[i].substr(number_found.length, 2);
@@ -294,7 +262,7 @@ export class EditorComponent implements OnInit {
       this.write_or_nuke_reset();
       return;
     }
-    // console.log('word_count is ', this.word_count);
+
     // Do not start the timer if there is no content.
     if (this.word_count <= 0) {
       this.write_or_nuke_reset();
@@ -327,7 +295,6 @@ export class EditorComponent implements OnInit {
         this._audioService.playSound(this.config.write_or_nuke_warning_sound);
       }
       if (this.write_or_nuke_interval <= 0) {
-        console.log('Time over');
         this._msgService.add('Content NUKED!!!', 'danger');
         this._audioService.playSound(this.config.write_or_nuke_nuked_sound);
 

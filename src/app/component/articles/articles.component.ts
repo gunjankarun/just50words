@@ -285,7 +285,11 @@ export class ArticlesComponent implements OnInit {
       this._articleService.articles = this.articles;
       this._articleService.current_article = this.current_article;
       this._articleService.save_article();
-      this.articleListContainer.nativeElement.scrollTop = 0;
+      try {
+        this.articleListContainer.nativeElement.scrollTop = 0;
+      }catch (e) {
+        // console.log('Error in native element');
+      }
     } else {
       console.log('Skipping save article');
     }
