@@ -128,7 +128,7 @@ export class WordCountComponent implements OnInit {
       // const old_text = this.article.title + ' ' + this.article.content;
 
       let old_text = '';
-      if (this.article) {
+      if (this.article && this.article.content) {
         old_text = this.article.content;
       }
       this.old_word_count = this._wordCountService.get_word_count(old_text);

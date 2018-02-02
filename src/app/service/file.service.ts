@@ -129,6 +129,8 @@ export class FileService {
       // }
       // console.log('About to load articles from ' + this.article_file);
       const scope = this;
+      let result: any;
+
 
       const load_data = {
         file_name: scope.article_file,
@@ -140,30 +142,13 @@ export class FileService {
 
       scope.ipc.on('file-read-error-article', function(evt, args) {
         console.log('IPC Renderer says, file NOT read so loading default articles', args);
-        const default_articles = `[
-        {
-          "title": "",
-          "summary": "",
-          "content": "",
-          "content_file": "",
-          "date_added": "",
-          "date_updated": ""
-        }
-        ]`;
-        console.log('default_articles=', default_articles);
-        let result: any;
-        try {
-          result = JSON.parse(default_articles);
-          next(null, result);
-        } catch (error) {
-          const err_message = 'File loading error';
-          next(error, null);
-        }
+        result = scope.get_default_article();
+        console.log('Default article received is ', result);
+        next(null, result);
       });
 
       scope.ipc.on('file-read-article', function(evt, args) {
         // console.log('IPC Renderer says, file read');
-        let result: any;
         try {
           result = JSON.parse(args);
           const message = 'Json Parsed successfully';
@@ -172,10 +157,12 @@ export class FileService {
           next(null, result);
         } catch (error) {
           console.log('Loading error ', error);
-          const err_message = 'File loading error';
+          const err_message = 'File loading error. So sending default article instead';
           // scope._msgService.add(err_message, 'danger');
           console.log(err_message);
-          next(error, null);
+        // next(error, null);
+          result = scope.get_default_article();
+          next(error, result);
         }
       });
     } else {
@@ -236,6 +223,23 @@ export class FileService {
     }
   }
 
+  get_default_article(): any {
+    const default_articles = `[
+        {
+          "title": "",
+          "summary": "",
+          "content": "",
+          "content_file": "",
+          "date_added": "",
+          "date_updated": ""
+        }
+        ]`;
+    console.log('default_articles=', default_articles);
+    let result: any;
+    result = JSON.parse(default_articles);
+    return result;
+  }
+
   // Configuration related data
   load_config(config, next): any {
     if (this._electronService.isElectronApp) {
@@ -269,6 +273,7 @@ export class FileService {
           next(null, result);
           return;
         } catch (error) {
+          // Need to overwrite config data here.
           console.log('Config Loading error ', error);
           const err_message = 'Config file loading error';
           console.log(err_message);

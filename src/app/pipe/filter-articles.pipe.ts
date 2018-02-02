@@ -19,11 +19,13 @@ export class FilterArticlesPipe implements PipeTransform {
     // });
     filter_str = filter_str.toLowerCase();
 
-    let filtered_list = items.filter(function (item) {
+    const filtered_list = items.filter(function (item) {
       let found = false;
       found = item.title.toLowerCase().indexOf(filter_str) !== -1;
       if (!found) {
-        found = item.content.toLowerCase().indexOf(filter_str) !== -1;
+        if (item.content) {
+          found = item.content.toLowerCase().indexOf(filter_str) !== -1;
+        }
       }
       return found;
     });

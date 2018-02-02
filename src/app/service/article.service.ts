@@ -44,19 +44,19 @@ export class ArticleService {
     scope._fileService.load_articles(function(err, articles) {
       if (err) {
         console.log('Error in loading articles', err);
-      } else {
-        console.log('Articles received', articles.length);
-        // if (articles) {
-        scope.articles = articles;
-        if (scope.articles.length) {
-          scope.sort_article_list();
-          const article_count = scope.articles.length;
-          // scope.filtered_articles = scope.articles;
-          scope._msgService.add('Loaded ' + article_count + ' articles');
-        }
-        next();
-        // }
       }
+      console.log('Articles received', articles.length);
+      // if (articles) {
+      scope.articles = articles;
+      if (scope.articles.length) {
+        scope.sort_article_list();
+        const article_count = scope.articles.length;
+        // scope.filtered_articles = scope.articles;
+        scope._msgService.add('Loaded ' + article_count + ' articles');
+      }
+      next();
+        // }
+      // }
     });
   }
 

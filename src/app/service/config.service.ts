@@ -118,6 +118,15 @@ export class ConfigService {
     // load the configuration data
     const scope = this;
     this._fileService.load_config(this.config, function(err, config_data) {
+      if (err) {
+        console.log('Error in loading config', err);
+        // Show some message in the message box
+      }
+
+      if (!config_data) {
+        return false;
+      }
+
       if (config_data.hasOwnProperty('target_words')) {
         scope.config.target_words = config_data.target_words;
       }
