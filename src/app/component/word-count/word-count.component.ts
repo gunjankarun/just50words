@@ -24,6 +24,7 @@ export class WordCountComponent implements OnInit {
 
   old_word_count = 0;
   celebration_timeout: any;
+  celebration_music_played = false;
   tooltip_text = 'Toggle word count mode';
 
   // @Input() target_words = 50;
@@ -241,7 +242,12 @@ export class WordCountComponent implements OnInit {
     // Lets celebrate by playing sound
     if (celebrate) {
       if (this.config.target_reached_sound) {
-        this._audioService.playSound(this.config.target_reached_sound);
+        if (!this.celebration_music_played) {
+          this._audioService.playSound(this.config.target_reached_sound);
+
+          // This ensures that the music does not play for every key stroke of the 50th (or target wordcount) word
+          this.celebration_music_played = true;
+        }
       }
       this._wordCountService.celebrate = true;
       this._msgService.add('You did it! Proud of you.', 'success');
@@ -252,7 +258,8 @@ export class WordCountComponent implements OnInit {
       }
       this.celebration_timeout = setTimeout(() => {
         this._wordCountService.celebrate = false;
-      }, this._configService.getConfig('session_celebration_duration') * 1000);
+        this.celebration_music_played = false;
+      }, this.config.session_celebration_duration * 1000);
     }
   }
 }

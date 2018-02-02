@@ -286,7 +286,7 @@ export class FileService {
       // console.log('Loading old config');
       const old_data = `
     {
-      "target_words": 50,
+      "target_words": 10,
       "mute_all_sound": false,
       "target_words_countdown_type": "to_target",
       "write_or_nuke": false
