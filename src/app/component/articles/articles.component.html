@@ -2,22 +2,6 @@
   <div class="row">
     <div id="leftlist" *ngIf="show_list">
       <!-- Articlelist component -->
-      <!-- <div class="form-group text-center">
-        <div class="input-group">
-          <div class="input-group-prepend">
-            <div class="input-group-text search-prefix" id="btnGroupAddon">
-              <small class="oi oi-magnifying-glass"></small>
-            </div>
-          </div>
-          <input
-            type="text"
-            class="form-control"
-            id="search-box"
-            placeholder="Search articles"
-            [(ngModel)]="search_term"
-          >
-        </div>
-      </div> -->
       <div class="title" *ngIf='show_list'>Just {{target_words}} words
         <button type="button" class="btn btn-small btn-link btn-sm" (click)='show_options()'
                 placement="bottom" ngbTooltip="Options">
@@ -32,12 +16,11 @@
             </div>
           </div>
           <input type="text"
-                 class="form-control"
-                 id="search-box"
-                 [(ngModel)]="search_term"
-                 (keyup)="search_article_from_search($event)"
-
-                 placeholder="Search articles">
+            class="form-control"
+            id="search-box"
+            [(ngModel)]="search_term"
+            (keyup)="search_article_from_search($event)"
+            placeholder="Search articles">
         </div>
       </div>
       <div class="list-group" id="article-list-container" #articleList [style.height.px]="listHeight">

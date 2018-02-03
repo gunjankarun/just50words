@@ -115,6 +115,8 @@ export class EditorComponent implements OnInit {
         }
         break;
       default:
+        this.check_autocomplete(event);
+        // this.check_word_replacement();
         break;
     }
 
@@ -251,6 +253,81 @@ export class EditorComponent implements OnInit {
     this.editor_object.setSelectionRange(start, start);
   }
 
+  check_autocomplete(event) {
+    const start_pos = this.editor_object.selectionStart;
+    const end_pos = this.editor_object.selectionEnd;
+    let next_few_chars = '';
+    switch (event.key) {
+      case '[':
+        next_few_chars = ']';
+        break;
+
+      case '(':
+        next_few_chars = ')';
+        break;
+
+      case '<':
+        next_few_chars = '>';
+        break;
+
+      case '{':
+        next_few_chars = '}';
+        break;
+
+      default:
+        break;
+    }
+
+    if (next_few_chars) {
+      // This preserves the undo redo queue
+      document.execCommand('insertText', false, next_few_chars);
+      this.editor_object.setSelectionRange(start_pos, end_pos);
+    }
+  }
+
+  check_word_replacement() {
+    // load this from a file
+    const start_pos = this.editor_object.selectionStart;
+
+    const content = this.content;
+    const before_lines = this.content.substr(0, start_pos);
+
+    let matches: any;
+    let old_text = '';
+    let new_text = '';
+    const cursor_pos = start_pos;
+    matches = before_lines.match(/[^\s]+/g);
+    // matches = before_lines.split(' ');
+    console.log('matches=', matches);
+    let last_word = '';
+    if (matches && matches.length) {
+      last_word = matches[matches.length - 1];
+      console.log('Last word is ', last_word);
+
+      switch (last_word) {
+        case '---':
+          old_text = '---';
+          new_text = '────────────\n';
+          break;
+
+        default:
+          break;
+      }
+    }
+
+    if (new_text) {
+      // This preserves the undo redo queue
+
+      this.editor_object.setSelectionRange(start_pos - old_text.length, start_pos);
+      document.execCommand('delete');
+
+      document.execCommand('insertText', false, new_text);
+      const new_cursor_pos = start_pos - old_text.length + new_text.length;
+      this.editor_object.setSelectionRange(new_cursor_pos, new_cursor_pos);
+    }
+
+  }
+
   write_or_nuke() {
     if (!this.config.write_or_nuke) {
       this.write_or_nuke_reset();
@@ -313,4 +390,6 @@ export class EditorComponent implements OnInit {
     this.write_or_nuke_interval = this.config.write_or_nuke_interval;
     this.write_or_nuke_class = '';
   }
+
+
 }
