@@ -95,6 +95,10 @@ export class EditorComponent implements OnInit {
 
   }
 
+  on_keydown(event) {
+    return this.check_block_action(event);
+  }
+
   on_keyup(event): void {
     // console.log('in KEYUP function', this.content);
     this.keyup.emit([event]);
@@ -256,6 +260,11 @@ export class EditorComponent implements OnInit {
   check_autocomplete(event) {
     const start_pos = this.editor_object.selectionStart;
     const end_pos = this.editor_object.selectionEnd;
+
+    if ( end_pos > start_pos ) {
+      // do not perform these opearation if the user has selected some text
+      return false;
+    }
     let next_few_chars = '';
     switch (event.key) {
       case '[':
@@ -273,6 +282,9 @@ export class EditorComponent implements OnInit {
       case '{':
         next_few_chars = '}';
         break;
+      case '"':
+        next_few_chars = '"';
+        break;
 
       default:
         break;
@@ -282,6 +294,72 @@ export class EditorComponent implements OnInit {
       // This preserves the undo redo queue
       document.execCommand('insertText', false, next_few_chars);
       this.editor_object.setSelectionRange(start_pos, end_pos);
+    }
+  }
+
+  check_block_action(event): boolean {
+    // perform block_events
+    const start_pos = this.editor_object.selectionStart;
+    const end_pos = this.editor_object.selectionEnd;
+    let block_char_start = '';
+    let block_char_end = '';
+    let block_char_found = false;
+    switch (event.key) {
+      case '*':
+        block_char_start = '*';
+        block_char_end = '*';
+        block_char_found = true;
+        break;
+      case '_':
+        block_char_start = '_';
+        block_char_end = '_';
+        block_char_found = true;
+        break;
+      case '[':
+        block_char_start = '[';
+        block_char_end = ']';
+        block_char_found = true;
+        break;
+      case '(':
+        block_char_start = '(';
+        block_char_end = ')';
+        block_char_found = true;
+        break;
+      case '{':
+        block_char_start = '}';
+        block_char_end = '}';
+        block_char_found = true;
+        break;
+      case '"':
+        block_char_start = '"';
+        block_char_end = '"';
+        block_char_found = true;
+        break;
+      case '\'':
+        block_char_start = '\'';
+        block_char_end = '\'';
+        block_char_found = true;
+        break;
+
+      default:
+        break;
+    }
+
+    if (block_char_found) {
+      if ( end_pos <= start_pos) {
+        // perform these operations only when the user has selected a block of text
+        // do nothing.
+      }else {
+        console.log('start_pos=' + start_pos + 'end_pos=' + end_pos);
+        this.editor_object.setSelectionRange(start_pos, start_pos);
+        document.execCommand('insertText', false, block_char_start);
+        const new_cursor_end_pos = end_pos + block_char_start.length;
+        const new_cursor_start_pos = start_pos + block_char_start.length;
+        this.editor_object.setSelectionRange(new_cursor_end_pos, new_cursor_end_pos);
+        document.execCommand('insertText', false, block_char_end);
+        this.editor_object.setSelectionRange(new_cursor_start_pos, new_cursor_end_pos);
+        return false;
+      }
     }
   }
 

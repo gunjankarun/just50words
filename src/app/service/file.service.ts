@@ -85,7 +85,7 @@ export class FileService {
 
   save(save_data, autosave) {
     // Now save this here
-    console.log('Going to save the article now', save_data);
+    // console.log('Going to save the article now', save_data);
 
     if (this._electronService.isElectronApp) {
       // console.log('Electron app Sending to save');
@@ -314,7 +314,7 @@ export class FileService {
    * This creates the default config file
    */
   save_config_file(config: any, next) {
-    const file_contents = JSON.stringify(config);
+    const file_contents = JSON.stringify(config, null, 4);
     const save_data = {
       file_name: this.config_file,
       file_type: 'config',
@@ -348,7 +348,7 @@ export class FileService {
       article_file_name: this.article_file,
       article_file_data: '',
       config_file_name: this.config_file,
-      config_file_data: JSON.stringify(config)
+      config_file_data: JSON.stringify(config, null, 4)
     };
 
     console.log('default to save is ', load_data);

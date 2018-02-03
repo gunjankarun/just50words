@@ -7,6 +7,7 @@
   [style.boxShadow]="write_or_nuke_class"
   [style.maxWidth.px]="editorMaxWidth"
   (keyup)="on_keyup($event)"
+  (keydown)="on_keydown($event)"
   (keydown.Tab)="on_tab_press($event)"
   [(ngModel)]="content"
   (ngModelChange)="change_content($event)"

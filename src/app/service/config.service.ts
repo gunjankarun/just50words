@@ -14,7 +14,7 @@ export class ConfigService {
     target_words: 50,
     target_words_countdown_type: 'to_target',
     target_reached_sound: 'assets/sound/notification-sound.mp3',
-    mute_all_sound: true,
+    mute_all_sound: false,
     play_target_reached_sound: true,
     editor_max_width: 800,
     play_keypress_sound: true,
