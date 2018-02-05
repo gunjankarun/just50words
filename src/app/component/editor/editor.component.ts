@@ -75,24 +75,19 @@ export class EditorComponent implements OnInit {
   on_tab_press(event): void {
     // console.log(event.keyCode + ' ', event.key);
     event.preventDefault();
-    const s = this.editor_object.selectionStart;
-    this.content =
-      this.content.substring(0, this.editor_object.selectionStart) +
-      '    ' +
-      this.content.substring(this.editor_object.selectionEnd);
+    const start_pos = this.editor_object.selectionStart;
+    const end_pos = this.editor_object.selectionEnd;
+    const blank_spaces = '    ' ;
+
     this.editor_object.focus();
 
-    let pos_timer: any;
-    if (pos_timer) {
-      clearInterval(pos_timer);
+    if (start_pos === end_pos) {
+      // nothing is selected
+      document.execCommand('insertText', false, blank_spaces);
+    }else {
+      // todo: a block is selected, so split the selected text into new line and append tab to all the new lines
+      this.insert_block_tab(start_pos, end_pos);
     }
-
-    pos_timer = setTimeout(() => {
-      this.editor_object.focus();
-      const cursor_pos = s + 4;
-      this.editor_object.setSelectionRange(cursor_pos, cursor_pos);
-    }, 10);
-
   }
 
   on_keydown(event) {
@@ -295,6 +290,44 @@ export class EditorComponent implements OnInit {
       document.execCommand('insertText', false, next_few_chars);
       this.editor_object.setSelectionRange(start_pos, end_pos);
     }
+  }
+
+  insert_block_tab(start_pos, end_pos) {
+
+    // If the user did not select from first char then we have to pick up the last new line here
+    if (start_pos > 0) {
+      const last_new_line = this.content.lastIndexOf('\n', start_pos);
+      const next_new_line = this.content.indexOf('\n', start_pos);
+
+      console.log('Last Index of NL is ' + last_new_line);
+      console.log('Current POS is ' + start_pos);
+      console.log('Next Index of NL is ' + next_new_line);
+
+      // If the preview char is not new line i.e. the user has selected from the middle of the string
+      if ( start_pos > last_new_line + 1 && start_pos < next_new_line){
+        start_pos = last_new_line + 1;
+      }
+    }
+
+    const selected_text = this.content.substr(start_pos, end_pos);
+    const arr_selected_text = selected_text.split('\n');
+    let new_end_pos = end_pos;
+    const tab_char = '    ';
+    let line_start_pos = start_pos;
+    // const i = 0;
+    for (let i = 0; i < arr_selected_text.length; i++) {
+      // console.log('inserting tab at location ' + line_start_pos + ' after >>' + arr_selected_text[i] + '<<');
+      if (line_start_pos <= new_end_pos) {
+        this.editor_object.setSelectionRange(line_start_pos, line_start_pos);
+        document.execCommand('insertText', false, tab_char);
+        line_start_pos = line_start_pos + tab_char.length + arr_selected_text[i].length + 1;
+        // line_start_pos = line_start_pos + ;
+        new_end_pos = new_end_pos + tab_char.length;
+      } else {
+        break;
+      }
+    }
+    // this.editor_object.setSelectionRange(start_pos, line_start_pos);
   }
 
   check_block_action(event): boolean {
