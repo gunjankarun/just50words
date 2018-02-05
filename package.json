@@ -1,11 +1,23 @@
 {
   "name": "just60words",
   "productName": "Just 50 Words",
-  "author": "Gunjan Karun",
+  "version": "1.0.0",
+  "author": "Gunjan Karun <gunjan@kalptaru.in>",
+  
   "description": "A desktop app to create articles, stories and write other stuff, specially useful for people who do not enjoy writing.",
   "build": {
     "asar": false,
-    "appId": "com.quadralyst.just50words"
+    "appId": "com.quadralyst.just50words",
+    "directories":{
+      "output": "release-builds/output"
+    },
+    "mac": {
+      "category": "public.app-category.productivity",
+      "target": "default"
+    },
+    "win": {
+      "target": "portable"
+    }
   },
   "files": [
     "**/*",
@@ -15,7 +27,6 @@
     "!release-builds${/*}",
     "!buildResources{,/**/*}"
   ],
-  "version": "1.0.0",
   "license": "MIT",
   "main": "main.js",
   "scripts": {
@@ -25,8 +36,9 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "electron": "ng build && electron .",
+    "electron": "NODE_ENV='development' ng build && electron .",
     "electron-aot": "ng build --prod && electron .",
+    "electron-pack": "ng build --prod && build win",
     "package-mac": "ng build --prod && electron-packager .  --overwrite --platform=darwin --arch=x64 --icon=assets/icons/mac/icon.icns --prune=true --out=release-builds  --no-asar",
     "create-installer-mac": "electron-installer-dmg ./release-builds/Electron\\ tutorial\\ app-darwin-x64/Electron\\ tutorial\\ app.app electron-tutorial-app --out=release-builds --overwrite --icon=assets/icons/mac/icon.icns",
     "package-win": "electron-packager . just-50-words --overwrite --platform=win32 --arch=ia32 --icon=assets/icons/win/icon.ico --prune=true --out=release-builds --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName=\"Electron Tutorial App\" --no-asar ",
@@ -60,6 +72,7 @@
     "@types/node": "~6.0.60",
     "codelyzer": "^4.0.1",
     "electron": "^1.7.10",
+    "electron-builder": "^19.56.0",
     "jasmine-core": "~2.6.2",
     "jasmine-spec-reporter": "~4.1.0",
     "karma": "~1.7.0",
