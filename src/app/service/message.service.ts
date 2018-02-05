@@ -8,6 +8,7 @@ export class MessageService {
   show_message = false;
   message_timeout_interval = this._configService.getConfig('message_dismiss_after') * 1000;
   message_timeout: any;
+  config_subscription: any;
 
   current_message: Message= {
     message: null,
@@ -15,7 +16,15 @@ export class MessageService {
     msg_date: new Date()
   };
 
-  constructor(private _configService: ConfigService) { }
+  constructor(private _configService: ConfigService) {
+        // this.config_subscription = _configService.configChange.subscribe(
+        //   new_config => {
+        //     console.log('New timeout interval', new_config.message_dismiss_after);
+        //     this.message_timeout_interval = new_config.message_dismiss_after * 1000;
+        //     // console.log('\n\nAUDIO::: mute_all_sound=' + this.mute_all_sound);
+        //   }
+        // );
+  }
 
   add(message: string, type: string = 'warning') {
     // console.log('MSG: ', message);

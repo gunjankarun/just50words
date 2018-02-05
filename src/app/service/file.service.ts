@@ -287,6 +287,7 @@ export class FileService {
       const old_data = `
     {
       "target_words": 10,
+      "message_dismiss_after": 300,
       "mute_all_sound": false,
       "target_words_countdown_type": "to_target",
       "write_or_nuke": false

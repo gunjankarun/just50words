@@ -119,6 +119,8 @@ export class ArticlesComponent implements OnInit {
     this.reset_list();
     this._msgService.add('Loaded article "' + article.title + '"', 'info');
     this.editor_object.focus();
+    // set the cursor at the start
+    this.editor_object.setSelectionRange(0, 0);
   }
 
   toggle_list() {

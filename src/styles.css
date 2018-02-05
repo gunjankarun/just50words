@@ -180,7 +180,7 @@ input#headline.font-small {
 
 .footer-alert{
     font-size: 12px;
-    padding: 5px;
+    padding: 2px 10px !important ;
     border-radius: 3px !important;
     margin-top: -46px;
 }
