@@ -168,8 +168,8 @@ export class ArticlesComponent implements OnInit {
 
   key_pressed_textarea(event) {
     // console.log('Keypressed in articles.component');
-    this.update_summary();
     this.save_articles();
+    this.update_summary();
     this.celebrate = this._wordCountService.celebrate;
     this.word_count = this._wordCountService.word_count;
   }
@@ -299,7 +299,9 @@ export class ArticlesComponent implements OnInit {
 
   update_summary() {
     // this._articleService.current_article = this.current_article;
+    // console.log('Updating summary');
     this._articleService.update_summary();
+    this.current_article = this._articleService.current_article;
   }
 
   trim_last_empty_item() {

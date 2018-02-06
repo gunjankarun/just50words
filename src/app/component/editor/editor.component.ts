@@ -359,8 +359,13 @@ export class EditorComponent implements OnInit {
         block_char_found = true;
         break;
       case '{':
-        block_char_start = '}';
+        block_char_start = '{';
         block_char_end = '}';
+        block_char_found = true;
+        break;
+      case '<':
+        block_char_start = '<';
+        block_char_end = '>';
         block_char_found = true;
         break;
       case '"':

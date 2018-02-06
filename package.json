@@ -3,12 +3,11 @@
   "productName": "Just 50 Words",
   "version": "1.0.0",
   "author": "Gunjan Karun <gunjan@kalptaru.in>",
-  
   "description": "A desktop app to create articles, stories and write other stuff, specially useful for people who do not enjoy writing.",
   "build": {
     "asar": false,
     "appId": "com.quadralyst.just50words",
-    "directories":{
+    "directories": {
       "output": "release-builds/output"
     },
     "mac": {
@@ -64,7 +63,7 @@
     "zone.js": "^0.8.14"
   },
   "devDependencies": {
-    "@angular/cli": "1.5.5",
+    "@angular/cli": "^1.5.5",
     "@angular/compiler-cli": "^5.0.0",
     "@angular/language-service": "^5.0.0",
     "@types/jasmine": "~2.5.53",

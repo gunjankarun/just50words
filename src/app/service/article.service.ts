@@ -149,6 +149,8 @@ export class ArticleService {
       } else {
         this.current_article.summary = this.current_article.content;
       }
+    }else {
+      this.current_article.summary = '';
     }
   }
 }
