@@ -1,9 +1,9 @@
 {
-  "name": "just60words",
+  "name": "just50words",
   "productName": "Just 50 Words",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "author": "Gunjan Karun <gunjan@kalptaru.in>",
-  "description": "A desktop app to create articles, stories and write other stuff, specially useful for people who do not enjoy writing.",
+  "description": "A desktop app to create articles, stories and write other stuff, specially useful for people who are new to writing.",
   "build": {
     "asar": false,
     "appId": "com.quadralyst.just50words",
@@ -26,7 +26,6 @@
     "!release-builds${/*}",
     "!buildResources{,/**/*}"
   ],
-  "license": "MIT",
   "main": "main.js",
   "scripts": {
     "ng": "ng",
@@ -35,9 +34,9 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "electron": "NODE_ENV='development' ng build && electron .",
-    "electron-aot": "ng build --prod && electron .",
-    "electron-pack": "ng build --prod && build win",
+    "electron": "ng build && electron .",
+    "electron-aot": "NODE_ENV='development' ng build --prod && electron .",
+    "pack": "ng build --prod && build",
     "package-mac": "ng build --prod && electron-packager .  --overwrite --platform=darwin --arch=x64 --icon=assets/icons/mac/icon.icns --prune=true --out=release-builds  --no-asar",
     "create-installer-mac": "electron-installer-dmg ./release-builds/Electron\\ tutorial\\ app-darwin-x64/Electron\\ tutorial\\ app.app electron-tutorial-app --out=release-builds --overwrite --icon=assets/icons/mac/icon.icns",
     "package-win": "electron-packager . just-50-words --overwrite --platform=win32 --arch=ia32 --icon=assets/icons/win/icon.ico --prune=true --out=release-builds --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName=\"Electron Tutorial App\" --no-asar ",
@@ -45,6 +44,7 @@
   },
   "private": true,
   "dependencies": {
+    "@angular-devkit/core": "^0.2.0",
     "@angular/animations": "^5.0.0",
     "@angular/common": "^5.0.0",
     "@angular/compiler": "^5.0.0",
@@ -63,7 +63,7 @@
     "zone.js": "^0.8.14"
   },
   "devDependencies": {
-    "@angular/cli": "^1.5.5",
+    "@angular/cli": "^1.6.7",
     "@angular/compiler-cli": "^5.0.0",
     "@angular/language-service": "^5.0.0",
     "@types/jasmine": "~2.5.53",
@@ -85,5 +85,6 @@
     "ts-node": "~3.2.0",
     "tslint": "~5.7.0",
     "typescript": "~2.4.2"
-  }
+  },
+  "license": "MIT"
 }
