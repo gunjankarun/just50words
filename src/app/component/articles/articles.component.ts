@@ -7,6 +7,7 @@ import { ConfigService } from '../../service/config.service';
 import { MessageService } from '../../service/message.service';
 import { FileService } from '../../service/file.service';
 import { WordCountService } from '../../service/word-count.service';
+import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-articles',
@@ -21,6 +22,10 @@ export class ArticlesComponent implements OnInit {
   @ViewChild('articleList') private articleListContainer: ElementRef;
   config = this._configService.config;
   config_subscription: any;
+  app_version = '0.0.0';
+  config_folder = '';
+  config_file = '';
+
 
   editorMaxWidth = this.config.editor_max_width;
 
@@ -52,9 +57,16 @@ export class ArticlesComponent implements OnInit {
     private _msgService: MessageService,
     private _elRef: ElementRef,
     private _wordCountService: WordCountService,
-    private _electronService: ElectronService
+    private _electronService: ElectronService,
+    private _modalService: NgbModal
   ) {
     // constructor
+    if (this._electronService.isElectronApp) {
+      this.app_version = this._electronService.remote.app.getVersion();
+      this.config_folder = this._electronService.remote.getGlobal('application_root') + 'data/';
+      this.config_file =  this.config_folder + '_config.json';
+    }
+
     this.config = this._configService.config;
     // Listen for configuration changes
     this.config_subscription = _configService.configChange.subscribe(
@@ -89,13 +101,38 @@ export class ArticlesComponent implements OnInit {
     this.config_subscription.unsubscribe();
   }
 
-  show_options() {
+  show_options(configPopup) {
     // will show options popup here
-    // if (this._electronService.isElectronApp) {
-    //   this._electronService.shell.openExternal('https://google.com');
-    // } else {
-    //   console.log('Not an electron app. hence could not launch_window');
-    // }
+    this._modalService.open(configPopup).result.then(
+      result => {
+        // this.closeResult = `Closed with: ${result}`;
+      },
+      reason => {
+        // this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+      }
+    );
+  }
+
+  open_url(event, url) {
+    // console.log(event);
+    event.preventDefault();
+    if (this._electronService.isElectronApp) {
+      this._electronService.shell.openExternal(url);
+    } else {
+      window.open(url, '_blank');
+      console.log('Not an electron app. hence could not launch_window');
+    }
+  }
+
+  open_folder(event, url) {
+    console.log('Opening folder ' + url);
+    event.preventDefault();
+    if (this._electronService.isElectronApp) {
+      this._electronService.shell.showItemInFolder(url);
+    } else {
+      // window.open(url, '_blank');
+      console.log('Not an electron app. hence could not launch_window');
+    }
   }
 
   ngOnInit() {
@@ -289,7 +326,7 @@ export class ArticlesComponent implements OnInit {
       this._articleService.save_article();
       try {
         this.articleListContainer.nativeElement.scrollTop = 0;
-      }catch (e) {
+      } catch (e) {
         // console.log('Error in native element');
       }
     } else {

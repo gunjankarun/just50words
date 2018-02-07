@@ -8,7 +8,7 @@
     "asar": false,
     "appId": "com.quadralyst.just50words",
     "directories": {
-      "output": "release-builds/output"
+      "output": "release-builds"
     },
     "mac": {
       "category": "public.app-category.productivity",

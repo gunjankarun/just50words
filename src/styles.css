@@ -216,3 +216,15 @@ input#headline.font-small {
     background-image: url('assets/images/bg-celebration.gif') !important;
 }
 
+.modal-header, .modal-footer{
+    border:0px !important;
+}
+
+.modal-content{
+    background-color:burlywood !important;
+    font-size: 14px;
+}
+
+.modal-body, .modal-footer{
+    background-color: white;
+}
