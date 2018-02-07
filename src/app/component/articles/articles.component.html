@@ -108,7 +108,6 @@
                  placeholder="What do you want to write about?"
                  [(ngModel)]="current_article.title"
                  (keyup)="key_pressed_headline($event)"
-                 (ngModelChange)="search_article_from_title($event)"
                  (focus)="focus_set()">
         </div>
       </div>
