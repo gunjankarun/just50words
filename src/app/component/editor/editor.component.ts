@@ -73,7 +73,6 @@ export class EditorComponent implements OnInit {
   }
 
   on_tab_press(event): void {
-    // console.log(event.keyCode + ' ', event.key);
     event.preventDefault();
     const start_pos = this.editor_object.selectionStart;
     const end_pos = this.editor_object.selectionEnd;
@@ -85,7 +84,6 @@ export class EditorComponent implements OnInit {
       // nothing is selected
       document.execCommand('insertText', false, blank_spaces);
     }else {
-      // todo: a block is selected, so split the selected text into new line and append tab to all the new lines
       this.insert_block_tab(start_pos, end_pos);
     }
   }
@@ -95,7 +93,6 @@ export class EditorComponent implements OnInit {
   }
 
   on_keyup(event): void {
-    // console.log('in KEYUP function', this.content);
     this.keyup.emit([event]);
 
     // Play the sound
@@ -141,7 +138,6 @@ export class EditorComponent implements OnInit {
     }
 
     // get bullet chars
-    // const first_two_chars: string = last_line.substr(index_space, 2);
     const find_special_chars = last_line.match(/(^[\W]+)(.+$)/i);
     if (find_special_chars) {
       const special_chars = find_special_chars[1];
@@ -181,7 +177,6 @@ export class EditorComponent implements OnInit {
               number_bullet_found = true;
               new_number = +number_found + 1;
               spaces = spaces + new_number + arr_number_separator.join('');
-              // this.format_number_bullet(start_pos, end_pos, new_number, first_char, spaces_before_number);
             }
           }
         }
@@ -314,20 +309,16 @@ export class EditorComponent implements OnInit {
     let new_end_pos = end_pos;
     const tab_char = '    ';
     let line_start_pos = start_pos;
-    // const i = 0;
     for (let i = 0; i < arr_selected_text.length; i++) {
-      // console.log('inserting tab at location ' + line_start_pos + ' after >>' + arr_selected_text[i] + '<<');
       if (line_start_pos <= new_end_pos) {
         this.editor_object.setSelectionRange(line_start_pos, line_start_pos);
         document.execCommand('insertText', false, tab_char);
         line_start_pos = line_start_pos + tab_char.length + arr_selected_text[i].length + 1;
-        // line_start_pos = line_start_pos + ;
         new_end_pos = new_end_pos + tab_char.length;
       } else {
         break;
       }
     }
-    // this.editor_object.setSelectionRange(start_pos, line_start_pos);
   }
 
   check_block_action(event): boolean {
@@ -413,7 +404,6 @@ export class EditorComponent implements OnInit {
     let new_text = '';
     const cursor_pos = start_pos;
     matches = before_lines.match(/[^\s]+/g);
-    // matches = before_lines.split(' ');
     console.log('matches=', matches);
     let last_word = '';
     if (matches && matches.length) {
