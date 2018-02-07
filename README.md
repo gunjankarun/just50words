@@ -49,6 +49,7 @@ The built in editor is deceptively simple to use. Although you will not find any
 Almost everything in the editor can be customized by editing the config.json file.
 
 WARNING: The config.json file has to be a valid JSON. So you are editing this file, you will have to ensure that there are no errors in the JSON. In a future version I will create a UI to manage config settings so this will not be an issue in future versions.
+I strongly recommend using json editors like https://jsoneditoronline.org/ to edit and verify this json file before using it in the app.
 
 ## Location of the config file
 Click on the config button (It is beside the 'Just 50 Words' title in the app). This will open a popup with the location of the config file on your machine.
