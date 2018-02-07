@@ -1,3 +1,6 @@
+/**
+ * This is the main component that shows the main editor screen.
+ */
 import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { ElectronService } from 'ngx-electron';
 import { Subject } from 'rxjs/Subject';
@@ -26,7 +29,6 @@ export class ArticlesComponent implements OnInit {
   config_folder = '';
   config_file = '';
 
-
   editorMaxWidth = this.config.editor_max_width;
 
   articles: Article[];
@@ -38,14 +40,12 @@ export class ArticlesComponent implements OnInit {
   target_words = this.config.target_words;
   word_count = 0;
   target_time: string;
-  // articles: Article[];
   search_term = '';
   current_article: Article;
   show_list = true;
   select_first_article = false;
   show_list_label = '<span class="oi oi-caret-left"> </span>';
   old_title: string;
-  // headline_placeholder = 'Search or start here (this is the title)';
   write_or_nuke_mode = this.config.write_or_nuke;
   write_or_nuke_show_button = this.config.write_or_nuke_show_button;
   editor_bg = this.config.editor_bg;
@@ -86,11 +86,9 @@ export class ArticlesComponent implements OnInit {
       }
     );
 
-    // this.current_article = this._articleService.get_blank_article();
     const scope = this;
     this._articleService.load_articles(function(err, articles) {
       scope.articles = scope._articleService.articles;
-      // scope.filtered_articles = scope.articles;
       scope.reset_list();
       scope.new_article();
     });
@@ -105,16 +103,15 @@ export class ArticlesComponent implements OnInit {
     // will show options popup here
     this._modalService.open(configPopup).result.then(
       result => {
-        // this.closeResult = `Closed with: ${result}`;
+        // console.log(`Closed with: ${result}`);
       },
       reason => {
-        // this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+        // console.log(`Dismissed ${reason}`);
       }
     );
   }
 
   open_url(event, url) {
-    // console.log(event);
     event.preventDefault();
     if (this._electronService.isElectronApp) {
       this._electronService.shell.openExternal(url);
@@ -125,18 +122,16 @@ export class ArticlesComponent implements OnInit {
   }
 
   open_folder(event, url) {
-    console.log('Opening folder ' + url);
     event.preventDefault();
     if (this._electronService.isElectronApp) {
       this._electronService.shell.showItemInFolder(url);
     } else {
-      // window.open(url, '_blank');
       console.log('Not an electron app. hence could not launch_window');
     }
   }
 
   ngOnInit() {
-    // this.target_words = this._configService.getConfig('target_words');
+    // On init activities
   }
 
   ngAfterViewInit() {
@@ -161,7 +156,6 @@ export class ArticlesComponent implements OnInit {
   }
 
   toggle_list() {
-    console.log('Toggling List');
     this.show_list = !this.show_list;
     if (this.show_list) {
       this.show_list_label = '<span class="oi oi-caret-left"></span>';
@@ -187,16 +181,6 @@ export class ArticlesComponent implements OnInit {
     }
   }
 
-  search_article_from_title(event) {
-    // if (!this.articles) {
-    //   return ;
-    // }
-    // this.select_first_article = true;
-    // this._msgService.add('Hit Enter/Return key to add/edit this article');
-    // this.search_term = this.current_article.title;
-    // this.filter_articles(this.search_term);
-  }
-
   focus_set() {
     if (this.current_article) {
       this.old_title = this.current_article.title;
@@ -204,7 +188,6 @@ export class ArticlesComponent implements OnInit {
   }
 
   key_pressed_textarea(event) {
-    // console.log('Keypressed in articles.component');
     this.save_articles();
     this.update_summary();
     this.celebrate = this._wordCountService.celebrate;
@@ -215,39 +198,17 @@ export class ArticlesComponent implements OnInit {
     this.update_summary();
     this.save_articles();
 
-    // console.log(event.keyCode + ' ', event.key);
 
     // Do not save articles if only the headline is being changed.
     switch (event.key) {
       case 'Enter':
-        if (!event.shiftKey) {
-          // if (!this._articleService.current_article) {
-          //   this.new_article();
-          // }
-        } else {
-          // console.log('User clicked shift + Enter');
-          // if (!this.filtered_articles.length) {
-          //   // console.log('Going to create new article now');
-          //   if (!this.current_article) {
-          //     this.new_article();
-          //   }
-          // } else {
-          //   // console.log('Selecting existing article to edit');
-          //   const selected_article = this.filtered_articles[0];
-          //   this.select_article(selected_article);
-          // }
+        if (event.shiftKey) {
+          // Shift key was pressed
         }
         this.editor_object.focus();
         // reset the filtered articles list
         break;
 
-      case 's':
-        // console.log('User clicked s');
-        if (event.ctrlKey) {
-          // console.log('User clicked control + S');
-        }
-        // do nothing right now.
-        break;
       default:
         break;
     }
@@ -273,12 +234,10 @@ export class ArticlesComponent implements OnInit {
     }
     this._articleService.current_article = this.current_article;
     this.articles.unshift(this.current_article);
-    // this.save_articles();
     this.select_first_article = false;
   }
 
   delete_article() {
-    console.log('Deleting article');
     const title = this.current_article.title
       ? this.current_article.title
       : 'this article';
@@ -319,7 +278,6 @@ export class ArticlesComponent implements OnInit {
 
   save_articles() {
     if (this._articleService.current_article) {
-      // console.log('Entering save article');
       this.filtered_articles = this.articles;
       this._articleService.articles = this.articles;
       this._articleService.current_article = this.current_article;
@@ -335,8 +293,6 @@ export class ArticlesComponent implements OnInit {
   }
 
   update_summary() {
-    // this._articleService.current_article = this.current_article;
-    // console.log('Updating summary');
     this._articleService.update_summary();
     this.current_article = this._articleService.current_article;
   }
