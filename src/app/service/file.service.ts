@@ -2,6 +2,13 @@ import { Injectable } from '@angular/core';
 import { Article } from '../article';
 import { ElectronService } from 'ngx-electron';
 
+/**
+ * This service handles the file operations from renderer process. This passes the commands to the application process
+ * The application process performs the actual file operations and sends a response back here asynchronously
+ *
+ * @export
+ * @class FileService
+ */
 @Injectable()
 export class FileService {
   fs = require('fs');
@@ -13,31 +20,21 @@ export class FileService {
   config_file_name = '_config.json';
 
   article_folder = this.application_root + this.data_folder;
-  // article_summary_folder = this.application_root + data_folder;
   article_file = this.article_folder + '/' + this.article_file_name;
   config_file = this.article_folder + '/' + this.config_file_name;
 
-  constructor(
-    // private _msgService: MessageService,
-    private _electronService: ElectronService
-  ) {
+  constructor(private _electronService: ElectronService) {
     console.log('Application folder is ', this.application_root);
-    // console.log('Article folder is ', this.article_folder);
     if (this._electronService.isElectronApp) {
       const remote = this._electronService.remote;
       this.application_root = remote.getGlobal('application_root');
-      // console.log('\n100: this.application_root is ', this.application_root);
       this.article_folder = this.application_root + this.data_folder;
-      // this.article_summary_folder = this.application_root + 'articles';
       this.article_file = this.article_folder + '/_articles';
       this.config_file = this.article_folder + '/_config.json';
-      // console.log('200 and config file is ', this.config_file);
     }
   }
 
   save_article(article: Article, autosave = false) {
-    // console.log('saving content: ', article.title);
-    // let inputWords = article.title.split(/\s+/);
     let article_file: string;
     if (article.content_file) {
       article_file = article.content_file;
@@ -57,7 +54,6 @@ export class FileService {
       article_file = this.article_folder + '/' + article_file_name;
       article.content_file = article_file;
     }
-    // const article_file_contents = JSON.stringify(article);
     const article_file_contents =
       '# ' + article.title + '\r\n\r\n' + article.content + '\r\n';
 
@@ -67,12 +63,11 @@ export class FileService {
       file_type: 'article'
     };
 
-    // disabling of saving individual files
+    // disabling of saving individual files. Uncomment this to save individual files separately
     // this.save(save_data, autosave);
   }
 
   save_articles(articles: Article[], autosave = false) {
-    // console.log('saving articles: ');
     const file_contents = JSON.stringify(articles);
     const save_data = {
       file_name: this.article_file,
@@ -85,37 +80,27 @@ export class FileService {
 
   save(save_data, autosave) {
     // Now save this here
-    // console.log('Going to save the article now', save_data);
 
     if (this._electronService.isElectronApp) {
-      // console.log('Electron app Sending to save');
       this.ipc.send('save-file', save_data);
 
       const scope = this;
       this.ipc.on('file-saved-article', function(evt, args) {
-        // console.log('IPC Renderer says, file saved', args);
         let message = 'Contents saved successfully';
         if (autosave) {
           message = 'Contents saved automatically';
         }
         const date = new Date();
-        // const year = date.getFullYear();
-        // const month = date.getMonth() + 1;
-        // const day = date.getDate();
         const hour = date.getHours();
         const minutes = date.getMinutes();
         const seconds = date.getSeconds();
 
         message = message + ' at ' + hour + ':' + minutes + ':' + seconds;
-        // console.log(message);
-        // scope._msgService.add(message, 'success');
       });
 
       this.ipc.on('file-save-error-article', function(evt, args) {
-        console.log('IPC Renderer says, file NOT saved', args);
         const err_message = 'Could not save contents';
         console.log(err_message);
-        // scope._msgService.add(err_message, 'danger');
       });
     } else {
       // console.log('Cannot save file, not an electron app');
@@ -124,48 +109,42 @@ export class FileService {
 
   load_articles(next): any {
     if (this._electronService.isElectronApp) {
-      //   console.log ('Not loading articles because not Electron');
-      //   return ;
-      // }
-      // console.log('About to load articles from ' + this.article_file);
       const scope = this;
       let result: any;
-
 
       const load_data = {
         file_name: scope.article_file,
         file_type: 'article'
       };
 
-      // this._msgService.add('File Loaded', 'success');
       scope.ipc.send('read-file', load_data);
 
       scope.ipc.on('file-read-error-article', function(evt, args) {
-        console.log('IPC Renderer says, file NOT read so loading default articles', args);
+        console.log(
+          'IPC Renderer says, file NOT read so loading default articles',
+          args
+        );
         result = scope.get_default_article();
         console.log('Default article received is ', result);
         next(null, result);
       });
 
       scope.ipc.on('file-read-article', function(evt, args) {
-        // console.log('IPC Renderer says, file read');
         try {
           result = JSON.parse(args);
           const message = 'Json Parsed successfully';
-          // scope._msgService.add(message, 'success');
-          // console.log(message);
           next(null, result);
         } catch (error) {
           console.log('Loading error ', error);
-          const err_message = 'File loading error. So sending default article instead';
-          // scope._msgService.add(err_message, 'danger');
+          const err_message =
+            'File loading error. So sending default article instead';
           console.log(err_message);
-        // next(error, null);
           result = scope.get_default_article();
           next(error, result);
         }
       });
     } else {
+      // Some dummy data to test in browser
       const old_data = `[
         {
           "title": "This is article number two",
@@ -212,12 +191,10 @@ export class FileService {
       try {
         result = JSON.parse(old_data);
         const message = 'OLD data Json Parsed successfully';
-        // this._msgService.add(message, 'success');
         next(null, result);
       } catch (error) {
         console.log('Loading error in OLD data JSON', error);
         const err_message = 'File loading error';
-        // this._msgService.add(err_message, 'danger');
         next(error, null);
       }
     }
@@ -234,7 +211,6 @@ export class FileService {
           "date_updated": ""
         }
         ]`;
-    console.log('default_articles=', default_articles);
     let result: any;
     result = JSON.parse(default_articles);
     return result;
@@ -243,7 +219,6 @@ export class FileService {
   // Configuration related data
   load_config(config, next): any {
     if (this._electronService.isElectronApp) {
-      console.log('About to load config from ' + this.config_file);
       const scope = this;
 
       const load_data = {
@@ -255,21 +230,18 @@ export class FileService {
       scope.ipc.send('read-file', load_data);
 
       scope.ipc.on('file-read-error-config', function(evt, args) {
-        console.log('IPC Renderer says, config-file NOT read', args);
-        scope.create_default_files(config, function(err, msg){
+        scope.create_default_files(config, function(err, msg) {
           console.log('created defaults');
         });
         // scope._msgService.add(err_message, 'danger');
       });
 
       scope.ipc.on('file-read-config', function(evt, args) {
-        console.log('IPC Renderer says, config-file read');
         let result: any;
         try {
           result = JSON.parse(args);
           const message = 'Config Json Parsed successfully';
           console.log(message);
-          // scope._msgService.add(message, 'success');
           next(null, result);
           return;
         } catch (error) {
@@ -283,7 +255,7 @@ export class FileService {
         }
       });
     } else {
-      // console.log('Loading old config');
+      // Some dummy data to test in browser
       const old_data = `
     {
       "target_words": 10,
@@ -297,14 +269,9 @@ export class FileService {
       try {
         result = JSON.parse(old_data);
         const message = 'OLD config data Json Parsed successfully';
-        // console.log(message, result);
-        // this._msgService.add(message, 'success');
         next(null, result);
         return;
       } catch (error) {
-        // console.log('Loading error in OLD config data JSON', error);
-        // const err_message = 'Config file loading error';
-        // this._msgService.add(err_message, 'danger');
         next(error, null);
         return;
       }
@@ -313,6 +280,10 @@ export class FileService {
 
   /**
    * This creates the default config file
+   *
+   * @param {*} config
+   * @param {any} next
+   * @memberof FileService
    */
   save_config_file(config: any, next) {
     const file_contents = JSON.stringify(config, null, 4);
@@ -321,18 +292,15 @@ export class FileService {
       file_type: 'config',
       file_contents: file_contents
     };
-    console.log('About to create config file', config);
 
     this.save(save_data, false);
 
     const scope = this;
     this.ipc.on('file-saved-config', function(evt, args) {
-      console.log('IPC Renderer says, config file saved', args);
       next(null, config);
     });
 
     this.ipc.on('file-save-error-config', function(evt, args) {
-      console.log('IPC Renderer says, config file NOT saved', args);
       next(args, null);
     });
   }
@@ -352,16 +320,12 @@ export class FileService {
       config_file_data: JSON.stringify(config, null, 4)
     };
 
-    console.log('default to save is ', load_data);
-
     if (scope._electronService.isElectronApp) {
       // run only in electron
 
-      console.log('Sending create-defaults to file operations');
       scope.ipc.send('create-defaults', load_data);
 
       scope.ipc.on('created-defaults', function(evt, args) {
-        console.log('IPC Renderer says, created defaults', args);
         next();
       });
     } // end of if iselectron app

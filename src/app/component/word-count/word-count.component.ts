@@ -8,12 +8,19 @@ import { Article } from '../../article';
 import { MessageService } from '../../service/message.service';
 import { Constants } from '../../constants';
 import { AudioService } from '../../service/audio.service';
-
+/**
+ * This component handles tasks related to counting words, targets etc and displaying it on screen
+ * This component uses the WordCountService
+ * @export
+ * @class WordCountComponent
+ * @implements {OnInit}
+ */
 @Component({
   selector: 'app-word-count',
   templateUrl: './word-count.component.html',
   styleUrls: ['./word-count.component.css']
 })
+
 export class WordCountComponent implements OnInit {
   @Input() article_title: string;
   @Input() article_content: string;
@@ -26,9 +33,6 @@ export class WordCountComponent implements OnInit {
   celebration_timeout: any;
   celebration_music_played = false;
   tooltip_text = 'Toggle word count mode';
-
-  // @Input() target_words = 50;
-  // @Input() current_words = 50;
 
   label = 'Words left';
   word_count = 0;
@@ -86,7 +90,6 @@ export class WordCountComponent implements OnInit {
           'target_words_countdown_type',
           Constants.WORD_COUNT_TYPE.COUNT_DOWN
         );
-        // this.tooltip_text = 'Click to';
         this._msgService.add('Word count mode changed to "Countdown"');
         break;
       case Constants.WORD_COUNT_TYPE.COUNT_DOWN:
@@ -94,7 +97,6 @@ export class WordCountComponent implements OnInit {
           'target_words_countdown_type',
           Constants.WORD_COUNT_TYPE.WORD_COUNT
         );
-        // this.tooltip_text = 'Mode: Countdown';
         this._msgService.add('Word count mode changed to "Word count"');
         break;
       case Constants.WORD_COUNT_TYPE.WORD_COUNT:
@@ -126,7 +128,6 @@ export class WordCountComponent implements OnInit {
     const articleChange: SimpleChange = changes.article;
     if (articleChange) {
       const article = articleChange.currentValue;
-      // const old_text = this.article.title + ' ' + this.article.content;
 
       let old_text = '';
       if (this.article && this.article.content) {
@@ -144,7 +145,6 @@ export class WordCountComponent implements OnInit {
 
     const article_content_change: SimpleChange = changes.article_content;
     if (article_content_change) {
-      // console.log ('Content changed');
       this.article_content = article_content_change.currentValue;
     }
 
@@ -154,12 +154,11 @@ export class WordCountComponent implements OnInit {
   process_countdown() {
     const text = this.article_content;
     let celebrate = false;
-    // let target = this.target_words;
     const total_word_count = this._wordCountService.get_word_count(text);
     let word_count = total_word_count;
     // adjust for existing contents
     if (this.old_word_count) {
-      // if the user deleted something from old content then ignore the negative data
+      // if the user deleted something from old content then ignore the negative number
       if (this.old_word_count > word_count) {
         this.old_word_count = word_count;
       }
@@ -174,7 +173,6 @@ export class WordCountComponent implements OnInit {
     const half_way_end = half_way + 5;
     let full_way_end = this.target_words + 5;
 
-    // console.log('Processing ', word_count);
     switch (this._configService.getConfig('target_words_countdown_type')) {
       case Constants.WORD_COUNT_TYPE.TO_TARGET:
         if (word_count < this.target_words) {
@@ -210,8 +208,6 @@ export class WordCountComponent implements OnInit {
       default:
         break;
     }
-
-    // console.log ('word_count=' + word_count);
 
     if (word_count < this.target_words) {
       if (

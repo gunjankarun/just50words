@@ -3,12 +3,21 @@ import { ConfigService } from '../../service/config.service';
 import { WordCountService } from '../../service/word-count.service';
 import { MessageService } from '../../service/message.service';
 import { Subject } from 'rxjs/Subject';
-
+/**
+ * This component handles the Pomodoro features of timer.
+ * This uses the WritingTimerService for persistance and data storage etc
+ *
+ * @export
+ * @class WritingTimerComponent
+ * @implements {OnInit}
+ */
 @Component({
   selector: 'app-writing-timer',
   templateUrl: './writing-timer.component.html',
   styleUrls: ['./writing-timer.component.css']
 })
+
+
 export class WritingTimerComponent implements OnInit {
   config = this._configService.config;
   config_subscription: any;
@@ -85,7 +94,6 @@ export class WritingTimerComponent implements OnInit {
     this.timer = setTimeout(() => {
       this.total_time++;
       this.session_time++;
-      // console.log(' session_time= ' + this.session_time + ' target_time ' + this.target_time);
 
       if (this.session_time < this.target_time) {
         // do nothing
@@ -95,21 +103,18 @@ export class WritingTimerComponent implements OnInit {
           let audio: any;
           switch (this.session_type) {
             case 'work':
-              // console.log('Playing work completed sound');
               audio = new Audio(
                 this._configService.getConfig('work_session_complete_sound')
               );
               audio.play();
               break;
             case 'relax':
-              // console.log('Playing relax completed sound');
               audio = new Audio(
                 this._configService.getConfig('short_break_complete_sound')
               );
               audio.play();
               break;
             case 'long-relax':
-              // console.log('Playing long-relax completed sound');
               audio = new Audio(
                 this._configService.getConfig('long_break_complete_sound')
               );
@@ -119,19 +124,13 @@ export class WritingTimerComponent implements OnInit {
               break;
           }
         }
-        // console.log('100');
         if (this._configService.getConfig('manually_start_session')) {
-          // console.log('200');
           if (this.session_type !== 'work') {
-            // console.log('300');
             this.wait_to_start = true;
           }
         }
 
-        // if (!this.wait_to_start) {
-        //   console.log('400');
         this.change_session();
-        // }
       }
 
       let display_time = this.session_time;
@@ -151,7 +150,6 @@ export class WritingTimerComponent implements OnInit {
   change_session() {
     // get session count and figure out if it is write or relax session and reset session count
     // reset session time
-    // console.log('500 Changing session from ', this.session_type);
     this.session_time = 0;
 
     if (this.session_type === 'work') {
@@ -189,7 +187,7 @@ export class WritingTimerComponent implements OnInit {
       this.class = 'btn-warning';
       this.target_time = this._configService.getConfig('work_session') * 60;
       this._msgService.add(
-        "Let's get back to writing. Write for " +
+        'Let\'s get back to writing. Write for ' +
           this._configService.getConfig('work_session') +
           ' minutes.'
       );

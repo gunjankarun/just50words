@@ -1,6 +1,3 @@
-/**
- * This is the main component that shows the main editor screen.
- */
 import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { ElectronService } from 'ngx-electron';
 import { Subject } from 'rxjs/Subject';
@@ -11,12 +8,19 @@ import { MessageService } from '../../service/message.service';
 import { FileService } from '../../service/file.service';
 import { WordCountService } from '../../service/word-count.service';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
-
+/**
+ * This is the main component that shows the main editor screen.
+ * This uses the ArticlesService for persistent storage of articles
+ * @export
+ * @class ArticlesComponent
+ * @implements {OnInit}
+ */
 @Component({
   selector: 'app-articles',
   templateUrl: './articles.component.html',
   styleUrls: ['./articles.component.css']
 })
+
 export class ArticlesComponent implements OnInit {
   @Input() listHeight: number;
   @Input() editorHeight: number;

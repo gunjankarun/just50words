@@ -1,5 +1,11 @@
 import { Injectable } from '@angular/core';
 
+/**
+ * This Service handles the task related to counting words
+ * 
+ * @export
+ * @class WordCountService
+ */
 @Injectable()
 export class WordCountService {
   celebrate = false;
@@ -13,7 +19,6 @@ export class WordCountService {
     }
     let matches: any;
     matches = text.trim().match(/[\w\d]+/gi);
-    // console.log('matches=', matches);
     const word_count = matches ? matches.length : 0;
     return word_count;
   }

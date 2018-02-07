@@ -1,9 +1,17 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { WordCountService } from '../service/word-count.service';
-
+/**
+ * This pipe displays wordcount of any string passed to it
+ *
+ * @export
+ * @class WordCountPipe
+ * @implements {PipeTransform}
+ */
 @Pipe({
   name: 'wordCount'
 })
+
+
 export class WordCountPipe implements PipeTransform {
 
   constructor(

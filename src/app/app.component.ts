@@ -1,5 +1,11 @@
 import { Component } from '@angular/core';
 
+/**
+ * This component tracks resizing events and updates the heights of componets to ensure that no scrollbar appears in the app
+ *
+ * @export
+ * @class AppComponent
+ */
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',

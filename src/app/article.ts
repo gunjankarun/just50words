@@ -1,3 +1,9 @@
+/**
+ * This class defines an article object.
+ * 
+ * @export
+ * @class Article
+ */
 export class Article {
     title: string;
     summary: string;

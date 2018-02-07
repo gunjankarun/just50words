@@ -1,6 +1,12 @@
 import { Injectable } from '@angular/core';
 import { ConfigService } from './config.service';
 
+/**
+ * This service handles tasks related to streaks (will come in later version)
+ *
+ * @export
+ * @class WritingStreakService
+ */
 @Injectable()
 export class WritingStreakService {
   streaks = [];
@@ -18,10 +24,6 @@ export class WritingStreakService {
   constructor(private _configService: ConfigService) {
     // this.load_streak_data();
   }
-
-  // add(word_count, article_count) {
-  //   this.current_day_block.
-  // }
 
   load_streak_data() {
     const streak_data = [

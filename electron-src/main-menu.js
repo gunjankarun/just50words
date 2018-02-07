@@ -1,3 +1,8 @@
+/**
+ * This file defines the menus to be shown by electron. The idea is to keep the menus specific to platform and not add any custom functionality on these menus. 
+ * The custom functionality will be implemented using items on main screen.
+ * That will make it easy to move the entire solution to a cloud based solution in future.
+ */
 const { Menu } = require('electron')
 const electron = require('electron')
 const app = electron.app

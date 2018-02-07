@@ -5,6 +5,12 @@ import { FileService } from './file.service';
 import { ConfigService } from './config.service';
 import { Subject } from 'rxjs/Subject';
 
+/**
+ * This Service handles articles related tasks
+ *
+ * @export
+ * @class ArticleService
+ */
 @Injectable()
 export class ArticleService {
   config_subscription: any;
@@ -40,28 +46,22 @@ export class ArticleService {
 
   load_articles(next) {
     const scope = this;
-    // scope.articles = ;
     scope._fileService.load_articles(function(err, articles) {
       if (err) {
         console.log('Error in loading articles', err);
       }
       console.log('Articles received', articles.length);
-      // if (articles) {
       scope.articles = articles;
       if (scope.articles.length) {
         scope.sort_article_list();
         const article_count = scope.articles.length;
-        // scope.filtered_articles = scope.articles;
         scope._msgService.add('Loaded ' + article_count + ' articles');
       }
       next();
-        // }
-      // }
     });
   }
 
   get_articles() {
-    console.log('Loading articles in services');
     return this.articles;
   }
 
@@ -79,7 +79,6 @@ export class ArticleService {
 
   save_article() {
     if (!this.current_article) {
-      // this.new_article();
       // do nothing
     } else {
       const d = new Date();
@@ -91,7 +90,6 @@ export class ArticleService {
 
   delete_article(next) {
     const index: number = this.articles.indexOf(this.current_article);
-    console.log('Deleting item at index: ' + index);
     if (index !== -1) {
       this.articles.splice(index, 1);
       this.save_article();
@@ -100,15 +98,11 @@ export class ArticleService {
   }
 
   auto_save_start() {
-    // this.msgService.add('Will save automatically when you stop typing.');
-
     if (this.autosave_timeout) {
       clearTimeout(this.autosave_timeout);
     }
 
     this.autosave_timeout = setTimeout(() => {
-      // this._msgService.add('Starting auto save');
-
       this._fileService.save_article(this.current_article, true);
       this._fileService.save_articles(this.articles, true);
     }, this.autosave_interval);
@@ -122,16 +116,13 @@ export class ArticleService {
   }
 
   sort_article_list() {
-    // console.log('About to sort articles');
     if (!this.articles) {
-      // console.log('But articles are null so quitting sorting');
+      // articles are null so quitting sorting
       return false;
     }
     this.articles.sort(function(a, b) {
       const d1 = new Date(a.date_updated);
       const d2 = new Date(b.date_updated);
-      // console.log('Comparing dates ', d1);
-      // console.log('with ', d2);
       return d1 > d2 ? -1 : d1 < d2 ? 1 : 0;
     });
   }

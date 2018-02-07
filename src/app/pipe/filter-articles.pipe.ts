@@ -1,8 +1,15 @@
 import { Pipe, PipeTransform } from '@angular/core';
-
+/**
+ * This pipe handles tasks related to filtering articles based on selected criteria
+ *
+ * @export
+ * @class FilterArticlesPipe
+ * @implements {PipeTransform}
+ */
 @Pipe({
   name: 'filterArticles'
 })
+
 export class FilterArticlesPipe implements PipeTransform {
 
   transform(items: any[], filter_str: string): any {
@@ -11,12 +18,6 @@ export class FilterArticlesPipe implements PipeTransform {
     }
     console.log('Filtering Article');
 
-    // const criteria = { title: filter, content: filter };
-    // return items.filter(function (obj) {
-    //   return Object.keys(criteria).every(function (c) {
-    //     return obj[c].indexOf(criteria[c]) !== -1;
-    //   });
-    // });
     filter_str = filter_str.toLowerCase();
 
     const filtered_list = items.filter(function (item) {
@@ -30,7 +31,6 @@ export class FilterArticlesPipe implements PipeTransform {
       return found;
     });
 
-    // console.log('Filtered List', filtered_list);
     return filtered_list;
   }
 }

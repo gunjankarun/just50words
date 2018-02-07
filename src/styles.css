@@ -228,3 +228,7 @@ input#headline.font-small {
 .modal-body, .modal-footer{
     background-color: white;
 }
+
+.title .btn-link {
+    color: black;
+}

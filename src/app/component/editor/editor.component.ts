@@ -11,12 +11,20 @@ import { Subject } from 'rxjs/Subject';
 import { ConfigService } from '../../service/config.service';
 import { MessageService } from '../../service/message.service';
 import { AudioService } from '../../service/audio.service';
-
+/**
+ * This component handles the actual editor where the user enters the text
+ * 
+ * @export
+ * @class EditorComponent
+ * @implements {OnInit}
+ */
 @Component({
   selector: 'app-editor',
   templateUrl: './editor.component.html',
   styleUrls: ['./editor.component.css']
 })
+
+
 export class EditorComponent implements OnInit {
   config = this._configService.config;
   config_subscription: any;

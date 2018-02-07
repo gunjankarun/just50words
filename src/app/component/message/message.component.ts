@@ -1,11 +1,20 @@
 import { Component, OnInit } from '@angular/core';
 import { MessageService } from '../../service/message.service';
 import { Message } from '../../message';
+/**
+ * This component handles all message related services
+ * Also this component users MessageService
+ * 
+ * @export
+ * @class MessageComponent
+ * @implements {OnInit}
+ */
 @Component({
   selector: 'app-message',
   templateUrl: './message.component.html',
   styleUrls: ['./message.component.css']
 })
+
 export class MessageComponent implements OnInit {
 
   current_message: Message = {

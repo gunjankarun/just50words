@@ -1,5 +1,12 @@
 import { Pipe, PipeTransform, NgZone, ChangeDetectorRef, OnDestroy } from '@angular/core';
-
+/**
+ * This pipe displays time as days/time ago.
+ *
+ * @export
+ * @class TimeAgoPipe
+ * @implements {PipeTransform}
+ * @implements {OnDestroy}
+ */
 @Pipe({
   name: 'timeAgo',
   pure: false

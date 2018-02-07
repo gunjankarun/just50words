@@ -1,6 +1,13 @@
 import { Injectable } from '@angular/core';
 import { Message } from '../message';
 import { ConfigService } from './config.service';
+
+/**
+ * This service handles the task of displaying messages across the application
+ * 
+ * @export
+ * @class MessageService
+ */
 @Injectable()
 export class MessageService {
 
@@ -16,25 +23,16 @@ export class MessageService {
     msg_date: new Date()
   };
 
-  constructor(private _configService: ConfigService) {
-        // this.config_subscription = _configService.configChange.subscribe(
-        //   new_config => {
-        //     console.log('New timeout interval', new_config.message_dismiss_after);
-        //     this.message_timeout_interval = new_config.message_dismiss_after * 1000;
-        //     // console.log('\n\nAUDIO::: mute_all_sound=' + this.mute_all_sound);
-        //   }
-        // );
-  }
+  constructor(private _configService: ConfigService) {}
 
   add(message: string, type: string = 'warning') {
-    // console.log('MSG: ', message);
     this.current_message.message = message;
     this.current_message.type = type;
     this.current_message.msg_date = new Date();
     this.messages.push(message);
     this.show_message = true;
 
-    // console.log ('About to show notification');
+    // Uncomment this to show system notification. Can get annoying if notifications are large
     // const myNotification = new Notification('Just 50 Words', {
     //   body: message
     // });
@@ -45,7 +43,6 @@ export class MessageService {
     this.message_timeout = setTimeout(() => {
       this.current_message.message = null;
       this.current_message.type = null;
-      // console.log('Hiding Message');
       this.show_message = false;
     }, this.message_timeout_interval);
 
