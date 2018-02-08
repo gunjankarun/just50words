@@ -1,6 +1,4 @@
 **Just 50 words is a simple text editor designed to help lazy writers, like me, build a habit of writing.**  
-
-<!-- Screenshot [[https://github.com/username/repository/blob/master/img/octocat.png|alt=octocat]] -->
    
 It features:  
 
@@ -10,6 +8,8 @@ It features:
 - A Write or Nuke feature where if you stop writing before completing the target words, everything that you wrote is cleared. This forces you to achieve your target words more often.
 - Almost everything can be configured
 - and a UI designed for the rest of us.
+
+[[https://github.com/gunjankarun/just50words/blob/master/docs/images/screen-main-window.PNG|alt=app screenshot]]
 
 <!-- # Watch "Just 50 Words" in Action
 1. Introduction and basic operations
@@ -35,13 +35,14 @@ Almost everything in the editor can be configured by editing the _config.json fi
    
 [...continue reading about configuring "Just 50 words"](https://github.com/gunjankarun/just50words/wiki/Customizing-Just-50-Words)
 
-<!-- # Working with the source code of "Just 50 Words"
-If you know JavaScript, you can edit the code of "Just 50 Words"
+# Built With
+If you know JavaScript, you can edit the code of "Just 50 Words"  
 "Just 50 Words" is created with 
-- [Electron]()
-- [Angular JS]()
-You can edit the code, add new features or tweak something that you don't like and build it again.
-[Read more about installing, understanding the code and building Just 50 Words]() -->
+- [Electron](https://electronjs.org/)
+- [Angular JS](https://angular.io/)
+- [Bootstrap](https://getbootstrap.com/)
+<!-- You can edit the code, add new features or tweak something that you don't like and build it again.
+[Read more about installing, understanding the code and building Just 50 Words]()  -->
 
 # Planned Features
 What you see here is part of the long journey that I have planned for "Just 50 Words". Most of these are doable, I just need more time to build them. Some of them are wishful thinking, but they are here anyway.   
@@ -55,7 +56,7 @@ What you see here is part of the long journey that I have planned for "Just 50 W
 - Email me at gunjan@kalptaru.in
 
 # How to help
-- You can [donate using Paypal](https://www.paypal.me/quadralyst)
+- You can [securely donate using Paypal](https://www.paypal.me/quadralyst)
 If this app helps you in your work, consider donating a small amount.This helps pay the bills for me and my kids and gives me time and **lots of motivation** to work on this app.
 
 - If you know Javascript and are familiar with Angular2 and Electron then you can review the code, suggest changes, fix bugs or add new features. Just download or clone the source code from https://github.com/gunjankarun/just50words and do whatever you want.
@@ -65,3 +66,9 @@ If this app helps you in your work, consider donating a small amount.This helps 
 - If you write articles or have a blog or are active on social media, then a review of this app will help me a lot. I would love to discuss any specific detail i.e. the technology involved, philosophy etc.
 
 - Hire me. If you have a project that uses Blockchain, AI, Machine Learning, Electron, NodeJS, Ionic for mobile etc, I can help. 
+
+# About Gunjan Karun
+- [ LinkedIn ](https://www.linkedin.com/in/gunjankarun/)<!-- - [ My articles on Medium ](https://medium.com/@gunjankarun) -->
+- [ Instagram ](https://www.instagram.com/gunjankarun/)
+- [ Twitter ](https://twitter.com/gunjankarun)
+- [ Facebook ](https://www.facebook.com/gunjankarun)
