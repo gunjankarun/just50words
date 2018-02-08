@@ -9,7 +9,7 @@ It features:
 - Almost everything can be configured
 - and a UI designed for the rest of us.
 
-[[https://github.com/gunjankarun/just50words/blob/master/docs/images/screen-main-window.PNG|alt=app screenshot]]
+[[https://github.com/gunjankarun/just50words/blob/master/docs/images/screen-main-window.PNG|alt=app]]
 
 <!-- # Watch "Just 50 Words" in Action
 1. Introduction and basic operations
