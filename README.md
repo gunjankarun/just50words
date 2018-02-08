@@ -7,9 +7,9 @@ It features:
 - A complete Pomodoro system to set writing session intervals so that you can use short focussed intervals to write.
 - A Write or Nuke feature where if you stop writing before completing the target words, everything that you wrote is cleared. This forces you to achieve your target words more often.
 - Almost everything can be configured
-- and a UI designed for the rest of us.
+- and a UI designed for the rest of us.  
 
-[[https://github.com/gunjankarun/just50words/blob/master/docs/images/screen-main-window.PNG|alt=app]]
+![Screenshot of Just 50 words](/docs/images/screen-main-window.PNG?raw=true "Screenshot file")
 
 <!-- # Watch "Just 50 Words" in Action
 1. Introduction and basic operations
