@@ -153,7 +153,7 @@
     <li>Config file location: <a href="#" (click)="open_folder($event,config_file)">{{config_file}} </a></li>
   </div>
   <div class="modal-footer">
-    <div class='col-sm-10'> &nbsp; &nbsp; &nbsp; &nbsp;App version: {{app_version}}</div>
+    <div class='col-sm-10'> <app-update></app-update></div>
     <div class="col-sm align-right"><button type="button" class="btn btn-outline-dark" (click)="c('Close click')">Close</button></div>
     
   </div>

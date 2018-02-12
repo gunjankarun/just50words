@@ -4,7 +4,7 @@ import { Message } from '../../message';
 /**
  * This component handles all message related services
  * Also this component users MessageService
- * 
+ *
  * @export
  * @class MessageComponent
  * @implements {OnInit}

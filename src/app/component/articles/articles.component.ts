@@ -29,7 +29,7 @@ export class ArticlesComponent implements OnInit {
   @ViewChild('articleList') private articleListContainer: ElementRef;
   config = this._configService.config;
   config_subscription: any;
-  app_version = '0.0.0';
+  app_version = this._configService.app_version;
   config_folder = '';
   config_file = '';
 
@@ -66,7 +66,7 @@ export class ArticlesComponent implements OnInit {
   ) {
     // constructor
     if (this._electronService.isElectronApp) {
-      this.app_version = this._electronService.remote.app.getVersion();
+      // this.app_version = this._electronService.remote.app.getVersion();
       this.config_folder = this._electronService.remote.getGlobal('application_root') + 'data/';
       this.config_file =  this.config_folder + '_config.json';
     }

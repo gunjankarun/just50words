@@ -3,6 +3,7 @@ import { NgModule, APP_INITIALIZER } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgxElectronModule } from 'ngx-electron';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { HttpClientModule } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
 import { ArticlesComponent } from './component/articles/articles.component';
@@ -24,6 +25,8 @@ import { WritingStreakComponent } from './component/writing-streak/writing-strea
 import { WritingStreakService } from './service/writing-streak.service';
 import { EditorComponent } from './component/editor/editor.component';
 import { AudioService } from './service/audio.service';
+import { UpdateService } from './service/update.service';
+import { UpdateComponent } from './component/update/update.component';
 
 @NgModule({
   declarations: [
@@ -36,9 +39,10 @@ import { AudioService } from './service/audio.service';
     WordCountPipe,
     WritingTimerComponent,
     WritingStreakComponent,
-    EditorComponent
+    EditorComponent,
+    UpdateComponent
   ],
-  imports: [BrowserModule, FormsModule, NgxElectronModule, NgbModule.forRoot()],
+  imports: [BrowserModule, FormsModule, NgxElectronModule, NgbModule.forRoot(), HttpClientModule],
   providers: [
     ArticleService,
     ConfigService,
@@ -53,7 +57,8 @@ import { AudioService } from './service/audio.service';
       deps: [ConfigService],
       multi: true
     },
-    AudioService
+    AudioService,
+    UpdateService
   ],
   bootstrap: [AppComponent]
 })
