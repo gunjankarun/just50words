@@ -1,1 +1,13 @@
-&nbsp; &nbsp; &nbsp; <a href="#" (click)="open_url($event, version_url)">{{version_str}}</a>
+&nbsp; &nbsp; &nbsp; <a href="#"  [ngbPopover]="updatePopup" triggers="manual" #p="ngbPopover" (click)="p.open()">{{version_str}}</a>
+
+<!-- update Popup -->
+<ng-template #updatePopup>
+    <div>
+        <strong>{{update_data.title}}</strong>
+        <div [innerHTML]="update_data.msg"></div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn-sm btn-primary" (click)="open_url($event, version_url)">Download</button>
+        <button type="button" class="btn-sm btn-outline-dark" (click)="p.close()">Dismiss</button>
+    </div>
+</ng-template>

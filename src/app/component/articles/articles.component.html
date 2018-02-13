@@ -3,7 +3,7 @@
     <div id="leftlist" *ngIf="show_list">
       <!-- Articlelist component -->
       <div class="title" *ngIf='show_list'>Just {{target_words}} words
-        <button type="button" class="btn btn-small btn-link btn-sm" (click)='show_options(configPopup)'
+        <button type="button" class="btn btn-small btn-link btn-sm" (click)='show_options()'
                 placement="bottom" ngbTooltip="Options">
           <span class="oi oi-menu"></span>
         </button>
@@ -154,7 +154,7 @@
   </div>
   <div class="modal-footer">
     <div class='col-sm-10'> <app-update></app-update></div>
-    <div class="col-sm align-right"><button type="button" class="btn btn-outline-dark" (click)="c('Close click')">Close</button></div>
+    <div class="col-sm align-right"><button type="button" class="btn btn-sm btn-outline-dark" (click)="c('Close click')">Close</button></div>
     
   </div>
 </ng-template>
