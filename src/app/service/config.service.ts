@@ -14,6 +14,8 @@ import { Subject } from 'rxjs/Subject';
  */
 @Injectable()
 export class ConfigService {
+  app_version = '0.0.0';
+
   config = {
     editor_bg: 'url("assets/images/bg-dirty-paper.jpg")',
     editor_text_color: 'black',
@@ -49,8 +51,12 @@ export class ConfigService {
 
   constructor(
     private _fileService: FileService,
-    private _electron: ElectronService
-  ) {}
+    private _electronService: ElectronService
+  ) {
+    if (this._electronService.isElectronApp) {
+      this.app_version = this._electronService.remote.app.getVersion();
+    }
+  }
 
   /**
    * Use to get the data found in the config array

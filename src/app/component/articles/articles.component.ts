@@ -20,16 +20,17 @@ import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
   templateUrl: './articles.component.html',
   styleUrls: ['./articles.component.css']
 })
-
 export class ArticlesComponent implements OnInit {
   @Input() listHeight: number;
   @Input() editorHeight: number;
   @Input() editor_object: any;
 
   @ViewChild('articleList') private articleListContainer: ElementRef;
+  @ViewChild('configPopup') private cPopup;
+
   config = this._configService.config;
   config_subscription: any;
-  app_version = '0.0.0';
+  app_version = this._configService.app_version;
   config_folder = '';
   config_file = '';
 
@@ -66,9 +67,10 @@ export class ArticlesComponent implements OnInit {
   ) {
     // constructor
     if (this._electronService.isElectronApp) {
-      this.app_version = this._electronService.remote.app.getVersion();
-      this.config_folder = this._electronService.remote.getGlobal('application_root') + 'data/';
-      this.config_file =  this.config_folder + '_config.json';
+      // this.app_version = this._electronService.remote.app.getVersion();
+      this.config_folder =
+        this._electronService.remote.getGlobal('application_root') + 'data/';
+      this.config_file = this.config_folder + '_config.json';
     }
 
     this.config = this._configService.config;
@@ -103,9 +105,9 @@ export class ArticlesComponent implements OnInit {
     this.config_subscription.unsubscribe();
   }
 
-  show_options(configPopup) {
+  show_options() {
     // will show options popup here
-    this._modalService.open(configPopup).result.then(
+    this._modalService.open(this.cPopup).result.then(
       result => {
         // console.log(`Closed with: ${result}`);
       },
@@ -201,7 +203,6 @@ export class ArticlesComponent implements OnInit {
   key_pressed_headline(event) {
     this.update_summary();
     this.save_articles();
-
 
     // Do not save articles if only the headline is being changed.
     switch (event.key) {
