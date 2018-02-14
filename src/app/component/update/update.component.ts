@@ -84,7 +84,7 @@ export class UpdateComponent implements OnInit {
             ) {
               new_version_available = true;
             } else {
-              this.update_data.title = 'You have the latest version';
+              // this.update_data.title = 'You have the latest version';
             }
 
             if (new_version_available) {
@@ -109,9 +109,12 @@ export class UpdateComponent implements OnInit {
                   }
                 });
               }
+            }else {
+              this.version_str = 'You have the latest version';
             }
           } else {
             this.update_data.title = 'Could not check updates';
+            this.version_str = 'Could not check updates';
           }
         }
         // console.log('update_data', this.update_data);

@@ -131,7 +131,7 @@
 </div>
 
 <!-- Configure Popup -->
-<ng-template #configPopup let-c="close" let-d="dismiss">
+<!-- <ng-template #configPopup let-c="close" let-d="dismiss">
   <div class="modal-header">
     <h4 class="modal-title title">Just 50 Words</h4>
     <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
@@ -157,4 +157,110 @@
     <div class="col-sm align-right"><button type="button" class="btn btn-sm btn-outline-dark" (click)="c('Close click')">Close</button></div>
     
   </div>
+</ng-template> -->
+
+<ng-template #configPopup let-c="close" let-d="dismiss">
+  <div class="modal-body config-body">
+    <div class="row">
+      <div class="col-sm">
+        <strong>Quick tutorial</strong>
+        <br />
+        <div class="row config-item">
+          <div class="col-sm">
+            <figure class="figure">
+              <img src="http://i3.ytimg.com/vi/erLk59H86ww/maxresdefault.jpg" class="figure-img img-fluid rounded" alt="Tutorial video">
+              <!-- <figcaption class="figure-caption">Opens Youtube url</figcaption> -->
+            </figure>
+          </div>
+        </div>
+        <div class="row config-item">
+          <div class="col-sm config-donations">
+            <strong>Help me pay my bills</strong>
+            <p style="font-size:11px;">Your donations not only help me and my family, it also motivates me to keep improving Just 50 Words with new features
+              and provide faster support.</p>
+            <button class="btn btn-sm btn-primary btn-block" (click)="open_url($event, 'https://www.paypal.me/quadralyst')">Securely donate using Paypal</button>
+            <p style="font-size:11px; text-align:center;">PS: Your donation will be processed by Quadralyst Pvt Ltd.</p>
+          </div>
+        </div>
+        <div class="row config-item">
+          <div class="col-sm">
+            <strong>App Version: {{app_version}}</strong><br />
+            <app-update class="config-update"></app-update>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm config-links">
+        <strong>Useful links</strong>
+        <li>Get Source Code:<br />
+          <a href="#" (click)="open_url($event, 'https://github.com/gunjankarun/just50words')">Visit GitHub repository</a>
+          <br >
+        </li>
+        <li>Need Help?<br />
+          <a href="#" (click)="open_url($event,'http://google.com')">View latest #readme</a>
+          <br>
+        </li>
+        <li>Facing an Issue?<br />
+          <a href="#" (click)="open_url($event,'https://github.com/gunjankarun/just50words/issues')">Visit issue tracker </a>
+          <br>
+        </li>
+        <li>Need a new feature?<br />
+          <a href="#" (click)="open_url($event,'https://github.com/gunjankarun/just50words/issues/new?title=[Feature+Request]:')">Visit feature tracker </a>
+          <br>
+        </li>
+        <li>Get in touch with me.<br />
+          <a href="#" (click)="open_url($event,'mailto:gunjan@kalptaru.in')">gunjan@kalptaru.in </a>
+          <br>
+        </li>
+        <li>Config file location:<br />
+          <a href="#" (click)="open_folder($event,config_file)">Open config folder</a>
+          <!-- <a href="#" (click)="open_folder($event,config_file)">{{config_file}}</a> -->
+          <br>
+        </li>
+      </div>
+    </div>
+
+  </div>
+  <div class="modal-footer">
+      <button type="button" class="btn btn-sm btn-outline-dark" (click)="c('Close click')">Close</button>  
+  </div>
 </ng-template>
+
+<style>
+  .config-item{
+    /* border-bottom: 1px solid silver; */
+    padding-bottom: 10px;
+    padding-top:10px;
+  }
+
+  .config-item figure{
+    margin-bottom: -10px;
+  }
+
+  .config-body li{
+    margin-bottom: 15px;
+    list-style: none;
+  }
+
+  .config-update{
+    /* text-align: center; */
+  }
+
+  .config-links{
+    box-shadow: 2px 2px 5px 2px #ccc;
+    margin-right: 10px;
+    border: 1px solid #c0c0c03d;
+  }
+
+  .config-donations{
+    box-shadow: 
+        inset 0px 11px 8px -10px #CCC,
+        inset 0px -11px 8px -10px #CCC; 
+    padding-top: 10px;
+    background-color: #fdf2e5;
+  }
+
+  .tutorial-vid{
+    /* width:210px; */
+  }
+
+</style>
