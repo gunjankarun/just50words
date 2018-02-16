@@ -1,7 +1,8 @@
-import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, AfterViewInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { ElectronService } from 'ngx-electron';
 import { Subject } from 'rxjs/Subject';
 import { Article } from '../../article';
+import { Constants } from '../../constants';
 import { ArticleService } from '../../service/article.service';
 import { ConfigService } from '../../service/config.service';
 import { MessageService } from '../../service/message.service';
@@ -9,6 +10,7 @@ import { FileService } from '../../service/file.service';
 import { WordCountService } from '../../service/word-count.service';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { WritingPromptService } from '../../service/writing-prompt.service';
+import { UpdateService } from '../../service/update.service';
 /**
  * This is the main component that shows the main editor screen.
  * This uses the ArticlesService for persistent storage of articles
@@ -27,11 +29,16 @@ export class ArticlesComponent implements OnInit {
   @Input() editor_object: any;
 
   @ViewChild('articleList') private articleListContainer: ElementRef;
-  @ViewChild('configPopup') private cPopup;
+  @ViewChild('configPopup') private cPopup: ElementRef;
+  @ViewChild('updatePopup') private uPopup: ElementRef;
 
   config = this._configService.config;
   config_subscription: any;
   app_version = this._configService.app_version;
+  git_username = Constants.git_username;
+  git_repo_name = Constants.git_repo_name;
+  update_data: any;
+
   config_folder = '';
   config_file = '';
 
@@ -65,6 +72,7 @@ export class ArticlesComponent implements OnInit {
     private _wordCountService: WordCountService,
     private _electronService: ElectronService,
     private _modalService: NgbModal,
+    private _updateService: UpdateService,
     private _writingPromptService: WritingPromptService
   ) {
     this._writingPromptService.generate_prompts('HyperLedger', 10);
@@ -145,8 +153,31 @@ export class ArticlesComponent implements OnInit {
   }
 
   ngAfterViewInit() {
-    console.log('DOM loaded');
     this.headline_object = this._elRef.nativeElement.querySelector('#headline');
+
+    if (this.config.check_for_updates_automatically) {
+      console.log('About to check for update');
+      const scope = this;
+      this._updateService.check_update(
+        this.app_version,
+        this.git_username,
+        this.git_repo_name,
+        function(err, update_obj) {
+          console.log('Checked update in ngAfterViewInit', update_obj);
+          if (update_obj.new_version_available) {
+            scope.update_data = update_obj;
+            scope._modalService.open(scope.uPopup).result.then(
+              result => {
+                // console.log(`Closed with: ${result}`);
+              },
+              reason => {
+                // console.log(`Dismissed ${reason}`);
+              }
+            );
+          }
+        }
+      );
+    } // end of check_for_updates_automatically
   }
 
   create_editor_object(obj: any) {

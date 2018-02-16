@@ -45,7 +45,8 @@ export class ConfigService {
     long_break_complete_sound: 'assets/sound/filling.mp3',
     words_in_summary: 20,
     auto_save_after: 2,
-    message_dismiss_after: 5
+    message_dismiss_after: 5,
+    check_for_updates_automatically: true
   };
   configChange: Subject<any> = new Subject<any>();
 
@@ -186,6 +187,10 @@ export class ConfigService {
       if (config_data.hasOwnProperty('long_break_complete_sound')) {
         scope.config.long_break_complete_sound =
           config_data.long_break_complete_sound;
+      }
+      if (config_data.hasOwnProperty('check_for_updates_automatically')) {
+        scope.config.check_for_updates_automatically =
+          config_data.check_for_updates_automatically;
       }
 
       scope.configChange.next(scope.config);

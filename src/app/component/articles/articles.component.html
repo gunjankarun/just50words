@@ -130,35 +130,19 @@
   </div>
 </div>
 
-<!-- Configure Popup -->
-<!-- <ng-template #configPopup let-c="close" let-d="dismiss">
-  <div class="modal-header">
-    <h4 class="modal-title title">Just 50 Words</h4>
-    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
-      <span aria-hidden="true">&times;</span>
-    </button>
-  </div>
-  <div class="modal-body">
-    <div>
-      <p style="font-size:11px;">Your donations not only help me and my family, it also motivates me to keep improving Just 50 Words with new features and provide faster support.</p>
-      <button class="btn btn-sm btn-primary btn-block"  (click)="open_url($event, 'https://www.paypal.me/quadralyst')">Securely donate using Paypal</button>
-      <p style="font-size:11px; text-align:center;">PS: Your donation will be processed by Quadralyst Pvt Ltd.</p>
-    </div>
-    <hr>
-    <li>Get Source Code: <a href="#" (click)="open_url($event, 'https://github.com/gunjankarun/just50words')">Visit GitHub repository</a></li>
-    <li>Need Help? <a href="#" (click)="open_url($event,'http://google.com')">View latest #readme</a></li>
-    <li>Facing an Issue? <a href="#" (click)="open_url($event,'https://github.com/gunjankarun/just50words/issues')">Visit issue tracker </a></li>
-    <li>Need a new feature? <a href="#" (click)="open_url($event,'https://github.com/gunjankarun/just50words/issues/new?title=[Feature+Request]:')">Visit feature tracker </a></li>
-    <li>Get in touch with me. <a href="#" (click)="open_url($event,'mailto:gunjan@kalptaru.in')">Email me at gunjan@kalptaru.in </a></li>
-    <li>Config file location: <a href="#" (click)="open_folder($event,config_file)">{{config_file}} </a></li>
+<!-- Update Popup -->
+<ng-template #updatePopup let-c="close" let-d="dismiss">
+  <div class="modal-body update-modal">
+    <strong>{{update_data.title}}</strong>
+    <div [innerHTML]="update_data.msg"></div>
   </div>
   <div class="modal-footer">
-    <div class='col-sm-10'> <app-update></app-update></div>
-    <div class="col-sm align-right"><button type="button" class="btn btn-sm btn-outline-dark" (click)="c('Close click')">Close</button></div>
-    
+    <button type="button" class="btn-sm btn-primary" (click)="open_url($event, update_data.release_url);c();">Download</button>
+    <button type="button" class="btn btn-sm btn-outline-dark" (click)="c()">Close</button>
   </div>
-</ng-template> -->
+</ng-template>
 
+<!-- Config Popup -->
 <ng-template #configPopup let-c="close" let-d="dismiss">
   <div class="modal-body config-body">
     <div class="row">
