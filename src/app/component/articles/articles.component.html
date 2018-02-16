@@ -196,7 +196,7 @@
           <br >
         </li>
         <li>Need Help?<br />
-          <a href="#" (click)="open_url($event,'http://google.com')">View latest #readme</a>
+          <a href="#" (click)="open_url($event,'https://github.com/gunjankarun/just50words/wiki')">Visit Wiki</a>
           <br>
         </li>
         <li>Facing an Issue?<br />
@@ -207,13 +207,17 @@
           <a href="#" (click)="open_url($event,'https://github.com/gunjankarun/just50words/issues/new?title=[Feature+Request]:')">Visit feature tracker </a>
           <br>
         </li>
-        <li>Get in touch with me.<br />
-          <a href="#" (click)="open_url($event,'mailto:gunjan@kalptaru.in')">gunjan@kalptaru.in </a>
-          <br>
-        </li>
         <li>Config file location:<br />
           <a href="#" (click)="open_folder($event,config_file)">Open config folder</a>
           <!-- <a href="#" (click)="open_folder($event,config_file)">{{config_file}}</a> -->
+          <br>
+        </li>
+        <li>
+          <strong>Get in touch with me.</strong>
+          <br />
+          <i>I'd love to hear from you</i>
+          <br />
+          <a href="#" (click)="open_url($event,'mailto:gunjan@kalptaru.in')">gunjan@kalptaru.in </a>
           <br>
         </li>
       </div>
@@ -246,9 +250,9 @@
   }
 
   .config-links{
-    box-shadow: 2px 2px 5px 2px #ccc;
+    box-shadow: 0px 0px 10px 5px #ccc;
     margin-right: 10px;
-    border: 1px solid #c0c0c03d;
+    border: 10px solid white;  
   }
 
   .config-donations{

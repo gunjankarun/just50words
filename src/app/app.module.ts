@@ -27,6 +27,8 @@ import { EditorComponent } from './component/editor/editor.component';
 import { AudioService } from './service/audio.service';
 import { UpdateService } from './service/update.service';
 import { UpdateComponent } from './component/update/update.component';
+import { WritingPromptComponent } from './component/writing-prompt/writing-prompt.component';
+import { WritingPromptService } from './service/writing-prompt.service';
 
 @NgModule({
   declarations: [
@@ -40,7 +42,8 @@ import { UpdateComponent } from './component/update/update.component';
     WritingTimerComponent,
     WritingStreakComponent,
     EditorComponent,
-    UpdateComponent
+    UpdateComponent,
+    WritingPromptComponent
   ],
   imports: [BrowserModule, FormsModule, NgxElectronModule, NgbModule.forRoot(), HttpClientModule],
   providers: [
@@ -58,7 +61,8 @@ import { UpdateComponent } from './component/update/update.component';
       multi: true
     },
     AudioService,
-    UpdateService
+    UpdateService,
+    WritingPromptService
   ],
   bootstrap: [AppComponent]
 })

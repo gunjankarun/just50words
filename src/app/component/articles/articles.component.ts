@@ -8,6 +8,7 @@ import { MessageService } from '../../service/message.service';
 import { FileService } from '../../service/file.service';
 import { WordCountService } from '../../service/word-count.service';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import { WritingPromptService } from '../../service/writing-prompt.service';
 /**
  * This is the main component that shows the main editor screen.
  * This uses the ArticlesService for persistent storage of articles
@@ -63,8 +64,11 @@ export class ArticlesComponent implements OnInit {
     private _elRef: ElementRef,
     private _wordCountService: WordCountService,
     private _electronService: ElectronService,
-    private _modalService: NgbModal
+    private _modalService: NgbModal,
+    private _writingPromptService: WritingPromptService
   ) {
+    this._writingPromptService.generate_prompts('HyperLedger', 10);
+
     // constructor
     if (this._electronService.isElectronApp) {
       // this.app_version = this._electronService.remote.app.getVersion();
