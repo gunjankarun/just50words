@@ -1,3 +1,23 @@
-<p>
-  writing-prompt works!
-</p>
+<div class="modal-body writing-prompt-modal">
+  <div class="input-group mb-3">
+    <input type="text" class="form-control" placeholder="Enter a keyword/phrase to start" aria-label="Enter a keyword/phrase to start" aria-describedby="basic-addon2" [(ngModel)]="keyword">
+    <div class="input-group-append">
+      <button class="btn btn-primary" type="button" (click)="get_prompts()">Start</button>
+    </div>
+  </div>
+  <div *ngIf="prompts && prompts.length">
+    <strong>{{list_title}}</strong> <button class="btn-sm btn-link pull-xs-right btn-refresh" (click)="get_prompts()"><span class="oi oi-reload"></span></button>
+    <ul class="list-group list-group-flush">
+      <li href="#" class="list-group-item d-flex justify-content-between align-items-center" *ngFor="let prompt of prompts; let i=index">
+        {{prompt}}
+        <div class="btn-group btn-group-sm" role="group" aria-label="Options">
+          <button type="button" class="btn btn-primary" (click)="select_prompt($event, prompt)">Use</button>&nbsp;
+          <button type="button" class="btn btn-warning" (click)="search_google($event, prompt)">Google</button>
+        </div>
+      </li>
+    </ul>
+  </div>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-outline-dark" (click)="activeModal.close('Close click')">Close</button>
+</div>

@@ -55,7 +55,10 @@ body{
     padding:10px;
 }
 
-
+.dropdown-menu{
+    left:auto !important;
+    right:0 !important;
+}
 
 #leftlist .list-group-item.active{
     /* background-color:rgba(201, 135, 69, 0.795); */

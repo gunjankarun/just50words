@@ -1,0 +1,20 @@
+.writing-prompt-modal .list-group li {
+    text-transform: capitalize;
+    color:black;
+    padding:5px 0px;
+}
+
+.btn-refresh{
+    border: 0px;
+}
+
+/* .writing-prompt-modal .list-group a:hover{
+    color:navy;
+} */
+
+/* Reset blue outline */
+*:focus,*:active, .form-control:focus {
+   outline: 0px !important;
+   box-shadow: none;
+   -webkit-appearance:none;
+}
