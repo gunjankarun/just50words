@@ -98,17 +98,30 @@
       </div>
       <div class="row">
         <div class="col-sm">
-          <input type="text"
+          <div class="input-group mb-3">
+            <input type="text"
                  id="headline"
                  spellcheck="true"
                  [style.maxWidth.px]="editorMaxWidth"
                  [style.color]="editor_text_color"
                  autofocus
                  [class]='headline_font'
+                 (ngModelChange)="update_font_class()"
                  placeholder="What do you want to write about?"
                  [(ngModel)]="current_article.title"
                  (keyup)="key_pressed_headline($event)"
                  (focus)="focus_set()">
+            <div class="input-group-append" *ngIf="current_article.title===''">
+              <div ngbDropdown class="d-inline-block">
+                <button class="btn btn-dark" id="writingWizards" ngbDropdownToggle><span class="oi oi-lightbulb"></span></button>
+                <div ngbDropdownMenu aria-labelledby="writingWizards">
+                  <button class="dropdown-item" (click)='show_writing_prompt()'>Get writing prompts</button>
+                  <!-- <button class="dropdown-item">Another Action</button>
+                  <button class="dropdown-item">Something else is here</button> -->
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       <div>

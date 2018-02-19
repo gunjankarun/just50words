@@ -45,7 +45,14 @@ import { WritingPromptService } from './service/writing-prompt.service';
     UpdateComponent,
     WritingPromptComponent
   ],
-  imports: [BrowserModule, FormsModule, NgxElectronModule, NgbModule.forRoot(), HttpClientModule],
+  imports: [
+    BrowserModule,
+    FormsModule,
+    NgxElectronModule,
+    NgbModule.forRoot(),
+    HttpClientModule
+  ],
+  entryComponents: [WritingPromptComponent],
   providers: [
     ArticleService,
     ConfigService,

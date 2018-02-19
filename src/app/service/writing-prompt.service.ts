@@ -1,17 +1,28 @@
 import { Injectable } from '@angular/core';
+import { Subject } from 'rxjs/Subject';
 
 /**
  * A service to generate writing prompts
- * 
+ *
  * @export
  * @class WritingPromptService
  */
 @Injectable()
 export class WritingPromptService {
-  prompts: string[];
+  prompts: string[] = [];
+  private promptSelectedSource = new Subject<string>();
+
+  // Observable string streams
+  promptSelected$ = this.promptSelectedSource.asObservable();
+
   constructor() {
     this._get_raw_prompts();
-   }
+  }
+
+  // Service message commands
+  selectPrompt(prompt: string) {
+    this.promptSelectedSource.next(prompt);
+  }
 
   private _get_raw_prompts() {
     const prompts = [
@@ -56,7 +67,7 @@ export class WritingPromptService {
       '##COUNT## Conventional Advertising Methods That Will Jeopardize ##KEYWORD##',
       '##COUNT## Crazy Trends In The ##KEYWORD## Industry',
       '##COUNT## Creative Ways You Can Improve Your ##KEYWORD##',
-      '##COUNT## Critical Skills To (Do) ##KEYWORD## Loss Remarkably Well',
+      '##COUNT## Critical Skills To Do ##KEYWORD## Loss Remarkably Well',
       '##COUNT## Days To A Better ##KEYWORD##',
       '##COUNT## Days To Improving The Way You ##KEYWORD##',
       '##COUNT## Difficult Things About ##KEYWORD##',
@@ -94,7 +105,7 @@ export class WritingPromptService {
       '##COUNT## Guilt Free ##KEYWORD## Tips',
       '##COUNT## Habits Of Highly Effective ##KEYWORD##',
       '##COUNT## Hidden ##KEYWORD## Features That Will Make Your Life Easier',
-      '##COUNT## Horrible Mistakes To Avoid When You (Do) ##KEYWORD##',
+      '##COUNT## Horrible Mistakes To Avoid When You Do ##KEYWORD##',
       '##COUNT## Ideas About ##KEYWORD## That Really Work',
       '##COUNT## Important Facts That You Should Know About ##KEYWORD##',
       '##COUNT## Important Facts That You Should Know About The ##KEYWORD## Industry',
@@ -186,7 +197,7 @@ export class WritingPromptService {
       '##COUNT## Secrets About ##KEYWORD## That Nobody Will Tell You',
       '##COUNT## Secrets That Experts Of ##KEYWORD## Don\'t Want You To Know',
       '##COUNT## Secrets You Will Not Want To Know About ##KEYWORD##',
-      '##COUNT## Secrets: How To Use ##KEYWORD## To Create A Successful Business(Product)',
+      '##COUNT## Secrets: How To Use ##KEYWORD## To Create A Successful Business/Product',
       '##COUNT## Sexy Ways To Improve Your ##KEYWORD##',
       '##COUNT## Shitty Things ##KEYWORD## Have Done',
       '##COUNT## Shocking Facts About ##KEYWORD##',
@@ -277,7 +288,7 @@ export class WritingPromptService {
       '##COUNT## Ways To Achieve Your Goals In ##KEYWORD## Faster',
       '##COUNT## Ways To Avoid ##KEYWORD## Burnout',
       '##COUNT## Ways To Get Through To Your ##KEYWORD##',
-      '##COUNT## Ways To Have (A) More Appealing ##KEYWORD##',
+      '##COUNT## Ways To Have A More Appealing ##KEYWORD##',
       '##COUNT## Ways To Have Fun Learning ##KEYWORD##',
       '##COUNT## Ways To Immediately Start Selling ##KEYWORD##',
       '##COUNT## Ways To Improve ##KEYWORD##',
@@ -369,7 +380,7 @@ export class WritingPromptService {
       '##KEYWORD## Promotion 101',
       '##KEYWORD## Question: Does Size Matter?',
       '##KEYWORD## Report: Statistics and Facts',
-      '##KEYWORD## Resources: google.com (website)',
+      '##KEYWORD## Resources: google.com (or any specific website name)',
       '##KEYWORD## Review',
       '##KEYWORD## Reviewed: What Can One Learn From Other\'s Mistakes',
       '##KEYWORD## Services - How To Do It Right',
@@ -448,12 +459,12 @@ export class WritingPromptService {
       'Boost Your ##KEYWORD## With These Tips',
       'Building Relationships With ##KEYWORD##',
       'Can You Pass The ##KEYWORD## Test?',
-      'Can You Really Find ##KEYWORD## (on the Web)?',
+      'Can You Really Find ##KEYWORD## on the Web/Market?',
       'Can You Spot The A ##KEYWORD## Pro?',
       'Cash For ##KEYWORD##',
       'Cats, Dogs and ##KEYWORD##',
-      'Clear And Unbiased Facts About ##KEYWORD## (Without All the Hype)',
-      'Congratulations! Your ##KEYWORD## Is (Are) About To Stop Being Relevant',
+      'Clear And Unbiased Facts About ##KEYWORD## Without All the Hype',
+      'Congratulations! Your ##KEYWORD## Is/Are About To Stop Being Relevant',
       'Cool Little ##KEYWORD## Tool',
       'Could This Report Be The Definitive Answer To Your ##KEYWORD##?',
       'Cracking The ##KEYWORD## Code',
@@ -492,7 +503,7 @@ export class WritingPromptService {
       'Find A Quick Way To ##KEYWORD##',
       'Find Out How I Cured My ##KEYWORD## In ##COUNT## Days',
       'Find Out Now, What Should You Do For Fast ##KEYWORD##?',
-      'Finding Customers With ##KEYWORD## (Part A,B,C ... )',
+      'Finding Customers With ##KEYWORD##',
       'Five Rookie ##KEYWORD## Mistakes You Can Fix Today',
       'Free ##KEYWORD## Coaching Servies',
       'Free Advice On ##KEYWORD##',
@@ -522,7 +533,7 @@ export class WritingPromptService {
       'Here\'s What People Are Saying About ##KEYWORD##',
       'Here\'s Why ##COUNT## Million Customers In the US Are ##KEYWORD##',
       'Here, Copy This Idea on ##KEYWORD##',
-      'Ho To (Do) ##KEYWORD## Without Leaving Your Office(House)',
+      'Ho To Do ##KEYWORD## Without Leaving Your Office/House',
       'How ##COUNT## Stories Will Change The Way You Approach ##KEYWORD##',
       'How ##KEYWORD## Became A Globally Well-Known Brand',
       'How ##KEYWORD## Can Ease Your Pain',
@@ -545,13 +556,13 @@ export class WritingPromptService {
       'How To Be In The Top ##COUNT## With ##KEYWORD##',
       'How To Be Successful In The ##KEYWORD## Industry',
       'How To Become Better With ##KEYWORD## In ##COUNT## Minutes',
-      'How To Buy (A) ##KEYWORD## On A Tight Budget',
+      'How To Buy A ##KEYWORD## On A Tight Budget',
       'How to Create Your ##KEYWORD## Strategy [Blueprint]',
-      'How To Deal With(A) Very Bad ##KEYWORD##',
+      'How To Deal With A Very Bad ##KEYWORD##',
       'How To Earn $398/Day Using ##KEYWORD##',
-      'How To Find The Right ##KEYWORD## For Your Specific Product(Service)',
+      'How To Find The Right ##KEYWORD## For Your Specific Product/Service',
       'How To Find The Time To ##KEYWORD## On Twitter',
-      'How To Get (A) Fabulous ##KEYWORD## On A Tight Budget',
+      'How To Get A Fabulous ##KEYWORD## On A Tight Budget',
       'How To Get Discovered With ##KEYWORD##',
       'How To Get People To Like ##KEYWORD##',
       'How to Grow Your ##KEYWORD## Income',
@@ -587,10 +598,10 @@ export class WritingPromptService {
       'How To Win Buyers And Influence Sales with ##KEYWORD##',
       'How To Win Clients And Influence Markets with ##KEYWORD##',
       'How To Win Friends And Influence People with ##KEYWORD##',
-      'How We Improved Our ##KEYWORD## In One Week(Month, Day)',
+      'How We Improved Our ##KEYWORD## In One Week/Month/Day',
       'How Will ##KEYWORD## Be In The Future',
-      'How You Can (Do) ##KEYWORD## Almost Instantly',
-      'How You Can (Do) ##KEYWORD## In ##COUNT## Hours Or Less For Free',
+      'How You Can Do ##KEYWORD## Almost Instantly',
+      'How You Can Do ##KEYWORD## In ##COUNT## Hours Or Less For Free',
       'How You Can Own ##KEYWORD## With Lower Cost',
       'How You Know You\'re Doing ##KEYWORD## The Right Way',
       'I Answered The Toughest##KEYWORD## Question So You Don\'t Have To (But You Might Want To)',
@@ -598,11 +609,11 @@ export class WritingPromptService {
       'I Finally Tried ##KEYWORD## For A Week And This Is What Happened',
       'I Will Tell You The Truth About ##KEYWORD## In The Next ##COUNT## Seconds',
       'If ##KEYWORD## Is So Terrible, Why Don\'t Statistics Show It?',
-      'If You Do Not (Do)##KEYWORD## Now, You Will Hate Yourself Later',
+      'If You Do Not Do ##KEYWORD## Now, You Will Hate Yourself Later',
       'If You Want To Be A Winner, Change Your ##KEYWORD## Philosophy Now!',
       'If You Want To Be Successful In ##KEYWORD##, Here Are ##COUNT## Invaluable Things To Know',
       'Improve Your ##KEYWORD## Skills',
-      'Improve(Increase) Your ##KEYWORD## In ##COUNT## Days',
+      'Improve/Increase Your ##KEYWORD## In ##COUNT## Days',
       'In ##COUNT## Minutes, I\'ll Give You The Truth About ##KEYWORD##',
       'In the Age of Information, Specializing in ##KEYWORD##',
       'Interesting Facts I Bet You Never Knew About ##KEYWORD##',
@@ -616,7 +627,7 @@ export class WritingPromptService {
       'Is It Time to Talk More About ##KEYWORD##?',
       'Is It Time To Talk More ABout ##KEYWORD##?',
       'Is This ##KEYWORD## Thing Really That Hard',
-      'It\'s All About (The) ##KEYWORD##',
+      'It\'s All About ##KEYWORD##',
       'It\'s The Side Of Extreme ##KEYWORD## Rarely Seen, But That\'s Why Is Needed',
       'It\'s The Side of Extreme ##KEYWORD## Rarely Seen, But That\'s Why It\'s Needed',
       'Learn All About ##KEYWORD## From This Politician',
@@ -629,7 +640,7 @@ export class WritingPromptService {
       'Learn How To Start ##KEYWORD##',
       'Learn The Truth About ##KEYWORD## In The Next ##COUNT## Seconds',
       'Learn The Truth About ##KEYWORD## Industry In The Next ##COUNT## Seconds',
-      'Learn To (Do) ##KEYWORD## Like A Professional',
+      'Learn To Do ##KEYWORD## Like A Professional',
       'Learning ##KEYWORD## Can Be Addictive. Here\'s How You Can Get Yourself Hooked',
       'Learning ##KEYWORD## Can Be Disastrous If You Neglect These ##COUNT## Simple Rules',
       'Learning ##KEYWORD## Is Not Difficult At All! You Just Need A Great Teacher!',
@@ -645,7 +656,7 @@ export class WritingPromptService {
       'Marketing And ##KEYWORD##',
       'Marriage And ##KEYWORD## Have More In Common Than You Think',
       'Master ##KEYWORD## In Just A Few Hours!',
-      'Master (Your) ##KEYWORD## in ##COUNT## Minutes A Day',
+      'Master ##KEYWORD## in ##COUNT## Minutes A Day',
       'Master The Art Of ##KEYWORD## With These ##COUNT## Tips',
       'Master The Skills Of ##KEYWORD## And Be Successful',
       'Mastering The Way Of ##KEYWORD## Is Not An Accident - It\'s An Art',
@@ -672,7 +683,7 @@ export class WritingPromptService {
       'Old School ##KEYWORD##',
       'OMG! The Best ##KEYWORD## Ever!',
       'One Surprisingly Effective Way To ##KEYWORD##',
-      'One Tip To Dramatically Improve You(r) ##KEYWORD##',
+      'One Tip To Dramatically Improve Your ##KEYWORD##',
       'Open Mike on ##KEYWORD##',
       'Open The Gates For ##KEYWORD## By Using These Simple Tips',
       'Picture Your ##KEYWORD## On Top. Read This And Make It So',
@@ -777,14 +788,14 @@ export class WritingPromptService {
       'The Millionaire Guide On ##KEYWORD## To Help You Get Rich',
       'The Miracle Of ##KEYWORD##',
       'The Modern Rules Of ##KEYWORD##',
-      'The Most (and Least) Effective Ideas In ##KEYWORD##',
+      'The Most/Least Effective Ideas In ##KEYWORD##',
       'The Most Common ##KEYWORD## Debate Isn\'t As Simple As You May Think',
       'The Most Common Mistakes People Make With ##KEYWORD##',
       'The Most Important Elements Of ##KEYWORD##',
       'The Most Unconventional Ways to Learn ##KEYWORD##',
       'The Next ##COUNT## Things To Immediately Do About ##KEYWORD##',
-      'The No. 1 ##KEYWORD## Mistake You\'re Making (and ##COUNT## Ways To Fix It)',
-      'The Number One Reason You Should (Do) ##KEYWORD##',
+      'The No. 1 ##KEYWORD## Mistake You\'re Making and ##COUNT## Ways To Fix It',
+      'The Number One Reason You Should Do ##KEYWORD##',
       'The Philosophy Of ##KEYWORD##',
       'The Power Of ##KEYWORD##',
       'The Problem With The New ##KEYWORD##',
@@ -829,7 +840,7 @@ export class WritingPromptService {
       'There\'s A Right Way To Talk About ##KEYWORD## And There\'s Another Way..',
       'There\'s No Point Doing ##KEYWORD## If You\'re Not Doing It Right',
       'There’s Big Money In ##KEYWORD##',
-      'These ##COUNT## Hacks Will Make You(r) ##KEYWORD## (Look) Like A Pro',
+      'These ##COUNT## Hacks Will Make You ##KEYWORD## Look Like A Pro',
       'These ##COUNT## Inspirational Quotes Will Help You Survive in The ##KEYWORD## World',
       'These ##COUNT## Simple ##KEYWORD## Tricks Will Pump Up Your Sales Almost Instantly',
       'These Facts Just Might Get You To Change Your ##KEYWORD## Strategy',
@@ -948,7 +959,7 @@ export class WritingPromptService {
       'Why Some People Almost Always Make/Save Money With ##KEYWORD##',
       'Why You Must Experience ##KEYWORD## At Least Once In Your Lifetime',
       'Why You Never See ##KEYWORD## That Actually Works',
-      'Why You Really Need (A) ##KEYWORD##',
+      'Why You Really Need ##KEYWORD##',
       'Why You Should Not Go To ##KEYWORD##',
       'Why You Shouldn\'t Venture Into The ##KEYWORD## Industry Now',
       'Will ##KEYWORD## Ever Die?',
@@ -979,7 +990,7 @@ export class WritingPromptService {
     this.prompts = prompts;
   }
 
-  generate_prompts(keyword = 'keyword', num = 10) {
+  generate_prompts(keyword = 'keyword', num = 10, next) {
     const shuffled = this.prompts.slice(0);
     let i = this.prompts.length;
     const min = i - num;
@@ -994,7 +1005,8 @@ export class WritingPromptService {
         shuffled[i] = temp;
     }
     final_arr = shuffled.slice(min);
-    console.log('final_arr is of length ' + final_arr.length, final_arr);
+    // console.log('final_arr is of length ' + final_arr.length, final_arr);
+    next(null, final_arr);
   }
 
   private _replace_template(str: string, keyword: string) {

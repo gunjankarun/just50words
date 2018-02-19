@@ -9,8 +9,11 @@ import { MessageService } from '../../service/message.service';
 import { FileService } from '../../service/file.service';
 import { WordCountService } from '../../service/word-count.service';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import { WritingPromptComponent } from '../writing-prompt/writing-prompt.component';
 import { WritingPromptService } from '../../service/writing-prompt.service';
 import { UpdateService } from '../../service/update.service';
+import { Subscription } from 'rxjs/Subscription';
+
 /**
  * This is the main component that shows the main editor screen.
  * This uses the ArticlesService for persistent storage of articles
@@ -33,7 +36,9 @@ export class ArticlesComponent implements OnInit {
   @ViewChild('updatePopup') private uPopup: ElementRef;
 
   config = this._configService.config;
-  config_subscription: any;
+  config_subscription: Subscription;
+  writingprompt_subscription: Subscription;
+
   app_version = this._configService.app_version;
   git_username = Constants.git_username;
   git_repo_name = Constants.git_repo_name;
@@ -75,8 +80,6 @@ export class ArticlesComponent implements OnInit {
     private _updateService: UpdateService,
     private _writingPromptService: WritingPromptService
   ) {
-    this._writingPromptService.generate_prompts('HyperLedger', 10);
-
     // constructor
     if (this._electronService.isElectronApp) {
       // this.app_version = this._electronService.remote.app.getVersion();
@@ -101,6 +104,15 @@ export class ArticlesComponent implements OnInit {
         );
         this.editor_bg = new_config.editor_bg;
         this.editor_text_color = new_config.editor_text_color;
+      }
+    );
+
+    this.writingprompt_subscription = _writingPromptService.promptSelected$.subscribe(
+      prompt => {
+        this.current_article.title = prompt;
+        this.current_article.content = '# ' + prompt + '  \n\n';
+        this.update_font_class();
+        this.editor_object.focus();
       }
     );
 
@@ -252,8 +264,6 @@ export class ArticlesComponent implements OnInit {
       default:
         break;
     }
-
-    this.update_font_class();
   }
 
   new_article_button_click() {
@@ -390,5 +400,10 @@ export class ArticlesComponent implements OnInit {
       }
     }
     this._configService.setConfig('write_or_nuke', this.write_or_nuke_mode);
+  }
+
+  show_writing_prompt() {
+    console.log('Showing writing prompt wizard');
+    this._modalService.open(WritingPromptComponent);
   }
 }
