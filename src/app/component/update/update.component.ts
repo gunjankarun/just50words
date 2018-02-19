@@ -54,9 +54,10 @@ export class UpdateComponent implements OnInit {
   }
 
   check_update() {
+    const scope = this;
     this._updateService.check_update(this.app_version, this.git_username, this.git_repo_name,  function(err, update_obj){
-      this.version_str = this.update_data.title;
-      this.version_url = this.update_data.release_url;
+      scope.version_str = update_obj.title;
+      scope.version_url = update_obj.release_url;
     });
   }
 
