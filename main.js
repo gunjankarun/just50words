@@ -5,12 +5,12 @@ const isDev = require('electron-is-dev');  // this is required to check if the a
 
 global.application_root = 'dada';
 
-require('./electron-src/file-operations');
-const { appUpdater } = require('./electron-src/autoupdater');
-
+const check_first_run = require('./electron-src/file-operations');
+console.log('01')
 let win
 
 function createWindow() {
+
     win = new BrowserWindow({ 
         width: 1000, 
         height: 700,
@@ -43,7 +43,10 @@ function createWindow() {
     const userDataPath = app.getPath('userData');
     console.log('000 userDataPath is', userDataPath);
     // We'll use the `configName` property to set the file name and path.join to bring it all together as a string
-    global.application_root = path.join(userDataPath, '/');
+    global.application_root = path.join(userDataPath, '/') + 'data/';
+
+    // Now that application_root is set, check if it is first run or not
+    check_first_run(global.application_root);
 
     // about to call auto-update function
     const page = win.webContents;
@@ -51,13 +54,7 @@ function createWindow() {
     // This function is called when page is loaded
     page.once('did-frame-finish-load', () => {
         console.log('Main Page loaded');
-    // const checkOS = isWindowsOrmacOS();
-    // if (checkOS && !isDev) {
-    // if (checkOS) {
-    //     console.log('Checking for update');
-    //     // Initate auto-updates on macOs and windows
-    //     appUpdater();
-    // }
+        // add more options here
     });
 }
 

@@ -19,7 +19,7 @@ export class UpdateComponent implements OnInit {
   app_version = this._configService.app_version;
   git_username = Constants.git_username;
   git_repo_name = Constants.git_repo_name;
-  version_str = 'Current version: ' +
+  version_str = ' v: ' +
     this.app_version +
     ' (Checking for updates)';
   version_url = Constants.product_website;

@@ -158,6 +158,9 @@
 <!-- Config Popup -->
 <ng-template #configPopup let-c="close" let-d="dismiss">
   <div class="modal-body config-body">
+    <!-- <div class="row">
+      <h2 class="config-title">Welcome to Just 50 Words</h2>
+    </div> -->
     <div class="row">
       <div class="col-sm">
         <strong>Quick tutorial</strong>
@@ -172,11 +175,11 @@
         </div>
         <div class="row config-item">
           <div class="col-sm config-donations">
-            <strong>Help me pay my bills</strong>
-            <p style="font-size:11px;">Your donations not only help me and my family, it also motivates me to keep improving Just 50 Words with new features
-              and provide faster support.</p>
+            <strong>Did I help you write today?</strong>
+            <p style="font-size:11px;">If you find this software useful and want to help me, you can donate. It shows your appreciation and also motivates me to add new features and bug fixes.</p>
             <button class="btn btn-sm btn-primary btn-block" (click)="open_url($event, 'https://www.paypal.me/quadralyst')">Securely donate using Paypal</button>
-            <p style="font-size:11px; text-align:center;">PS: Your donation will be processed by Quadralyst Pvt Ltd.</p>
+            <p>&nbsp;</p>
+            <!-- <p style="font-size:11px; text-align:center;">PS: Your donation will be processed by Quadralyst Pvt Ltd.</p> -->
           </div>
         </div>
         <div class="row config-item">
@@ -244,6 +247,14 @@
 
   .config-update{
     /* text-align: center; */
+    font-size: 14px;
+    font-weight: normal;
+  }
+
+  .config-title{
+    font-size: 20px;
+    margin-bottom: 20px;
+    margin-left: 15px;
   }
 
   .config-links{

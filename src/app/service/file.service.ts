@@ -15,20 +15,20 @@ export class FileService {
   ipc = this._electronService.ipcRenderer;
 
   application_root = '';
-  data_folder = 'data';
+  // data_folder = 'data';
   article_file_name = '_articles';
   config_file_name = '_config.json';
 
-  article_folder = this.application_root + this.data_folder;
-  article_file = this.article_folder + '/' + this.article_file_name;
-  config_file = this.article_folder + '/' + this.config_file_name;
+  article_folder = this.application_root;
+  article_file = this.article_folder + this.article_file_name;
+  config_file = this.article_folder + this.config_file_name;
 
   constructor(private _electronService: ElectronService) {
     console.log('Application folder is ', this.application_root);
     if (this._electronService.isElectronApp) {
       const remote = this._electronService.remote;
       this.application_root = remote.getGlobal('application_root');
-      this.article_folder = this.application_root + this.data_folder;
+      this.article_folder = this.application_root ;
       this.article_file = this.article_folder + '/_articles';
       this.config_file = this.article_folder + '/_config.json';
     }

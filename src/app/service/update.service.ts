@@ -139,7 +139,7 @@ export class UpdateService {
         file_ext = 'zip';
         break;
       default:
-        file_ext = 'dmg';
+        file_ext = '';
         break;
     }
     // console.log('OS = ' + os + ' and file_ext = ' + file_ext);

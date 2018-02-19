@@ -81,10 +81,12 @@ export class ArticlesComponent implements OnInit {
     private _writingPromptService: WritingPromptService
   ) {
     // constructor
+    const scope = this;
+
     if (this._electronService.isElectronApp) {
       // this.app_version = this._electronService.remote.app.getVersion();
       this.config_folder =
-        this._electronService.remote.getGlobal('application_root') + 'data/';
+        this._electronService.remote.getGlobal('application_root');
       this.config_file = this.config_folder + '_config.json';
     }
 
@@ -116,7 +118,6 @@ export class ArticlesComponent implements OnInit {
       }
     );
 
-    const scope = this;
     this._articleService.load_articles(function(err, articles) {
       scope.articles = scope._articleService.articles;
       scope.reset_list();
@@ -167,29 +168,36 @@ export class ArticlesComponent implements OnInit {
   ngAfterViewInit() {
     this.headline_object = this._elRef.nativeElement.querySelector('#headline');
 
-    if (this.config.check_for_updates_automatically) {
-      console.log('About to check for update');
-      const scope = this;
-      this._updateService.check_update(
-        this.app_version,
-        this.git_username,
-        this.git_repo_name,
-        function(err, update_obj) {
-          console.log('Checked update in ngAfterViewInit', update_obj);
-          if (update_obj.new_version_available) {
-            scope.update_data = update_obj;
-            scope._modalService.open(scope.uPopup).result.then(
-              result => {
-                // console.log(`Closed with: ${result}`);
-              },
-              reason => {
-                // console.log(`Dismissed ${reason}`);
-              }
-            );
+    const is_first_run = this._electronService.remote.getGlobal('is_first_run');
+
+    if (is_first_run) {
+      console.log('Load config screen');
+      this.show_options();
+    }else {
+      if (this.config.check_for_updates_automatically) {
+        console.log('About to check for update');
+        const scope = this;
+        this._updateService.check_update(
+          this.app_version,
+          this.git_username,
+          this.git_repo_name,
+          function(err, update_obj) {
+            console.log('Checked update in ngAfterViewInit', update_obj);
+            if (update_obj.new_version_available) {
+              scope.update_data = update_obj;
+              scope._modalService.open(scope.uPopup).result.then(
+                result => {
+                  // console.log(`Closed with: ${result}`);
+                },
+                reason => {
+                  // console.log(`Dismissed ${reason}`);
+                }
+              );
+            }
           }
-        }
-      );
-    } // end of check_for_updates_automatically
+        );
+      } // end of check_for_updates_automatically
+    }
   }
 
   create_editor_object(obj: any) {

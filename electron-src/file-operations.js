@@ -5,6 +5,14 @@ const electron = require('electron')
 const BrowserWindow = electron.BrowserWindow
 const ipc = electron.ipcMain
 const shell = electron.shell
+version_folder = global.application_root;
+version_file = version_folder + 'last_run';
+current_ver = electron.app.getVersion();
+current_ver_str = 'v_' + current_ver.split('.').join('_');
+
+global.is_first_run = true;
+
+// console.log('Checking first run and version str is '+ current_ver_str);
 
 /**
  * The event handler to save data to text file
@@ -159,5 +167,41 @@ function save_file(file_name, file_contents){
       return true;
     }
   });
-  
 }
+
+function save_version_file(){
+  var version_data = '{"' + current_ver_str + '":true}';
+  // console.log('Saving the version data', version_data);
+  if(file_exists(version_folder)){
+    save_file(version_file, version_data);
+  } else {
+    make_dir(version_folder);
+    save_file(version_file, version_data);
+  }
+}
+
+var check_first_run = function(){
+  version_folder = global.application_root;
+  version_file = version_folder + 'last_run';
+  current_ver = electron.app.getVersion();
+  current_ver_str = 'v_' + current_ver.split('.').join('_');
+
+  global.is_first_run = true;
+  if (file_exists(version_file)) {
+    var version_data = fs.readFileSync(version_file, 'utf8');
+    try {
+      result = JSON.parse(version_data);
+      if(result[current_ver_str]){
+        global.is_first_run = false;
+      }else{
+        save_version_file();
+      }
+    } catch (error) {
+      save_version_file();
+    }
+  }else{
+    save_version_file();
+  }
+} 
+
+module.exports = check_first_run;
