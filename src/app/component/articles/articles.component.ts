@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, Input, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, AfterViewInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { ElectronService } from 'ngx-electron';
 import { Subject } from 'rxjs/Subject';
 import { Article } from '../../article';
@@ -26,7 +26,7 @@ import { Subscription } from 'rxjs/Subscription';
   templateUrl: './articles.component.html',
   styleUrls: ['./articles.component.css']
 })
-export class ArticlesComponent implements OnInit {
+export class ArticlesComponent implements OnInit, OnDestroy, AfterViewInit {
   @Input() listHeight: number;
   @Input() editorHeight: number;
   @Input() editor_object: any;
@@ -215,6 +215,7 @@ export class ArticlesComponent implements OnInit {
     this.editor_object.focus();
     // set the cursor at the start
     this.editor_object.setSelectionRange(0, 0);
+    this.update_font_class();
   }
 
   toggle_list() {
@@ -294,6 +295,8 @@ export class ArticlesComponent implements OnInit {
     this._articleService.current_article = this.current_article;
     this.articles.unshift(this.current_article);
     this.select_first_article = false;
+    this.update_font_class();
+    this.reset_list();
   }
 
   delete_article() {
@@ -373,16 +376,21 @@ export class ArticlesComponent implements OnInit {
     this._articleService.current_article = this.current_article;
     this.word_count = 0;
     this.search_term = '';
+    this.update_font_class();
   }
 
   update_font_class() {
-    const headline_length = this.current_article.title.length;
-    if (headline_length <= 45) {
+    if(this.current_article && this.current_article.title){
+      const headline_length = this.current_article.title.length;
+      if (headline_length <= 45) {
+        this.headline_font = 'form-control font-large';
+      } else if (headline_length > 45 && headline_length <= 60) {
+        this.headline_font = 'form-control font-normal';
+      } else if (headline_length > 60) {
+        this.headline_font = 'form-control font-small';
+      }
+    }else{
       this.headline_font = 'form-control font-large';
-    } else if (headline_length > 45 && headline_length <= 60) {
-      this.headline_font = 'form-control font-normal';
-    } else if (headline_length > 60) {
-      this.headline_font = 'form-control font-small';
     }
   }
 
@@ -399,7 +407,9 @@ export class ArticlesComponent implements OnInit {
     } else {
       if (
         confirm(
-          'When you enable "Write or Nuke" mode, you cannot stop typing until you complete the target number of words.\nIf you stop typing for more than 30 seconds, you will lose whatever you have written so far.\nAre you sure you want to continue?'
+          `When you enable "Write or Nuke" mode, you cannot stop typing until you complete the target number of words.\n
+          If you stop typing for more than 30 seconds, you will lose whatever you have written so far.\n
+          Are you sure you want to continue?`
         )
       ) {
         this.write_or_nuke_mode = true;

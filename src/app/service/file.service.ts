@@ -194,6 +194,7 @@ export class FileService {
         next(null, result);
       } catch (error) {
         console.log('Loading error in OLD data JSON', error);
+        console.log(old_data);
         const err_message = 'File loading error';
         next(error, null);
       }
