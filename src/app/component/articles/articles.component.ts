@@ -128,6 +128,7 @@ export class ArticlesComponent implements OnInit, OnDestroy, AfterViewInit {
   ngOnDestroy() {
     // prevent memory leak when component destroyed
     this.config_subscription.unsubscribe();
+    this.writingprompt_subscription.unsubscribe();
   }
 
   show_options() {
@@ -380,7 +381,7 @@ export class ArticlesComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   update_font_class() {
-    if(this.current_article && this.current_article.title){
+    if (this.current_article && this.current_article.title) {
       const headline_length = this.current_article.title.length;
       if (headline_length <= 45) {
         this.headline_font = 'form-control font-large';
@@ -389,7 +390,7 @@ export class ArticlesComponent implements OnInit, OnDestroy, AfterViewInit {
       } else if (headline_length > 60) {
         this.headline_font = 'form-control font-small';
       }
-    }else{
+    }else {
       this.headline_font = 'form-control font-large';
     }
   }

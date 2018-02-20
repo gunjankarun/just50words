@@ -4,7 +4,7 @@ import { ConfigService } from './config.service';
 
 /**
  * This service handles the task of displaying messages across the application
- * 
+ *
  * @export
  * @class MessageService
  */

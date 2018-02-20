@@ -171,7 +171,7 @@ input#headline.font-small {
     font-size: 18px;
     line-height: 1.5em;
     height:455px;
-    margin-bottom: 58px;
+    margin-bottom: 42px;
 }
 
 ::-webkit-scrollbar {
@@ -189,7 +189,7 @@ input#headline.font-small {
     font-size: 12px;
     padding: 2px 10px !important ;
     border-radius: 3px !important;
-    margin-top: -46px;
+    margin-top: -40px;
 }
 
 .footer-alert .close{
