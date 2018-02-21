@@ -4,7 +4,7 @@ const url = require('url')
 const isDev = require('electron-is-dev');  // this is required to check if the app is running in development mode
 
 global.application_root = 'dada';
-
+global.doc_root = '';
 const check_first_run = require('./electron-src/file-operations');
 console.log('01')
 let win
@@ -41,9 +41,12 @@ function createWindow() {
     // Build the menu
     require('./electron-src/main-menu');
     const userDataPath = app.getPath('userData');
+    const userDocPath = app.getPath('documents');
     console.log('000 userDataPath is', userDataPath);
     // We'll use the `configName` property to set the file name and path.join to bring it all together as a string
     global.application_root = path.join(userDataPath, '/') + 'data/';
+    console.log('global.application_root is ' + global.application_root);
+    global.doc_root = path.join(userDocPath, '/');
 
     // Now that application_root is set, check if it is first run or not
     check_first_run(global.application_root);

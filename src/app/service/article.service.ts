@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import { Article } from '../article';
 import { MessageService } from './message.service';
 import { FileService } from './file.service';
@@ -12,7 +12,7 @@ import { Subject } from 'rxjs/Subject';
  * @class ArticleService
  */
 @Injectable()
-export class ArticleService {
+export class ArticleService implements OnDestroy {
   config_subscription: any;
 
   articles: Article[];
@@ -140,8 +140,12 @@ export class ArticleService {
       } else {
         this.current_article.summary = this.current_article.content;
       }
-    }else {
+    } else {
       this.current_article.summary = '';
     }
+  }
+
+  backup_articles(next) {
+    this._fileService.backup_articles(next);
   }
 }

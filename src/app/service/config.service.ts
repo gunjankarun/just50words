@@ -27,7 +27,7 @@ export class ConfigService {
     editor_max_width: 800,
     play_keypress_sound: true,
     keypress_sound: 'assets/sound/tick.wav',
-    write_or_nuke: true,
+    write_or_nuke: false,
     write_or_nuke_interval: 30,
     write_or_nuke_nuked_sound: 'assets/sound/glass-breaking.mp3',
     write_or_nuke_warning_sound:
@@ -36,7 +36,7 @@ export class ConfigService {
     manually_start_session: true,
     play_session_completed_sound: true,
     session_celebration_duration: 3,
-    work_session: 25,
+    work_session: 15,
     work_session_complete_sound: 'assets/sound/relentless.mp3',
     short_break: 5,
     short_break_complete_sound: 'assets/sound/filling.mp3',

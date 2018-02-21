@@ -1,0 +1,53 @@
+  .config-body .config-item{
+    /* border-bottom: 1px solid silver; */
+    padding-bottom: 10px;
+    padding-top:10px;
+  }
+
+  .config-body .config-item figure{
+    margin-bottom: -10px;
+  }
+
+  .config-body li{
+    margin-bottom: 15px;
+    list-style: none;
+  }
+
+  .config-body .config-update{
+    /* text-align: center; */
+    font-size: 14px;
+    font-weight: normal;
+  }
+
+  .config-body .config-title{
+    font-size: 20px;
+    margin-bottom: 20px;
+    margin-left: 15px;
+  }
+
+  .config-body .config-links{
+    box-shadow: 0px 0px 10px 5px #ccc;
+    margin-right: 10px;
+    border: 10px solid white;  
+  }
+
+  .config-body .config-donations{
+    box-shadow: 
+        inset 0px 11px 8px -10px #CCC,
+        inset 0px -11px 8px -10px #CCC; 
+    padding-top: 10px;
+    background-color: #fdf2e5;
+  }
+
+  .config-body .tutorial-vid{
+    text-align: center;
+    cursor: pointer;
+  }
+
+  .config-body .tutorial-vid .figure-caption{
+    margin-top: -10px;
+  }
+
+  .config-body .tutorial-vid img{
+    height: 80px;
+  }

@@ -40,8 +40,8 @@ export class ArticlesComponent implements OnInit, OnDestroy, AfterViewInit {
   writingprompt_subscription: Subscription;
 
   app_version = this._configService.app_version;
-  git_username = Constants.git_username;
-  git_repo_name = Constants.git_repo_name;
+  git_username = Constants.GIT_USERNAME;
+  git_repo_name = Constants.GIT_REPO_NAME;
   update_data: any;
 
   config_folder = '';
@@ -85,8 +85,9 @@ export class ArticlesComponent implements OnInit, OnDestroy, AfterViewInit {
 
     if (this._electronService.isElectronApp) {
       // this.app_version = this._electronService.remote.app.getVersion();
-      this.config_folder =
-        this._electronService.remote.getGlobal('application_root');
+      this.config_folder = this._electronService.remote.getGlobal(
+        'application_root'
+      );
       this.config_file = this.config_folder + '_config.json';
     }
 
@@ -112,7 +113,7 @@ export class ArticlesComponent implements OnInit, OnDestroy, AfterViewInit {
     this.writingprompt_subscription = _writingPromptService.promptSelected$.subscribe(
       prompt => {
         this.current_article.title = prompt;
-        this.current_article.content = '# ' + prompt + '  \n\n';
+        // this.current_article.content = '# ' + prompt + '  \n\n';
         this.update_font_class();
         this.editor_object.focus();
       }
@@ -162,6 +163,10 @@ export class ArticlesComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
+  open_youtube_tutorial(event) {
+    this.open_url(event, Constants.YOUTUBE_TUTORIAL_URL);
+  }
+
   ngOnInit() {
     // On init activities
   }
@@ -174,7 +179,7 @@ export class ArticlesComponent implements OnInit, OnDestroy, AfterViewInit {
       if (is_first_run) {
         console.log('Load config screen');
         this.show_options();
-      }else {
+      } else {
         if (this.config.check_for_updates_automatically) {
           console.log('About to check for update');
           const scope = this;
@@ -215,7 +220,11 @@ export class ArticlesComponent implements OnInit, OnDestroy, AfterViewInit {
     this._msgService.add('Loaded article "' + article.title + '"', 'info');
     this.editor_object.focus();
     // set the cursor at the start
-    this.editor_object.setSelectionRange(0, 0);
+    // this.editor_object.setSelectionRange(0, 0);
+    setTimeout(() => {
+      this.editor_object.setSelectionRange(0, 0);
+    }, 50);
+
     this.update_font_class();
   }
 
@@ -390,7 +399,7 @@ export class ArticlesComponent implements OnInit, OnDestroy, AfterViewInit {
       } else if (headline_length > 60) {
         this.headline_font = 'form-control font-small';
       }
-    }else {
+    } else {
       this.headline_font = 'form-control font-large';
     }
   }
@@ -408,9 +417,10 @@ export class ArticlesComponent implements OnInit, OnDestroy, AfterViewInit {
     } else {
       if (
         confirm(
-          `When you enable "Write or Nuke" mode, you cannot stop typing until you complete the target number of words.\n
-          If you stop typing for more than 30 seconds, you will lose whatever you have written so far.\n
-          Are you sure you want to continue?`
+          `When you enable "Write or Nuke" mode, you cannot stop typing until you complete the target number of words.
+If you stop typing for more than 30 seconds, you will lose whatever you would have written till then in that article.\n
+
+Are you sure you want to continue?`
         )
       ) {
         this.write_or_nuke_mode = true;
@@ -425,5 +435,18 @@ export class ArticlesComponent implements OnInit, OnDestroy, AfterViewInit {
   show_writing_prompt() {
     console.log('Showing writing prompt wizard');
     this._modalService.open(WritingPromptComponent);
+  }
+
+  backup_articles() {
+    this._articleService.backup_articles(function(err, backup_path) {
+      if (!err) {
+        alert('Successfully backed up at ' + backup_path);
+        this._msgService.add('File backed up at ' + backup_path);
+      } else {
+        console.log('Error in backup', err);
+        alert('There was some issue with backup\n' + err);
+        this._msgService.add('Could not backup file ' + err);
+      }
+    });
   }
 }

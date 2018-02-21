@@ -166,10 +166,10 @@
         <strong>Quick tutorial</strong>
         <br />
         <div class="row config-item">
-          <div class="col-sm">
+          <div class="col-sm tutorial-vid" (click)="open_youtube_tutorial($event)">
             <figure class="figure">
-              <img src="http://i3.ytimg.com/vi/erLk59H86ww/maxresdefault.jpg" class="figure-img img-fluid rounded" alt="Tutorial video">
-              <!-- <figcaption class="figure-caption">Opens Youtube url</figcaption> -->
+              <img src="assets/images/youtube.png" class="figure-img img-fluid rounded" alt="Tutorial video">
+              <figcaption class="figure-caption">Checkout tutorials on Youtube</figcaption>
             </figure>
           </div>
         </div>
@@ -226,54 +226,7 @@
 
   </div>
   <div class="modal-footer">
+      <button type="button" class="btn btn-sm btn-outline-primary" (click)="backup_articles()">Backup Articles</button>  
       <button type="button" class="btn btn-sm btn-outline-dark" (click)="c('Close click')">Close</button>  
   </div>
 </ng-template>
-
-<style>
-  .config-item{
-    /* border-bottom: 1px solid silver; */
-    padding-bottom: 10px;
-    padding-top:10px;
-  }
-
-  .config-item figure{
-    margin-bottom: -10px;
-  }
-
-  .config-body li{
-    margin-bottom: 15px;
-    list-style: none;
-  }
-
-  .config-update{
-    /* text-align: center; */
-    font-size: 14px;
-    font-weight: normal;
-  }
-
-  .config-title{
-    font-size: 20px;
-    margin-bottom: 20px;
-    margin-left: 15px;
-  }
-
-  .config-links{
-    box-shadow: 0px 0px 10px 5px #ccc;
-    margin-right: 10px;
-    border: 10px solid white;  
-  }
-
-  .config-donations{
-    box-shadow: 
-        inset 0px 11px 8px -10px #CCC,
-        inset 0px -11px 8px -10px #CCC; 
-    padding-top: 10px;
-    background-color: #fdf2e5;
-  }
-
-  .tutorial-vid{
-    /* width:210px; */
-  }
-
-</style>

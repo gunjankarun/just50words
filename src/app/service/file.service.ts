@@ -29,8 +29,8 @@ export class FileService {
       const remote = this._electronService.remote;
       this.application_root = remote.getGlobal('application_root');
       this.article_folder = this.application_root ;
-      this.article_file = this.article_folder + '/_articles';
-      this.config_file = this.article_folder + '/_config.json';
+      this.article_file = this.article_folder + '_articles';
+      this.config_file = this.article_folder + '_config.json';
     }
   }
 
@@ -328,6 +328,27 @@ export class FileService {
 
       scope.ipc.on('created-defaults', function(evt, args) {
         next();
+      });
+    } // end of if iselectron app
+  }
+
+  backup_articles(next) {
+    // copy articles from data folder to documents folder
+    const scope = this;
+    const load_data = {
+      article_file_name: this.article_file
+    };
+
+    if (scope._electronService.isElectronApp) {
+      // run only in electron
+
+      scope.ipc.send('backup-articles', load_data);
+
+      scope.ipc.on('backup-articles-done', function(evt, args) {
+        next(null, args);
+      });
+      scope.ipc.on('backup-articles-error', function(evt, args) {
+        next(args, null);
       });
     } // end of if iselectron app
   }

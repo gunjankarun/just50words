@@ -99,6 +99,37 @@ ipc.on('create-data-folder', function(event, args) {
   }
 });
 
+ipc.on('backup-articles', function(event, args) {
+  const article_file_name = args.article_file_name;
+
+  const dt = new Date();
+  const year = dt.getFullYear();
+  const month = dt.getMonth() + 1;
+  const date = dt.getDate();
+  const hour = dt.getHours();
+  const minutes = dt.getMinutes();
+  const seconds = dt.getSeconds();
+
+  const article_bkup_file_name =  global.doc_root + '_articles-bkup-' + year + '-' + month + '-' + date + '-' + hour + '-' + minutes + '-' + seconds;
+  console.log('About to backup ', article_file_name);
+
+  if (file_exists(article_file_name)) {
+    const article_content = fs.readFileSync(article_file_name, 'utf8');
+    console.log('About to save ', article_bkup_file_name);
+    try{
+      fs.writeFileSync(article_bkup_file_name, article_content);
+      console.log('Backup saved at ', article_bkup_file_name);
+      event.sender.send('backup-articles-done', article_bkup_file_name);
+    }catch(error){
+      console.log('Backup NOT Saved at ', article_bkup_file_name);
+      event.sender.send('backup-articles-error', 'Could not save to ' + article_bkup_file_name);
+    }
+  }else{
+    console.log('File not found ' + article_file_name);
+    event.sender.send('backup-articles-error', 'Article file not found at ' + article_file_name);
+  }
+});
+
 // Check default folders and files
 ipc.on('create-defaults', function(event, args) {
   console.log('About to create default folders and files');
@@ -157,16 +188,14 @@ function make_dir(dir_name){
 }
 
 function save_file(file_name, file_contents){
-  fs.writeFileSync(file_name, file_contents, function(error) {
-    if (error) {
-      // throw error
+  console.log('About to save file '+ file_name);
+  try{
+    fs.writeFileSync(file_name, file_contents);
+    return true;
+  } catch (error){
       console.log('There was an error in saving file', error);
       return false;
-    } else {
-      console.log('Saved file', file_name);
-      return true;
-    }
-  });
+  }
 }
 
 function save_version_file(){

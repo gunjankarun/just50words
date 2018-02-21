@@ -17,12 +17,12 @@ import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 })
 export class UpdateComponent implements OnInit {
   app_version = this._configService.app_version;
-  git_username = Constants.git_username;
-  git_repo_name = Constants.git_repo_name;
+  git_username = Constants.GIT_USERNAME;
+  git_repo_name = Constants.GIT_REPO_NAME;
   version_str = ' v: ' +
     this.app_version +
     ' (Checking for updates)';
-  version_url = Constants.product_website;
+  version_url = Constants.PRODUCT_WEBSITE;
   update_data = {
     latest_version: '',
     title: '',
