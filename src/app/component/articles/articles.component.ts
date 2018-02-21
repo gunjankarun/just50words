@@ -59,7 +59,7 @@ export class ArticlesComponent implements OnInit, OnDestroy, AfterViewInit {
   word_count = 0;
   target_time: string;
   search_term = '';
-  current_article: Article;
+  current_article = this._articleService.get_blank_article();
   show_list = true;
   select_first_article = false;
   show_list_label = '<span class="oi oi-caret-left"> </span>';

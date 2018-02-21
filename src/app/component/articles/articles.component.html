@@ -89,7 +89,7 @@
           </button>
           <button type="button"
                   class="btn btn-warning btn-sm"
-                  *ngIf="current_article.content || current_article.title"
+                  *ngIf="current_article && (current_article.content || current_article.title)"
                   (click)="delete_article()"
                   placement="left" ngbTooltip="Delete this article">
             <span class="oi oi-trash"></span>
