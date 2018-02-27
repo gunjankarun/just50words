@@ -261,10 +261,20 @@ export class ArticlesComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   key_pressed_textarea(event) {
-    this.save_articles();
-    this.update_summary();
-    this.celebrate = this._wordCountService.celebrate;
-    this.word_count = this._wordCountService.word_count;
+
+    let is_printable_char = false;
+    if (event && event.key && (event.key.length === 1 || event.key === 'Enter')) {
+      is_printable_char = true;
+    }
+
+    // All operations happen only when the key is printable so arrow etc should not be registered as keysound event
+    if (is_printable_char) {
+
+      this.save_articles();
+      this.update_summary();
+      this.celebrate = this._wordCountService.celebrate;
+      this.word_count = this._wordCountService.word_count;
+    }
   }
 
   key_pressed_headline(event) {

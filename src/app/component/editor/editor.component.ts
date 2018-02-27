@@ -1,19 +1,11 @@
-import {
-  Component,
-  OnInit,
-  OnDestroy,
-  Input,
-  Output,
-  EventEmitter,
-  ElementRef
-} from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, ElementRef } from '@angular/core';
 import { Subject } from 'rxjs/Subject';
 import { ConfigService } from '../../service/config.service';
 import { MessageService } from '../../service/message.service';
 import { AudioService } from '../../service/audio.service';
 /**
  * This component handles the actual editor where the user enters the text
- * 
+ *
  * @export
  * @class EditorComponent
  * @implements {OnInit}
@@ -25,7 +17,7 @@ import { AudioService } from '../../service/audio.service';
 })
 
 
-export class EditorComponent implements OnInit {
+export class EditorComponent implements OnInit, OnDestroy {
   config = this._configService.config;
   config_subscription: any;
 
@@ -101,32 +93,41 @@ export class EditorComponent implements OnInit {
   }
 
   on_keyup(event): void {
-    this.keyup.emit([event]);
 
-    // Play the sound
-    const play_keypress_sound = this.config.play_keypress_sound;
-    const keypress_sound = this.config.keypress_sound;
-    if (play_keypress_sound) {
-      this._audioService.playSound(keypress_sound, 0.1);
-    }
+    // console.log('event.key.length = ' + event.key.length + ' && event.key >' + event.key + '<');
+    const is_printable_char = event.key.length === 1 || event.key === 'Enter';
 
-    // format text
-    switch (event.key) {
-      case 'Enter':
-        if (!event.shiftKey) {
-          // format text only when the user has not pressed the shift and enter
-          this.format_text();
-        }
-        break;
-      default:
-        this.check_autocomplete(event);
-        // this.check_word_replacement();
-        break;
-    }
+    // All operations happen only when the key is printable so arrow etc should not be registered as keysound event
+    if (is_printable_char) {
+      // console.log(event.key + ' is a printable char ')
+      this.keyup.emit([event]);
 
-    this.write_or_nuke_reset();
-    if (this.config.write_or_nuke) {
-      this.write_or_nuke();
+      const play_keypress_sound = this.config.play_keypress_sound;
+      const keypress_sound = this.config.keypress_sound;
+
+      // `[^ -~]+`
+      if (play_keypress_sound) {
+        this._audioService.playSound(keypress_sound, 0.1);
+      }
+
+      // format text
+      switch (event.key) {
+        case 'Enter':
+          if (!event.shiftKey) {
+            // format text only when the user has not pressed the shift and enter
+            this.format_text();
+          }
+          break;
+        default:
+          this.check_autocomplete(event);
+          // this.check_word_replacement();
+          break;
+      }
+
+      this.write_or_nuke_reset();
+      if (this.config.write_or_nuke) {
+        this.write_or_nuke();
+      }
     }
   }
 
@@ -307,7 +308,7 @@ export class EditorComponent implements OnInit {
       console.log('Next Index of NL is ' + next_new_line);
 
       // If the preview char is not new line i.e. the user has selected from the middle of the string
-      if ( start_pos > last_new_line + 1 && start_pos < next_new_line){
+      if ( start_pos > last_new_line + 1 && start_pos < next_new_line) {
         start_pos = last_new_line + 1;
       }
     }
@@ -505,5 +506,15 @@ export class EditorComponent implements OnInit {
     this.write_or_nuke_class = '';
   }
 
+  // is_character_key(evt) {
+  //   console.log('evt.which is ', evt.which);
+  //   if (typeof evt.which === 'number' && evt.which > 0) {
+  //     // In other browsers except old versions of WebKit, evt.which is
+  //     // only greater than zero if the keypress is a printable key.
+  //     // We need to filter out backspace and ctrl/alt/meta key combinations
+  //     return !evt.ctrlKey && !evt.metaKey && !evt.altKey && evt.which !== 8;
+  //   }
+  //   return false;
+  // }
 
 }
