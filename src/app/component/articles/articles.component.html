@@ -133,8 +133,9 @@
             (ngModelChange)="key_pressed_textarea($event)"
             (nuked)="nuke_content()"
             [word_count]="word_count"
+            [article]="current_article"
             (editor_object_created)="create_editor_object($event)"
-            [(content)]="this.current_article.content">
+            [(content)]="current_article.content">
           </app-editor>
           <app-message></app-message>
         </div>

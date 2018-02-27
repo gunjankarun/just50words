@@ -193,8 +193,14 @@ export class ConfigService {
           config_data.check_for_updates_automatically;
       }
 
-      scope.configChange.next(scope.config);
+      // scope.configChange.next(scope.config);
+      scope.set_config(scope.config);
     });
+  }
+
+  set_config(config) {
+    this.config = config;
+    this.configChange.next(config);
   }
 
   // todo: save_config

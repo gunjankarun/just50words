@@ -35,6 +35,8 @@ export class ArticlesComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('configPopup') private cPopup: ElementRef;
   @ViewChild('updatePopup') private uPopup: ElementRef;
 
+  configChange: Subject<any> = new Subject<any>();
+
   config = this._configService.config;
   config_subscription: Subscription;
   writingprompt_subscription: Subscription;
@@ -261,15 +263,17 @@ export class ArticlesComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   key_pressed_textarea(event) {
-
     let is_printable_char = false;
-    if (event && event.key && (event.key.length === 1 || event.key === 'Enter')) {
+    if (
+      event &&
+      event.key &&
+      (event.key.length === 1 || event.key === 'Enter')
+    ) {
       is_printable_char = true;
     }
 
     // All operations happen only when the key is printable so arrow etc should not be registered as keysound event
     if (is_printable_char) {
-
       this.save_articles();
       this.update_summary();
       this.celebrate = this._wordCountService.celebrate;
@@ -439,7 +443,8 @@ Are you sure you want to continue?`
         this._msgService.add(msg, 'danger');
       }
     }
-    this._configService.setConfig('write_or_nuke', this.write_or_nuke_mode);
+    this.config.write_or_nuke = this.write_or_nuke_mode;
+    this._configService.set_config(this.config);
   }
 
   show_writing_prompt() {

@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, OnInit, OnChanges, SimpleChanges, SimpleChange } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, OnChanges, SimpleChanges, SimpleChange, OnDestroy } from '@angular/core';
 import { Subject } from 'rxjs/Subject';
 
 import { ConfigService } from '../../service/config.service';
@@ -21,7 +21,7 @@ import { AudioService } from '../../service/audio.service';
   styleUrls: ['./word-count.component.css']
 })
 
-export class WordCountComponent implements OnInit {
+export class WordCountComponent implements OnInit, OnDestroy, OnChanges {
   @Input() article_title: string;
   @Input() article_content: string;
   @Input() article: Article;
