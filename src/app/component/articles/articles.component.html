@@ -192,7 +192,7 @@
       <div class="col-sm config-links">
         <strong>Useful links</strong>
         <li>Need Help?<br />
-          <a href="#" (click)="open_url($event,'https://github.com/gunjankarun/just50words/wiki')">Visit Wiki</a>
+          <a href="#" (click)="open_url($event,'https://just50words.com')">Visit website</a>
           <br>
         </li>
         <li>Facing an Issue?<br />
@@ -226,6 +226,7 @@
 
   </div>
   <div class="modal-footer">
+      <button type="button" class="btn btn-sm btn-outline-secondary mr-auto" (click)="open_url($event, 'https://www.linkedin.com/in/gunjankarun')">About me</button>
       <button type="button" class="btn btn-sm btn-outline-primary" (click)="backup_articles()">Backup Articles</button>  
       <button type="button" class="btn btn-sm btn-outline-dark" (click)="c('Close click')">Close</button>  
   </div>

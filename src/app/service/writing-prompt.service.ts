@@ -410,7 +410,7 @@ export class WritingPromptService {
       '##KEYWORD##: This Is What Professionals Do',
       '##KEYWORD##: What A Mistake',
       '##KEYWORD##? It\'s Easy If You Do It Smart',
-      '##KEYWORD##Like An Expert. Follow These ##COUNT## Steps To Get There',
+      '##KEYWORD## Like An Expert. Follow These ##COUNT## Steps To Get There',
       '##YEAR## Is The Year Of ##KEYWORD##',
       '##COUNT## Ideas For ##KEYWORD##',
       '##COUNT## Lessons Learned From the Pros On ##KEYWORD##',
