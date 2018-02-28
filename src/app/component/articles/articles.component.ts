@@ -22,6 +22,7 @@ import { Subscription } from 'rxjs/Subscription';
  * @implements {OnInit}
  */
 @Component({
+  providers: [ConfigService],
   selector: 'app-articles',
   templateUrl: './articles.component.html',
   styleUrls: ['./articles.component.css']
@@ -95,7 +96,7 @@ export class ArticlesComponent implements OnInit, OnDestroy, AfterViewInit {
 
     this.config = this._configService.config;
     // Listen for configuration changes
-    this.config_subscription = _configService.configChange.subscribe(
+    this.config_subscription = _configService.cast.subscribe(
       new_config => {
         this.config = new_config;
         this.target_words = new_config.target_words;

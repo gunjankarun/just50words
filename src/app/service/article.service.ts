@@ -31,7 +31,7 @@ export class ArticleService implements OnDestroy {
     this.autosave_interval =
       this._configService.getConfig('auto_save_after') * 1000;
     this.target_words = this._configService.getConfig('target_words');
-    this.config_subscription = _configService.configChange.subscribe(
+    this.config_subscription = _configService.cast.subscribe(
       new_config => {
         this.autosave_interval = new_config.auto_save_after;
         this.target_words = new_config.target_words;

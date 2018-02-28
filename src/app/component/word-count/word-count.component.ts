@@ -48,7 +48,7 @@ export class WordCountComponent implements OnInit, OnDestroy, OnChanges {
     this.config = this._configService.config;
     this.target_words = this.config.target_words;
 
-    this.config_subscription = _configService.configChange.subscribe(
+    this.config_subscription = _configService.cast.subscribe(
       new_config => {
         this.config = new_config;
         console.log(

@@ -1,6 +1,7 @@
 import { Inject, Injectable } from '@angular/core';
 import { FileService } from './file.service';
 import { Observable } from 'rxjs/Observable';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { of } from 'rxjs/observable/of';
 import { Constants } from '../constants';
 import { ElectronService } from 'ngx-electron';
@@ -23,6 +24,7 @@ export class ConfigService {
     target_words_countdown_type: 'to_target',
     target_reached_sound: 'assets/sound/notification-sound.mp3',
     mute_all_sound: false,
+    global_sound_volume: 0.5,
     play_target_reached_sound: true,
     editor_max_width: 800,
     play_keypress_sound: true,
@@ -48,7 +50,11 @@ export class ConfigService {
     message_dismiss_after: 5,
     check_for_updates_automatically: true
   };
-  configChange: Subject<any> = new Subject<any>();
+
+  configObject = new BehaviorSubject<any>(this.config);
+  cast = this.configObject.asObservable();
+
+  // configChange: Subject<any> = new Subject<any>();
 
   constructor(
     private _fileService: FileService,
@@ -57,6 +63,7 @@ export class ConfigService {
     if (this._electronService.isElectronApp) {
       this.app_version = this._electronService.remote.app.getVersion();
     }
+    this.load_config();
   }
 
   /**
@@ -193,6 +200,10 @@ export class ConfigService {
           config_data.check_for_updates_automatically;
       }
 
+      if (config_data.hasOwnProperty('global_sound_volume')) {
+        scope.config.global_sound_volume = config_data.global_sound_volume;
+      }
+
       // scope.configChange.next(scope.config);
       scope.set_config(scope.config);
     });
@@ -200,7 +211,8 @@ export class ConfigService {
 
   set_config(config) {
     this.config = config;
-    this.configChange.next(config);
+    // this.configChange.next(config);
+    this.configObject.next(config);
   }
 
   // todo: save_config

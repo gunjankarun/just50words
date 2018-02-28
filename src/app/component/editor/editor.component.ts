@@ -57,7 +57,7 @@ export class EditorComponent implements OnInit, OnDestroy, OnChanges {
     private _audioService: AudioService,
     private _msgService: MessageService
   ) {
-    this.config_subscription = _configService.configChange.subscribe(
+    this.config_subscription = _configService.cast.subscribe(
       new_config => {
         console.log('Detected new config object in config_subscription of editor component');
         this.config = new_config;

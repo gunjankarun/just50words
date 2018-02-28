@@ -60,13 +60,6 @@ import { WritingPromptService } from './service/writing-prompt.service';
     FileService,
     WordCountService,
     WritingStreakService,
-    // AppConfig,
-    {
-      provide: APP_INITIALIZER,
-      useFactory: (config: ConfigService) => () => config.load_config(),
-      deps: [ConfigService],
-      multi: true
-    },
     AudioService,
     UpdateService,
     WritingPromptService
