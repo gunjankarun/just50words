@@ -1,8 +1,6 @@
 import { Inject, Injectable } from '@angular/core';
 import { FileService } from './file.service';
-import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { of } from 'rxjs/observable/of';
 import { Constants } from '../constants';
 import { ElectronService } from 'ngx-electron';
 import { Subject } from 'rxjs/Subject';

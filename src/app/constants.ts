@@ -8,7 +8,8 @@ export class Constants {
     public static WORD_COUNT_TYPE = {
         TO_TARGET: 'to_target',
         WORD_COUNT: 'word_count',
-        COUNT_DOWN: 'countdown'
+        COUNT_DOWN: 'countdown',
+        TOTAL_WORDS: 'total_words'
     };
 
     public static GIT_USERNAME = 'gunjankarun';

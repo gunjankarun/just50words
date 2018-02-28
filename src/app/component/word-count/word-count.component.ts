@@ -73,6 +73,11 @@ export class WordCountComponent implements OnInit, OnDestroy, OnChanges {
             this.label = 'Words typed';
             this.word_count = 0;
             break;
+          case Constants.WORD_COUNT_TYPE.TOTAL_WORDS:
+            this.label = 'Total words';
+            this.word_count = this._wordCountService.get_word_count(this.article_content);
+            console.log('Total words are ', this.word_count);
+            break;
 
           default:
             break;
@@ -100,6 +105,13 @@ export class WordCountComponent implements OnInit, OnDestroy, OnChanges {
         this._msgService.add('Word count mode changed to "Word count"');
         break;
       case Constants.WORD_COUNT_TYPE.WORD_COUNT:
+        this._configService.setConfig(
+          'target_words_countdown_type',
+          Constants.WORD_COUNT_TYPE.TOTAL_WORDS
+        );
+        this._msgService.add('Word count mode changed to "Total Words"');
+        break;
+      case Constants.WORD_COUNT_TYPE.TOTAL_WORDS:
         this._configService.setConfig(
           'target_words_countdown_type',
           Constants.WORD_COUNT_TYPE.TO_TARGET
@@ -135,6 +147,7 @@ export class WordCountComponent implements OnInit, OnDestroy, OnChanges {
       }
       this.old_word_count = this._wordCountService.get_word_count(old_text);
       this.word_count = this.target_words;
+      this.process_countdown();
       return false;
     }
 
@@ -155,6 +168,7 @@ export class WordCountComponent implements OnInit, OnDestroy, OnChanges {
     const text = this.article_content;
     let celebrate = false;
     const total_word_count = this._wordCountService.get_word_count(text);
+    // console.log('Processing countdown and total_word_count is ', total_word_count);
     let word_count = total_word_count;
     // adjust for existing contents
     if (this.old_word_count) {
@@ -174,6 +188,11 @@ export class WordCountComponent implements OnInit, OnDestroy, OnChanges {
     let full_way_end = this.target_words + 5;
 
     switch (this._configService.getConfig('target_words_countdown_type')) {
+      case Constants.WORD_COUNT_TYPE.TOTAL_WORDS:
+        this.word_count = total_word_count;
+        this.label = 'Total words';
+        this.class = 'btn-outline-dark';
+        return;
       case Constants.WORD_COUNT_TYPE.TO_TARGET:
         if (word_count < this.target_words) {
           this.label = 'Words left';
