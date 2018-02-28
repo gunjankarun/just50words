@@ -88,7 +88,11 @@ export class EditorComponent implements OnInit, OnDestroy, OnChanges {
     const articleChange: SimpleChange = changes.article;
     // console.log('in ngChanges', articleChange);
     if (articleChange) {
-      console.log('Article change detected and new article is ', articleChange.currentValue);
+      // console.log('Article change detected and new article is ', articleChange.currentValue);
+
+      // First of all, reset the write or nuke feature because it is a new article now.
+      this.write_or_nuke_reset();
+
       const new_article = articleChange.currentValue;
 
       if (this.config.write_or_nuke) {
