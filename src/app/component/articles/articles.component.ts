@@ -265,11 +265,7 @@ export class ArticlesComponent implements OnInit, OnDestroy, AfterViewInit {
 
   key_pressed_textarea(event) {
     let is_printable_char = false;
-    if (
-      event &&
-      event.key &&
-      (event.key.length === 1 || event.key === 'Enter')
-    ) {
+    if (event && event.key && (event.key.length === 1 || event.key === 'Enter' || event.key === 'Backspace' || event.key === 'Delete')) {
       is_printable_char = true;
     }
 

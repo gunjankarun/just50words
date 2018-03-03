@@ -98,15 +98,14 @@ export class EditorComponent implements OnInit, OnDestroy, OnChanges {
       if (this.config.write_or_nuke) {
         // Do not enable write or nuke for
         if (new_article.title === '' && new_article.content === '') {
-          console.log('ENABLE write or nuke for new article');
+          this._msgService.add('Write or Nuke active', 'danger');
           this.write_or_nuke_mode = true;
         } else {
-          console.log('DISABLE write or nuke for OLD articles');
+          this._msgService.add('Write or Nuke not active because working with existing article', 'warning');
           this.write_or_nuke_mode = false;
         }
       }
     }
-
   }
 
   change_content(event) {
@@ -135,12 +134,12 @@ export class EditorComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   on_keyup(event): void {
-    // console.log('event.key.length = ' + event.key.length + ' && event.key >' + event.key + '<');
-    const is_printable_char = event.key.length === 1 || event.key === 'Enter';
+    console.log('event.key.length = ' + event.key.length + ' && event.key >' + event.key + '<');
+    const is_printable_char = event.key.length === 1 || event.key === 'Enter' || event.key === 'Backspace' || event.key === 'Delete';
 
     // All operations happen only when the key is printable so arrow etc should not be registered as keysound event
     if (is_printable_char) {
-      // console.log(event.key + ' is a printable char ')
+      console.log(event.key + ' is a printable char ');
       this.keyup.emit([event]);
 
       const play_keypress_sound = this.config.play_keypress_sound;
@@ -170,6 +169,11 @@ export class EditorComponent implements OnInit, OnDestroy, OnChanges {
         this.write_or_nuke();
       }
     }
+  }
+
+  on_copy(event) {
+    console.log('Content is copied', event);
+    console.log('Data:' + event.clipboardData.getData('text'));
   }
 
   format_text() {
