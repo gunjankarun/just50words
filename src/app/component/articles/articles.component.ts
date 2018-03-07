@@ -126,7 +126,7 @@ export class ArticlesComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngOnDestroy() {
     // prevent memory leak when component destroyed
-    // this.config_subscription.unsubscribe();
+    this.config_subscription.unsubscribe();
     this.writingprompt_subscription.unsubscribe();
   }
 
