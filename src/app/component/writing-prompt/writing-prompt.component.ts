@@ -41,7 +41,6 @@ export class WritingPromptComponent implements OnInit {
 
   select_prompt(event, prompt) {
     event.preventDefault();
-    console.log(prompt);
     this._writingPromptService.selectPrompt(prompt);
     this.activeModal.dismiss('Prompt Selected');
   }
@@ -53,7 +52,6 @@ export class WritingPromptComponent implements OnInit {
       this._electronService.shell.openExternal(url);
     } else {
       window.open(url, '_blank');
-      console.log('Not an electron app. hence could not launch_window');
     }
   }
 }

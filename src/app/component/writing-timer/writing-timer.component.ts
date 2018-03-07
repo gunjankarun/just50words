@@ -47,7 +47,7 @@ export class WritingTimerComponent implements OnInit, OnDestroy {
     private _msgService: MessageService,
     private _wordCountService: WordCountService
   ) {
-    this.config_subscription = _configService.cast.subscribe(
+    this.config_subscription = this._configService.cast.subscribe(
       new_config => {
         this.config = new_config;
         this.target_time = new_config.work_session * 60;
@@ -205,7 +205,6 @@ export class WritingTimerComponent implements OnInit, OnDestroy {
   }
 
   stop_timer() {
-    console.log('Stop timer is called');
     clearTimeout(this.timer);
     this.play_pause_icon = 'oi-media-play';
   }

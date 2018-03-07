@@ -23,7 +23,7 @@ import { Subscription } from 'rxjs/Subscription';
  * @implements {OnInit}
  */
 @Component({
-  providers: [ConfigService],
+  providers: [],
   selector: 'app-articles',
   templateUrl: './articles.component.html',
   styleUrls: ['./articles.component.css']
@@ -84,55 +84,49 @@ export class ArticlesComponent implements OnInit, OnDestroy, AfterViewInit {
     private _updateService: UpdateService,
     private _writingPromptService: WritingPromptService
   ) {
-    // constructor
-    const scope = this;
+      // constructor
+      const scope = this;
 
-    if (this._electronService.isElectronApp) {
-      // this.app_version = this._electronService.remote.app.getVersion();
-      this.config_folder = this._electronService.remote.getGlobal(
-        'application_root'
+      if (this._electronService.isElectronApp) {
+        // this.app_version = this._electronService.remote.app.getVersion();
+        this.config_folder = this._electronService.remote.getGlobal('application_root');
+        this.config_file = this.config_folder + '_config.json';
+      }
+
+      this.config = this._configService.config;
+      // Listen for configuration changes
+      this.config_subscription = this._configService.cast.subscribe(
+        new_config => {
+          this.config = new_config;
+          this.target_words = new_config.target_words;
+          this.editorMaxWidth = new_config.editor_max_width;
+          this.write_or_nuke_mode = new_config.write_or_nuke;
+          this.write_or_nuke_show_button =
+            new_config.write_or_nuke_show_button;
+          this.editor_bg = new_config.editor_bg;
+          this.editor_text_color = new_config.editor_text_color;
+        }
       );
-      this.config_file = this.config_folder + '_config.json';
+
+      this.writingprompt_subscription = _writingPromptService.promptSelected$.subscribe(
+        prompt => {
+          this.current_article.title = prompt;
+          // this.current_article.content = '# ' + prompt + '  \n\n';
+          this.update_font_class();
+          this.editor_object.focus();
+        }
+      );
+
+      this._articleService.load_articles(function(err, articles) {
+        scope.articles = scope._articleService.articles;
+        scope.reset_list();
+        scope.new_article();
+      });
     }
-
-    this.config = this._configService.config;
-    // Listen for configuration changes
-    this.config_subscription = _configService.cast.subscribe(
-      new_config => {
-        this.config = new_config;
-        this.target_words = new_config.target_words;
-
-        this.editorMaxWidth = new_config.editor_max_width;
-        this.write_or_nuke_mode = new_config.write_or_nuke;
-        this.write_or_nuke_show_button = new_config.write_or_nuke_show_button;
-        console.log(
-          'Inside Editor Constructor and write_or_nuke_show_button=',
-          this.write_or_nuke_show_button
-        );
-        this.editor_bg = new_config.editor_bg;
-        this.editor_text_color = new_config.editor_text_color;
-      }
-    );
-
-    this.writingprompt_subscription = _writingPromptService.promptSelected$.subscribe(
-      prompt => {
-        this.current_article.title = prompt;
-        // this.current_article.content = '# ' + prompt + '  \n\n';
-        this.update_font_class();
-        this.editor_object.focus();
-      }
-    );
-
-    this._articleService.load_articles(function(err, articles) {
-      scope.articles = scope._articleService.articles;
-      scope.reset_list();
-      scope.new_article();
-    });
-  }
 
   ngOnDestroy() {
     // prevent memory leak when component destroyed
-    this.config_subscription.unsubscribe();
+    // this.config_subscription.unsubscribe();
     this.writingprompt_subscription.unsubscribe();
   }
 
@@ -181,18 +175,15 @@ export class ArticlesComponent implements OnInit, OnDestroy, AfterViewInit {
     if (this._electronService.isElectronApp) {
       is_first_run = this._electronService.remote.getGlobal('is_first_run');
       if (is_first_run) {
-        console.log('Load config screen');
         this.show_options();
       } else {
         if (this.config.check_for_updates_automatically) {
-          console.log('About to check for update');
           const scope = this;
           this._updateService.check_update(
             this.app_version,
             this.git_username,
             this.git_repo_name,
             function(err, update_obj) {
-              console.log('Checked update in ngAfterViewInit', update_obj);
               if (update_obj.new_version_available) {
                 scope.update_data = update_obj;
                 scope._modalService.open(scope.uPopup).result.then(
@@ -305,7 +296,6 @@ export class ArticlesComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   new_article() {
-    console.log('Creating new article');
     // make sure that the last empty item is trimmed
     this.trim_last_empty_item();
 
@@ -417,7 +407,6 @@ export class ArticlesComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   nuke_content() {
-    console.log('Content Nuked');
     this.current_article.content = '';
     this.current_article.summary = '';
   }
@@ -446,12 +435,12 @@ Are you sure you want to continue?`
   }
 
   show_writing_prompt() {
-    console.log('Showing writing prompt wizard');
+    // console.log('Showing writing prompt wizard');
     this._modalService.open(WritingPromptComponent);
   }
 
   show_config() {
-    console.log('Showing config popup');
+    // console.log('Showing config popup');
     this._modalService.open(ConfigComponent, { size: 'lg'});
   }
 

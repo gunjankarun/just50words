@@ -59,7 +59,6 @@ export class EditorComponent implements OnInit, OnDestroy, OnChanges {
   ) {
     this.config_subscription = _configService.cast.subscribe(
       new_config => {
-        console.log('Detected new config object in config_subscription of editor component');
         this.config = new_config;
         this.target_words = new_config.target_words;
         this.editorMaxWidth = new_config.editor_max_width;
@@ -86,9 +85,7 @@ export class EditorComponent implements OnInit, OnDestroy, OnChanges {
 
   ngOnChanges(changes: SimpleChanges) {
     const articleChange: SimpleChange = changes.article;
-    // console.log('in ngChanges', articleChange);
     if (articleChange) {
-      // console.log('Article change detected and new article is ', articleChange.currentValue);
 
       // First of all, reset the write or nuke feature because it is a new article now.
       this.write_or_nuke_reset();
@@ -134,12 +131,10 @@ export class EditorComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   on_keyup(event): void {
-    console.log('event.key.length = ' + event.key.length + ' && event.key >' + event.key + '<');
     const is_printable_char = event.key.length === 1 || event.key === 'Enter' || event.key === 'Backspace' || event.key === 'Delete';
 
     // All operations happen only when the key is printable so arrow etc should not be registered as keysound event
     if (is_printable_char) {
-      console.log(event.key + ' is a printable char ');
       this.keyup.emit([event]);
 
       const play_keypress_sound = this.config.play_keypress_sound;
@@ -172,8 +167,8 @@ export class EditorComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   on_copy(event) {
-    console.log('Content is copied', event);
-    console.log('Data:' + event.clipboardData.getData('text'));
+    // console.log('Content is copied', event);
+    // console.log('Data:' + event.clipboardData.getData('text'));
   }
 
   format_text() {
@@ -375,10 +370,6 @@ export class EditorComponent implements OnInit, OnDestroy, OnChanges {
       const last_new_line = this.content.lastIndexOf('\n', start_pos);
       const next_new_line = this.content.indexOf('\n', start_pos);
 
-      console.log('Last Index of NL is ' + last_new_line);
-      console.log('Current POS is ' + start_pos);
-      console.log('Next Index of NL is ' + next_new_line);
-
       // If the preview char is not new line i.e. the user has selected from the middle of the string
       if (start_pos > last_new_line + 1 && start_pos < next_new_line) {
         start_pos = last_new_line + 1;
@@ -461,7 +452,6 @@ export class EditorComponent implements OnInit, OnDestroy, OnChanges {
         // perform these operations only when the user has selected a block of text
         // do nothing.
       } else {
-        console.log('start_pos=' + start_pos + 'end_pos=' + end_pos);
         this.editor_object.setSelectionRange(start_pos, start_pos);
         document.execCommand('insertText', false, block_char_start);
         const new_cursor_end_pos = end_pos + block_char_start.length;
@@ -492,11 +482,9 @@ export class EditorComponent implements OnInit, OnDestroy, OnChanges {
     let new_text = '';
     const cursor_pos = start_pos;
     matches = before_lines.match(/[^\s]+/g);
-    console.log('matches=', matches);
     let last_word = '';
     if (matches && matches.length) {
       last_word = matches[matches.length - 1];
-      console.log('Last word is ', last_word);
 
       switch (last_word) {
         case '---':

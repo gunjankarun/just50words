@@ -16,7 +16,6 @@ export class FilterArticlesPipe implements PipeTransform {
     if (!items || !filter_str) {
       return items;
     }
-    console.log('Filtering Article');
 
     filter_str = filter_str.toLowerCase();
 

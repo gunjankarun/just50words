@@ -51,12 +51,7 @@ export class WordCountComponent implements OnInit, OnDestroy, OnChanges {
     this.config_subscription = _configService.cast.subscribe(
       new_config => {
         this.config = new_config;
-        console.log(
-          'Detected the change in word-count.component with word count',
-          new_config.target_words
-        );
         this.target_words = new_config.target_words;
-        console.log('new target_words =', this.target_words);
 
         this.word_count = this.target_words;
         this.config.target_reached_sound = new_config.target_reached_sound;
@@ -76,7 +71,6 @@ export class WordCountComponent implements OnInit, OnDestroy, OnChanges {
           case Constants.WORD_COUNT_TYPE.TOTAL_WORDS:
             this.label = 'Total words';
             this.word_count = this._wordCountService.get_word_count(this.article_content);
-            console.log('Total words are ', this.word_count);
             break;
 
           default:
@@ -88,7 +82,6 @@ export class WordCountComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   toggle_mode() {
-    console.log('Mode Toggled');
     switch (this._configService.getConfig('target_words_countdown_type')) {
       case Constants.WORD_COUNT_TYPE.TO_TARGET:
         this._configService.setConfig(

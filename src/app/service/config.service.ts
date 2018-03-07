@@ -209,8 +209,7 @@ export class ConfigService {
 
   set_config(config) {
     this.config = config;
-    // this.configChange.next(config);
-    this.configObject.next(config);
+    this.configObject.next(this.config);
   }
 
   // todo: save_config
