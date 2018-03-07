@@ -259,7 +259,7 @@ export class FileService {
       // Some dummy data to test in browser
       const old_data = `
     {
-      "target_words": 10,
+      "target_words": 250,
       "message_dismiss_after": 300,
       "mute_all_sound": false,
       "target_words_countdown_type": "to_target",

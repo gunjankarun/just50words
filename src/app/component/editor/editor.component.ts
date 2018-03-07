@@ -333,38 +333,38 @@ export class EditorComponent implements OnInit, OnDestroy, OnChanges {
       // do not perform these opearation if the user has selected some text
       return false;
     }
-    let next_few_chars = '';
+    let next_char = '';
     switch (event.key) {
       case '[':
-        next_few_chars = ']';
+        next_char = ']';
         break;
 
       case '(':
-        next_few_chars = ')';
+        next_char = ')';
         break;
 
       case '<':
-        next_few_chars = '>';
+        next_char = '>';
         break;
 
       case '{':
-        next_few_chars = '}';
+        next_char = '}';
         break;
       case '"':
-        next_few_chars = '"';
+        next_char = '"';
         break;
 
-      case '\'':
-        next_few_chars = '\'';
-        break;
+      // case '\'':
+      //   next_char = '\'';
+      //   break;
 
       default:
         break;
     }
 
-    if (next_few_chars) {
+    if (next_char) {
       // This preserves the undo redo queue
-      document.execCommand('insertText', false, next_few_chars);
+      document.execCommand('insertText', false, next_char);
       this.editor_object.setSelectionRange(start_pos, end_pos);
     }
   }

@@ -10,6 +10,7 @@ import { FileService } from '../../service/file.service';
 import { WordCountService } from '../../service/word-count.service';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { WritingPromptComponent } from '../writing-prompt/writing-prompt.component';
+import { ConfigComponent } from '../config/config.component';
 import { WritingPromptService } from '../../service/writing-prompt.service';
 import { UpdateService } from '../../service/update.service';
 import { Subscription } from 'rxjs/Subscription';
@@ -447,6 +448,11 @@ Are you sure you want to continue?`
   show_writing_prompt() {
     console.log('Showing writing prompt wizard');
     this._modalService.open(WritingPromptComponent);
+  }
+
+  show_config() {
+    console.log('Showing config popup');
+    this._modalService.open(ConfigComponent, { size: 'lg'});
   }
 
   backup_articles() {
