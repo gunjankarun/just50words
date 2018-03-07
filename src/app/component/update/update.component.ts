@@ -67,7 +67,6 @@ export class UpdateComponent implements OnInit {
       this._electronService.shell.openExternal(url);
     } else {
       window.open(url, '_blank');
-      console.log('Not an electron app. hence could not launch_window');
     }
   }
 

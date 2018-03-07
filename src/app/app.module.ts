@@ -29,6 +29,7 @@ import { UpdateService } from './service/update.service';
 import { UpdateComponent } from './component/update/update.component';
 import { WritingPromptComponent } from './component/writing-prompt/writing-prompt.component';
 import { WritingPromptService } from './service/writing-prompt.service';
+import { ConfigComponent } from './component/config/config.component';
 
 @NgModule({
   declarations: [
@@ -43,7 +44,8 @@ import { WritingPromptService } from './service/writing-prompt.service';
     WritingStreakComponent,
     EditorComponent,
     UpdateComponent,
-    WritingPromptComponent
+    WritingPromptComponent,
+    ConfigComponent
   ],
   imports: [
     BrowserModule,
@@ -52,7 +54,7 @@ import { WritingPromptService } from './service/writing-prompt.service';
     NgbModule.forRoot(),
     HttpClientModule
   ],
-  entryComponents: [WritingPromptComponent],
+  entryComponents: [WritingPromptComponent, ConfigComponent],
   providers: [
     ArticleService,
     ConfigService,
@@ -60,13 +62,6 @@ import { WritingPromptService } from './service/writing-prompt.service';
     FileService,
     WordCountService,
     WritingStreakService,
-    // AppConfig,
-    {
-      provide: APP_INITIALIZER,
-      useFactory: (config: ConfigService) => () => config.load_config(),
-      deps: [ConfigService],
-      multi: true
-    },
     AudioService,
     UpdateService,
     WritingPromptService

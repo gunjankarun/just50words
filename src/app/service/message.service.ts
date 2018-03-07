@@ -10,20 +10,30 @@ import { ConfigService } from './config.service';
  */
 @Injectable()
 export class MessageService {
-
   messages: string[] = [];
   show_message = false;
-  message_timeout_interval = this._configService.getConfig('message_dismiss_after') * 1000;
+  message_timeout_interval = this._configService.getConfig(
+    'message_dismiss_after'
+  ) * 1000;
   message_timeout: any;
   config_subscription: any;
 
-  current_message: Message= {
+  current_message: Message = {
     message: null,
     type: null,
     msg_date: new Date()
   };
 
-  constructor(private _configService: ConfigService) {}
+  // constructor(private _configService: ConfigService) {}
+
+  constructor(private _configService: ConfigService) {
+
+    // this.config_subscription = this._configService.cast.subscribe(
+    //   new_config => {
+    //     console.log('Inside msgService  ', new_config);
+    //   }
+    // );
+  }
 
   add(message: string, type: string = 'warning') {
     this.current_message.message = message;
@@ -45,7 +55,6 @@ export class MessageService {
       this.current_message.type = null;
       this.show_message = false;
     }, this.message_timeout_interval);
-
   }
 
   clear() {

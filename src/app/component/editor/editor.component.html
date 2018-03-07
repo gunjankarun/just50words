@@ -9,6 +9,7 @@
   (keyup)="on_keyup($event)"
   (keydown)="on_keydown($event)"
   (keydown.Tab)="on_tab_press($event)"
+  (copy)="on_copy($event)"
   [(ngModel)]="content"
   (ngModelChange)="change_content($event)"
   placeholder="&#10;&#10;&#10;Remember, you just have to write {{target_words}} words to complete the target today.&#10;&#10;You are awesome !!!"

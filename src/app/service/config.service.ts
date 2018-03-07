@@ -1,7 +1,6 @@
 import { Inject, Injectable } from '@angular/core';
 import { FileService } from './file.service';
-import { Observable } from 'rxjs/Observable';
-import { of } from 'rxjs/observable/of';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Constants } from '../constants';
 import { ElectronService } from 'ngx-electron';
 import { Subject } from 'rxjs/Subject';
@@ -16,39 +15,12 @@ import { Subject } from 'rxjs/Subject';
 export class ConfigService {
   app_version = '0.0.0';
 
-  config = {
-    editor_bg: 'url("assets/images/bg-dirty-paper.jpg")',
-    editor_text_color: 'black',
-    target_words: 50,
-    target_words_countdown_type: 'to_target',
-    target_reached_sound: 'assets/sound/notification-sound.mp3',
-    mute_all_sound: false,
-    play_target_reached_sound: true,
-    editor_max_width: 800,
-    play_keypress_sound: true,
-    keypress_sound: 'assets/sound/tick.wav',
-    write_or_nuke: false,
-    write_or_nuke_interval: 30,
-    write_or_nuke_nuked_sound: 'assets/sound/glass-breaking.mp3',
-    write_or_nuke_warning_sound:
-      'assets/sound/pin_dropping-Brian_Rocca-2084700791.mp3',
-    write_or_nuke_show_button: true,
-    manually_start_session: true,
-    play_session_completed_sound: true,
-    session_celebration_duration: 3,
-    work_session: 15,
-    work_session_complete_sound: 'assets/sound/relentless.mp3',
-    short_break: 5,
-    short_break_complete_sound: 'assets/sound/filling.mp3',
-    continuous_sessions: 3,
-    long_break: 15,
-    long_break_complete_sound: 'assets/sound/filling.mp3',
-    words_in_summary: 20,
-    auto_save_after: 2,
-    message_dismiss_after: 5,
-    check_for_updates_automatically: true
-  };
-  configChange: Subject<any> = new Subject<any>();
+  config = this.get_default_config();
+
+  configObject = new BehaviorSubject<any>(this.config);
+  cast = this.configObject.asObservable();
+
+  // configChange: Subject<any> = new Subject<any>();
 
   constructor(
     private _fileService: FileService,
@@ -57,6 +29,7 @@ export class ConfigService {
     if (this._electronService.isElectronApp) {
       this.app_version = this._electronService.remote.app.getVersion();
     }
+    this.load_config();
   }
 
   /**
@@ -193,11 +166,60 @@ export class ConfigService {
           config_data.check_for_updates_automatically;
       }
 
-      scope.configChange.next(scope.config);
+      if (config_data.hasOwnProperty('global_sound_volume')) {
+        scope.config.global_sound_volume = config_data.global_sound_volume;
+      }
+
+      // scope.configChange.next(scope.config);
+      scope.set_config(scope.config);
     });
   }
 
-  // todo: save_config
+  set_config(config) {
+    this.config = config;
+    this.configObject.next(this.config);
+  }
 
-  // todo: reset_config
+  save_config(config, next) {
+    this._fileService.save_config_file(config, function(err, new_config){
+      next();
+    });
+  }
+
+  get_default_config() {
+    const   config = {
+      editor_bg: 'url("assets/images/bg-dirty-paper.jpg")',
+      editor_text_color: 'black',
+      target_words: 50,
+      target_words_countdown_type: 'to_target',
+      target_reached_sound: 'assets/sound/notification-sound.mp3',
+      mute_all_sound: false,
+      global_sound_volume: 0.5,
+      play_target_reached_sound: true,
+      editor_max_width: 800,
+      play_keypress_sound: true,
+      keypress_sound: 'assets/sound/tick.wav',
+      write_or_nuke: false,
+      write_or_nuke_interval: 30,
+      write_or_nuke_nuked_sound: 'assets/sound/glass-breaking.mp3',
+      write_or_nuke_warning_sound:
+        'assets/sound/pin_dropping-Brian_Rocca-2084700791.mp3',
+      write_or_nuke_show_button: true,
+      manually_start_session: true,
+      play_session_completed_sound: true,
+      session_celebration_duration: 3,
+      work_session: 15,
+      work_session_complete_sound: 'assets/sound/relentless.mp3',
+      short_break: 5,
+      short_break_complete_sound: 'assets/sound/filling.mp3',
+      continuous_sessions: 3,
+      long_break: 15,
+      long_break_complete_sound: 'assets/sound/filling.mp3',
+      words_in_summary: 20,
+      auto_save_after: 2,
+      message_dismiss_after: 5,
+      check_for_updates_automatically: true
+    };
+    return config;
+  }
 }

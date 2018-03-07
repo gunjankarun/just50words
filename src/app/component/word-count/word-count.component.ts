@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, OnInit, OnChanges, SimpleChanges, SimpleChange } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, OnChanges, SimpleChanges, SimpleChange, OnDestroy } from '@angular/core';
 import { Subject } from 'rxjs/Subject';
 
 import { ConfigService } from '../../service/config.service';
@@ -21,7 +21,7 @@ import { AudioService } from '../../service/audio.service';
   styleUrls: ['./word-count.component.css']
 })
 
-export class WordCountComponent implements OnInit {
+export class WordCountComponent implements OnInit, OnDestroy, OnChanges {
   @Input() article_title: string;
   @Input() article_content: string;
   @Input() article: Article;
@@ -48,15 +48,10 @@ export class WordCountComponent implements OnInit {
     this.config = this._configService.config;
     this.target_words = this.config.target_words;
 
-    this.config_subscription = _configService.configChange.subscribe(
+    this.config_subscription = _configService.cast.subscribe(
       new_config => {
         this.config = new_config;
-        console.log(
-          'Detected the change in word-count.component with word count',
-          new_config.target_words
-        );
         this.target_words = new_config.target_words;
-        console.log('new target_words =', this.target_words);
 
         this.word_count = this.target_words;
         this.config.target_reached_sound = new_config.target_reached_sound;
@@ -73,6 +68,10 @@ export class WordCountComponent implements OnInit {
             this.label = 'Words typed';
             this.word_count = 0;
             break;
+          case Constants.WORD_COUNT_TYPE.TOTAL_WORDS:
+            this.label = 'Total words';
+            this.word_count = this._wordCountService.get_word_count(this.article_content);
+            break;
 
           default:
             break;
@@ -83,7 +82,6 @@ export class WordCountComponent implements OnInit {
   }
 
   toggle_mode() {
-    console.log('Mode Toggled');
     switch (this._configService.getConfig('target_words_countdown_type')) {
       case Constants.WORD_COUNT_TYPE.TO_TARGET:
         this._configService.setConfig(
@@ -100,6 +98,13 @@ export class WordCountComponent implements OnInit {
         this._msgService.add('Word count mode changed to "Word count"');
         break;
       case Constants.WORD_COUNT_TYPE.WORD_COUNT:
+        this._configService.setConfig(
+          'target_words_countdown_type',
+          Constants.WORD_COUNT_TYPE.TOTAL_WORDS
+        );
+        this._msgService.add('Word count mode changed to "Total Words"');
+        break;
+      case Constants.WORD_COUNT_TYPE.TOTAL_WORDS:
         this._configService.setConfig(
           'target_words_countdown_type',
           Constants.WORD_COUNT_TYPE.TO_TARGET
@@ -135,6 +140,7 @@ export class WordCountComponent implements OnInit {
       }
       this.old_word_count = this._wordCountService.get_word_count(old_text);
       this.word_count = this.target_words;
+      this.process_countdown();
       return false;
     }
 
@@ -155,6 +161,7 @@ export class WordCountComponent implements OnInit {
     const text = this.article_content;
     let celebrate = false;
     const total_word_count = this._wordCountService.get_word_count(text);
+    // console.log('Processing countdown and total_word_count is ', total_word_count);
     let word_count = total_word_count;
     // adjust for existing contents
     if (this.old_word_count) {
@@ -174,6 +181,11 @@ export class WordCountComponent implements OnInit {
     let full_way_end = this.target_words + 5;
 
     switch (this._configService.getConfig('target_words_countdown_type')) {
+      case Constants.WORD_COUNT_TYPE.TOTAL_WORDS:
+        this.word_count = total_word_count;
+        this.label = 'Total words';
+        this.class = 'btn-outline-dark';
+        return;
       case Constants.WORD_COUNT_TYPE.TO_TARGET:
         if (word_count < this.target_words) {
           this.label = 'Words left';

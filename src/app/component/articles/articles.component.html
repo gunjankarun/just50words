@@ -3,10 +3,24 @@
     <div id="leftlist" *ngIf="show_list">
       <!-- Articlelist component -->
       <div class="title" *ngIf='show_list'>Just {{target_words}} words
-        <button type="button" class="btn btn-small btn-link btn-sm" (click)='show_options()'
-                placement="bottom" ngbTooltip="Options">
-          <span class="oi oi-menu"></span>
-        </button>
+        <div class="input-group-append option-menu">
+          <div ngbDropdown class="d-inline-block">
+            <button class="btn btn-small btn-sm btn-link" id="btnOptions" ngbDropdownToggle>
+              <span class="oi oi-menu"></span>
+            </button>
+            <div ngbDropdownMenu aria-labelledby="btnOptions">
+              <button class="dropdown-item" (click)='show_config()'>
+                <!-- <span class="oi oi-cog"></span>  -->
+                Configurations
+              </button>
+              <button class="dropdown-item" (click)='show_options()'> 
+                <!-- <span class="oi oi-info"></span>  -->
+                Help and Updates
+              </button>
+              <!-- <button class="dropdown-item">Something else is here</button> -->
+            </div>
+          </div>
+        </div>
       </div>
       <!-- <div>
          {{app_version}}
@@ -133,8 +147,9 @@
             (ngModelChange)="key_pressed_textarea($event)"
             (nuked)="nuke_content()"
             [word_count]="word_count"
+            [article]="current_article"
             (editor_object_created)="create_editor_object($event)"
-            [(content)]="this.current_article.content">
+            [(content)]="current_article.content">
           </app-editor>
           <app-message></app-message>
         </div>

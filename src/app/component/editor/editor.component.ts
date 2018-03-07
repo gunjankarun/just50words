@@ -5,15 +5,19 @@ import {
   Input,
   Output,
   EventEmitter,
-  ElementRef
+  ElementRef,
+  OnChanges,
+  SimpleChanges,
+  SimpleChange
 } from '@angular/core';
 import { Subject } from 'rxjs/Subject';
 import { ConfigService } from '../../service/config.service';
 import { MessageService } from '../../service/message.service';
 import { AudioService } from '../../service/audio.service';
+import { Article } from '../../article';
 /**
  * This component handles the actual editor where the user enters the text
- * 
+ *
  * @export
  * @class EditorComponent
  * @implements {OnInit}
@@ -23,21 +27,22 @@ import { AudioService } from '../../service/audio.service';
   templateUrl: './editor.component.html',
   styleUrls: ['./editor.component.css']
 })
-
-
-export class EditorComponent implements OnInit {
+export class EditorComponent implements OnInit, OnDestroy, OnChanges {
   config = this._configService.config;
   config_subscription: any;
+  config_subscription_article: any;
 
   @Input() height = 200;
   @Output() keyup: EventEmitter<any> = new EventEmitter();
   @Input() target_words = this.config.target_words;
   @Input() content = '';
   @Input() word_count = 0;
+  @Input() article: Article;
   @Output() contentChange: EventEmitter<any> = new EventEmitter();
   @Output() nuked: EventEmitter<any> = new EventEmitter();
 
   editor_object: any;
+  write_or_nuke_mode = this.config.write_or_nuke;
   write_or_nuke_class = '';
   write_or_nuke_interval = this.config.write_or_nuke_interval;
   write_or_nuke_timer: any;
@@ -46,11 +51,13 @@ export class EditorComponent implements OnInit {
   editorMaxWidth = this.config.editor_max_width;
   editor_text_color = this.config.editor_text_color;
 
-  constructor(private _configService: ConfigService,
-              private _elRef: ElementRef,
-              private _audioService: AudioService,
-              private _msgService: MessageService) {
-    this.config_subscription = _configService.configChange.subscribe(
+  constructor(
+    private _configService: ConfigService,
+    private _elRef: ElementRef,
+    private _audioService: AudioService,
+    private _msgService: MessageService
+  ) {
+    this.config_subscription = _configService.cast.subscribe(
       new_config => {
         this.config = new_config;
         this.target_words = new_config.target_words;
@@ -59,10 +66,11 @@ export class EditorComponent implements OnInit {
         this.config.play_keypress_sound = new_config.play_keypress_sound;
         this.config.keypress_sound = new_config.keypress_sound;
 
-        // this.write_or_nuke = new_config.write_or_nuke;
+        this.write_or_nuke_mode = new_config.write_or_nuke;
         this.write_or_nuke_interval = new_config.write_or_nuke_interval;
       }
     );
+
   }
 
   ngOnDestroy() {
@@ -75,6 +83,28 @@ export class EditorComponent implements OnInit {
     this.editor_object_created.emit(this.editor_object);
   }
 
+  ngOnChanges(changes: SimpleChanges) {
+    const articleChange: SimpleChange = changes.article;
+    if (articleChange) {
+
+      // First of all, reset the write or nuke feature because it is a new article now.
+      this.write_or_nuke_reset();
+
+      const new_article = articleChange.currentValue;
+
+      if (this.config.write_or_nuke) {
+        // Do not enable write or nuke for
+        if (new_article.title === '' && new_article.content === '') {
+          this._msgService.add('Write or Nuke active', 'danger');
+          this.write_or_nuke_mode = true;
+        } else {
+          this._msgService.add('Write or Nuke not active because working with existing article', 'warning');
+          this.write_or_nuke_mode = false;
+        }
+      }
+    }
+  }
+
   change_content(event) {
     this.contentChange.emit(event);
     this.write_or_nuke_reset();
@@ -84,14 +114,14 @@ export class EditorComponent implements OnInit {
     event.preventDefault();
     const start_pos = this.editor_object.selectionStart;
     const end_pos = this.editor_object.selectionEnd;
-    const blank_spaces = '    ' ;
+    const blank_spaces = '    ';
 
     this.editor_object.focus();
 
     if (start_pos === end_pos) {
       // nothing is selected
       document.execCommand('insertText', false, blank_spaces);
-    }else {
+    } else {
       this.insert_block_tab(start_pos, end_pos);
     }
   }
@@ -101,33 +131,44 @@ export class EditorComponent implements OnInit {
   }
 
   on_keyup(event): void {
-    this.keyup.emit([event]);
+    const is_printable_char = event.key.length === 1 || event.key === 'Enter' || event.key === 'Backspace' || event.key === 'Delete';
 
-    // Play the sound
-    const play_keypress_sound = this.config.play_keypress_sound;
-    const keypress_sound = this.config.keypress_sound;
-    if (play_keypress_sound) {
-      this._audioService.playSound(keypress_sound, 0.1);
-    }
+    // All operations happen only when the key is printable so arrow etc should not be registered as keysound event
+    if (is_printable_char) {
+      this.keyup.emit([event]);
 
-    // format text
-    switch (event.key) {
-      case 'Enter':
-        if (!event.shiftKey) {
-          // format text only when the user has not pressed the shift and enter
-          this.format_text();
-        }
-        break;
-      default:
-        this.check_autocomplete(event);
-        // this.check_word_replacement();
-        break;
-    }
+      const play_keypress_sound = this.config.play_keypress_sound;
+      const keypress_sound = this.config.keypress_sound;
 
-    this.write_or_nuke_reset();
-    if (this.config.write_or_nuke) {
-      this.write_or_nuke();
+      // `[^ -~]+`
+      if (play_keypress_sound) {
+        this._audioService.playSound(keypress_sound, 0.1);
+      }
+
+      // format text
+      switch (event.key) {
+        case 'Enter':
+          if (!event.shiftKey) {
+            // format text only when the user has not pressed the shift and enter
+            this.format_text();
+          }
+          break;
+        default:
+          this.check_autocomplete(event);
+          // this.check_word_replacement();
+          break;
+      }
+
+      this.write_or_nuke_reset();
+      if (this.write_or_nuke_mode) {
+        this.write_or_nuke();
+      }
     }
+  }
+
+  on_copy(event) {
+    // console.log('Content is copied', event);
+    // console.log('Data:' + event.clipboardData.getData('text'));
   }
 
   format_text() {
@@ -156,14 +197,13 @@ export class EditorComponent implements OnInit {
       ) {
         if (
           arr_special_chars_separator[
-          arr_special_chars_separator.length - 1
-            ] === ' '
+            arr_special_chars_separator.length - 1
+          ] === ' '
         ) {
           spaces = arr_special_chars_separator.join('');
         }
       }
     }
-
 
     // Now create numbered list
     let number_bullet_found = false;
@@ -175,7 +215,10 @@ export class EditorComponent implements OnInit {
       const number_found = numbers_found[1];
       spaces_before_number = number_found.split(' ').length - 1;
       if (number_found.trim().length > 0) {
-        const number_separator: string = last_line.substr(number_found.length, 2);
+        const number_separator: string = last_line.substr(
+          number_found.length,
+          2
+        );
         const arr_number_separator = number_separator.split('');
         if (arr_number_separator && arr_number_separator.length === 2) {
           if (arr_number_separator[1] === ' ') {
@@ -197,16 +240,30 @@ export class EditorComponent implements OnInit {
       document.execCommand('insertText', false, spaces);
       const cursor_pos = start_pos + spaces.length;
       if (number_bullet_found) {
-        this.format_number_bullet(cursor_pos, cursor_pos, new_number, first_char, spaces_before_number);
+        this.format_number_bullet(
+          cursor_pos,
+          cursor_pos,
+          new_number,
+          first_char,
+          spaces_before_number
+        );
       }
     }
   }
 
-  format_number_bullet(start, end, number, number_separator, spaces_before_number) {
+  format_number_bullet(
+    start,
+    end,
+    number,
+    number_separator,
+    spaces_before_number
+  ) {
     let old_start_pos = start + 1;
     const before_lines = this.content.substr(0, old_start_pos);
 
-    const after_lines = this.content.substr(old_start_pos, this.content.length).split('\n');
+    const after_lines = this.content
+      .substr(old_start_pos, this.content.length)
+      .split('\n');
 
     let blank_spaces = '';
     if (spaces_before_number) {
@@ -219,7 +276,10 @@ export class EditorComponent implements OnInit {
       const numbers_found = after_lines[i].match(/(^[\s\d]+)(.+$)/i);
       if (numbers_found) {
         const number_found = numbers_found[1];
-        const _number_separator: string = after_lines[i].substr(number_found.length, 2);
+        const _number_separator: string = after_lines[i].substr(
+          number_found.length,
+          2
+        );
         const space_count = number_found.split(' ').length - 1;
         const arr_number_separator = _number_separator.split('');
         if (arr_number_separator && arr_number_separator.length === 2) {
@@ -227,19 +287,24 @@ export class EditorComponent implements OnInit {
             if (spaces_before_number === space_count) {
               const old_number = number;
               number = number + 1;
-              this.editor_object.setSelectionRange(old_start_pos, old_start_pos + number_found.length);
+              this.editor_object.setSelectionRange(
+                old_start_pos,
+                old_start_pos + number_found.length
+              );
               document.execCommand('delete');
 
-              this.editor_object.setSelectionRange(old_start_pos, old_start_pos);
+              this.editor_object.setSelectionRange(
+                old_start_pos,
+                old_start_pos
+              );
               document.execCommand('insertText', false, blank_spaces + number);
 
               // because insertText changed the selection start so getting new cursor location
               const new_start_pos = this.editor_object.selectionStart;
 
               // Adding 1 because split removes the \n character
-              old_start_pos = new_start_pos + numbers_found[2].length + 1 ;
-
-            }else {
+              old_start_pos = new_start_pos + numbers_found[2].length + 1;
+            } else {
               // stop searching immediately as soon as the numbers are not found.
               break;
             }
@@ -259,55 +324,54 @@ export class EditorComponent implements OnInit {
     const start_pos = this.editor_object.selectionStart;
     const end_pos = this.editor_object.selectionEnd;
 
-    if ( end_pos > start_pos ) {
+    if (end_pos > start_pos) {
       // do not perform these opearation if the user has selected some text
       return false;
     }
-    let next_few_chars = '';
+    let next_char = '';
     switch (event.key) {
       case '[':
-        next_few_chars = ']';
+        next_char = ']';
         break;
 
       case '(':
-        next_few_chars = ')';
+        next_char = ')';
         break;
 
       case '<':
-        next_few_chars = '>';
+        next_char = '>';
         break;
 
       case '{':
-        next_few_chars = '}';
+        next_char = '}';
         break;
       case '"':
-        next_few_chars = '"';
+        next_char = '"';
         break;
+
+      // case '\'':
+      //   next_char = '\'';
+      //   break;
 
       default:
         break;
     }
 
-    if (next_few_chars) {
+    if (next_char) {
       // This preserves the undo redo queue
-      document.execCommand('insertText', false, next_few_chars);
+      document.execCommand('insertText', false, next_char);
       this.editor_object.setSelectionRange(start_pos, end_pos);
     }
   }
 
   insert_block_tab(start_pos, end_pos) {
-
     // If the user did not select from first char then we have to pick up the last new line here
     if (start_pos > 0) {
       const last_new_line = this.content.lastIndexOf('\n', start_pos);
       const next_new_line = this.content.indexOf('\n', start_pos);
 
-      console.log('Last Index of NL is ' + last_new_line);
-      console.log('Current POS is ' + start_pos);
-      console.log('Next Index of NL is ' + next_new_line);
-
       // If the preview char is not new line i.e. the user has selected from the middle of the string
-      if ( start_pos > last_new_line + 1 && start_pos < next_new_line){
+      if (start_pos > last_new_line + 1 && start_pos < next_new_line) {
         start_pos = last_new_line + 1;
       }
     }
@@ -321,7 +385,8 @@ export class EditorComponent implements OnInit {
       if (line_start_pos <= new_end_pos) {
         this.editor_object.setSelectionRange(line_start_pos, line_start_pos);
         document.execCommand('insertText', false, tab_char);
-        line_start_pos = line_start_pos + tab_char.length + arr_selected_text[i].length + 1;
+        line_start_pos =
+          line_start_pos + tab_char.length + arr_selected_text[i].length + 1;
         new_end_pos = new_end_pos + tab_char.length;
       } else {
         break;
@@ -383,18 +448,23 @@ export class EditorComponent implements OnInit {
     }
 
     if (block_char_found) {
-      if ( end_pos <= start_pos) {
+      if (end_pos <= start_pos) {
         // perform these operations only when the user has selected a block of text
         // do nothing.
-      }else {
-        console.log('start_pos=' + start_pos + 'end_pos=' + end_pos);
+      } else {
         this.editor_object.setSelectionRange(start_pos, start_pos);
         document.execCommand('insertText', false, block_char_start);
         const new_cursor_end_pos = end_pos + block_char_start.length;
         const new_cursor_start_pos = start_pos + block_char_start.length;
-        this.editor_object.setSelectionRange(new_cursor_end_pos, new_cursor_end_pos);
+        this.editor_object.setSelectionRange(
+          new_cursor_end_pos,
+          new_cursor_end_pos
+        );
         document.execCommand('insertText', false, block_char_end);
-        this.editor_object.setSelectionRange(new_cursor_start_pos, new_cursor_end_pos);
+        this.editor_object.setSelectionRange(
+          new_cursor_start_pos,
+          new_cursor_end_pos
+        );
         return false;
       }
     }
@@ -412,11 +482,9 @@ export class EditorComponent implements OnInit {
     let new_text = '';
     const cursor_pos = start_pos;
     matches = before_lines.match(/[^\s]+/g);
-    console.log('matches=', matches);
     let last_word = '';
     if (matches && matches.length) {
       last_word = matches[matches.length - 1];
-      console.log('Last word is ', last_word);
 
       switch (last_word) {
         case '---':
@@ -432,18 +500,20 @@ export class EditorComponent implements OnInit {
     if (new_text) {
       // This preserves the undo redo queue
 
-      this.editor_object.setSelectionRange(start_pos - old_text.length, start_pos);
+      this.editor_object.setSelectionRange(
+        start_pos - old_text.length,
+        start_pos
+      );
       document.execCommand('delete');
 
       document.execCommand('insertText', false, new_text);
       const new_cursor_pos = start_pos - old_text.length + new_text.length;
       this.editor_object.setSelectionRange(new_cursor_pos, new_cursor_pos);
     }
-
   }
 
   write_or_nuke() {
-    if (!this.config.write_or_nuke) {
+    if (!this.write_or_nuke_mode) {
       this.write_or_nuke_reset();
       this._msgService.add('Write or Nuke disabled', 'warning');
       return;
@@ -463,8 +533,8 @@ export class EditorComponent implements OnInit {
       clearInterval(this.write_or_nuke_timer);
     }
     this.write_or_nuke_timer = setTimeout(() => {
-      if (!this.write_or_nuke) {
-      }
+      // if (!this.write_or_nuke_mode) {
+      // }
       this.write_or_nuke_interval--;
       const shadow_spread = -1 * this.write_or_nuke_interval + 5;
       this.write_or_nuke_class =
@@ -475,7 +545,6 @@ export class EditorComponent implements OnInit {
         this.write_or_nuke_interval <=
         this.config.write_or_nuke_interval / 2
       ) {
-
         const remaining_words = this.target_words - this.word_count;
         let msg =
           'Nuking the contents in ' + this.write_or_nuke_interval + ' seconds.';
@@ -505,5 +574,14 @@ export class EditorComponent implements OnInit {
     this.write_or_nuke_class = '';
   }
 
-
+  // is_character_key(evt) {
+  //   console.log('evt.which is ', evt.which);
+  //   if (typeof evt.which === 'number' && evt.which > 0) {
+  //     // In other browsers except old versions of WebKit, evt.which is
+  //     // only greater than zero if the keypress is a printable key.
+  //     // We need to filter out backspace and ctrl/alt/meta key combinations
+  //     return !evt.ctrlKey && !evt.metaKey && !evt.altKey && evt.which !== 8;
+  //   }
+  //   return false;
+  // }
 }

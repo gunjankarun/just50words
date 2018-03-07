@@ -51,3 +51,21 @@
   .config-body .tutorial-vid img{
     height: 80px;
   }
+
+  .option-menu{
+    float: right;
+    font-family: Arial, Helvetica, sans-serif;
+  }
+
+  .option-menu .dropdown-item{
+    font-size: 14px;
+    padding: 10px 15px;
+    text-align: left;  
+    cursor: pointer;
+  }
+
+  .option-menu .dropdown-menu{
+    box-shadow: 2px 2px 4px 1px rgba(0,0,0,.5);
+    
+    /* background-color: #ddb97f; */
+  }

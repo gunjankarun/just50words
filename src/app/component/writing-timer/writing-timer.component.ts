@@ -18,7 +18,7 @@ import { Subject } from 'rxjs/Subject';
 })
 
 
-export class WritingTimerComponent implements OnInit {
+export class WritingTimerComponent implements OnInit, OnDestroy {
   config = this._configService.config;
   config_subscription: any;
 
@@ -47,7 +47,7 @@ export class WritingTimerComponent implements OnInit {
     private _msgService: MessageService,
     private _wordCountService: WordCountService
   ) {
-    this.config_subscription = _configService.configChange.subscribe(
+    this.config_subscription = this._configService.cast.subscribe(
       new_config => {
         this.config = new_config;
         this.target_time = new_config.work_session * 60;
@@ -205,7 +205,6 @@ export class WritingTimerComponent implements OnInit {
   }
 
   stop_timer() {
-    console.log('Stop timer is called');
     clearTimeout(this.timer);
     this.play_pause_icon = 'oi-media-play';
   }
