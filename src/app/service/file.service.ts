@@ -294,16 +294,21 @@ export class FileService {
       file_contents: file_contents
     };
 
-    this.save(save_data, false);
+    if (this._electronService.isElectronApp) {
 
-    const scope = this;
-    this.ipc.on('file-saved-config', function(evt, args) {
-      next(null, config);
-    });
+      this.save(save_data, false);
 
-    this.ipc.on('file-save-error-config', function(evt, args) {
-      next(args, null);
-    });
+      const scope = this;
+      this.ipc.on('file-saved-config', function(evt, args) {
+        next(null, config);
+      });
+
+      this.ipc.on('file-save-error-config', function(evt, args) {
+        next(args, null);
+      });
+    }else {
+      next ('Not an electron app', null);
+    }
   }
 
   /**
