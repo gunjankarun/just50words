@@ -186,12 +186,6 @@ export class ConfigService {
     });
   }
 
-  reset_config() {
-    // reset config
-    const default_config = this.get_default_config();
-    this.set_config(default_config);
-  }
-
   get_default_config() {
     const   config = {
       editor_bg: 'url("assets/images/bg-dirty-paper.jpg")',
