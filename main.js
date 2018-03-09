@@ -11,14 +11,17 @@ let win
 
 function createWindow() {
 
-    win = new BrowserWindow({ 
-        width: 1000, 
+    win = new BrowserWindow({
+        width: 1000,
         height: 700,
         minWidth: 1000,
         minHeight: 700,
         backgroundColor: '#ffffff',
-        show: false
+        show: false,
+        icon: path.join(__dirname, 'build/icon.png')
     })
+    // mainWindow = new BrowserWindow({width: 800, height: 600, icon: path.join(__dirname, 'resources/img/typewriter.png') }) // window data
+
         // background-color: rgb(207, 172, 126);
     win.once('ready-to-show', () => {
         win.show();
