@@ -1,0 +1,280 @@
+<form>
+<div class="modal-body config_modal">
+  <ngb-tabset>
+    <ngb-tab title="General">
+      <ng-template ngbTabContent>
+        <br>
+          <div class="form-group row">
+            <label for="editor_bg" class="col-sm-4 col-form-label no-right-padding">Background</label>
+            <div class="col-sm-8 no-left-padding">
+              <input type="text" name="editor_bg" class="form-control" id="editorbg" placeholder="Editor background image or color" [(ngModel)]="config.editor_bg">
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label for="editor_text_color" class="col-sm-4 col-form-label no-right-padding">Text color</label>
+            <div class="col-sm-8 no-left-padding">
+              <input type="text" name="editor_text_color" class="form-control" id="editor_text_color" placeholder="Text color" [(ngModel)]="config.editor_text_color">
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label for="editor_max_width" class="col-sm-4 col-form-label no-right-padding">Max width of editor</label>
+            <div class="col-sm-5 no-left-padding no-right-padding">
+              <input type="number" name="editor_max_width" class="form-control" id="editor_max_width" placeholder="Max width of editor" [(ngModel)]="config.editor_max_width" min="400" step="1">
+            </div>
+            <label for="config_maxwidth" class="col-sm-2 col-form-label no-left-padding"> &nbsp; px</label>
+          </div>
+          
+          <div class="form-group row">
+            <div class="col-sm-7">Mute all sound</div>
+            <div class="col-sm-5">
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="mute_all_sound" id="mute_all_sound_true" [value]="true" [(ngModel)]="config.mute_all_sound">
+                <label class="form-check-label" for="mute_all_sound_true">Yes</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="mute_all_sound" id="mute_all_sound_false" [value]="false" [(ngModel)]="config.mute_all_sound">
+                <label class="form-check-label" for="mute_all_sound_false">No</label>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group row" *ngIf="is_sound_enabled()">
+            <label for="global_sound_volume" class="col-sm-4 col-form-label no-right-padding">Alert volume</label>
+            <div class="col-sm-8 no-left-padding">
+              <input type="number" name="global_sound_volume" class="form-control" id="global_sound_volume" placeholder="Max volume of all alerts" [(ngModel)]="config.global_sound_volume" min="0" step="0.01">
+            </div>
+          </div>
+
+          <div class="form-group row" *ngIf="is_sound_enabled()">
+            <div class="col-sm-7">Play keypress sound</div>
+            <div class="col-sm-5">
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="play_keypress_sound" id="play_keypress_sound_true" [value]="true" [(ngModel)]="config.play_keypress_sound">
+                <label class="form-check-label" for="play_keypress_sound_true">Yes</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="play_keypress_sound" id="play_keypress_sound_false" [value]="false" [(ngModel)]="config.play_keypress_sound">
+                <label class="form-check-label" for="play_keypress_sound_false">No</label>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group row" *ngIf="is_sound_enabled('play_keypress_sound')">
+            <label for="keypress_sound" class="col-sm-4 col-form-label no-right-padding">Keypress mp3</label>
+            <div class="col-sm-8 no-left-padding">
+              <input type="text" name="keypress_sound" class="form-control" id="keypress_sound" placeholder="mp3 file for keypress sound" [(ngModel)]="config.keypress_sound">
+            </div>
+          </div>
+
+
+          <div class="form-group row">
+            <div class="col-sm-7">Check for new version at at app start</div>
+            <div class="col-sm-5">
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="check_for_updates_automatically" id="check_for_updates_automatically_true" [value]="true" [(ngModel)]="config.check_for_updates_automatically">
+                <label class="form-check-label" for="check_for_updates_automatically_true" >Yes</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="check_for_updates_automatically" id="check_for_updates_automatically_false" [value]="false" [(ngModel)]="config.check_for_updates_automatically">
+                <label class="form-check-label" for="check_for_updates_automatically_false">No</label>
+              </div>
+            </div>
+          </div>
+          
+      </ng-template>
+    </ngb-tab>
+
+    <ngb-tab title="Word Targets">
+      <ng-template ngbTabContent>
+        <br>
+        
+          <div class="form-group row">
+            <label for="config_target_words" class="col-sm-4 col-form-label no-right-padding">Word target</label>
+            <div class="col-sm-8 no-left-padding">
+              <input type="number" name="" name="config_target_words" class="form-control" id="config_target_words" placeholder="Target number of words to type" [(ngModel)]="config.target_words" min="50" step="1">
+            </div>
+          </div>
+<!-- 
+          We will manage it from the frontend UI
+          <div class="form-group row">
+            <label for="config_editorbg" class="col-sm-4 col-form-label no-right-padding">Countdown Type</label>
+            <div class="col-sm-8 no-left-padding">
+              <input type="text" name="" class="form-control" id="config_editorbg" placeholder="Editor background image or color" [(ngModel)]="config.editor_bg">
+            </div>
+          </div>
+-->
+          <div class="form-group row" *ngIf="is_sound_enabled()">
+            <div class="col-sm-7">Play notification when target reached</div>
+            <div class="col-sm-5">
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="play_target_reached_sound" id="play_target_reached_sound_true" [value]="true" [(ngModel)]="config.play_target_reached_sound">
+                <label class="form-check-label" for="play_target_reached_sound_true">Yes</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="play_target_reached_sound" id="play_target_reached_sound_false" [value]="false" [(ngModel)]="config.play_target_reached_sound">
+                <label class="form-check-label" for="play_target_reached_sound_false">No</label>
+              </div>
+            </div>
+          </div>
+        
+          <div class="form-group row" *ngIf="is_sound_enabled('play_target_reached_sound')">
+            <label for="target_reached_sound" class="col-sm-4 col-form-label no-right-padding">Target reached mp3</label>
+            <div class="col-sm-8 no-left-padding">
+              <input type="text" name="target_reached_sound" class="form-control" id="target_reached_sound" placeholder="mp3 file to play when target is reached" [(ngModel)]="config.target_reached_sound">
+            </div>
+          </div>
+      </ng-template>
+    </ngb-tab>
+
+    <ngb-tab title="Timer Targets">
+      <ng-template ngbTabContent>
+        <br>        
+          <div class="form-group row">
+            <label for="work_session" class="col-sm-5 col-form-label no-right-padding">Minutes in work session</label>
+            <div class="col-sm-7 no-left-padding">
+              <input type="number" name="work_session" class="form-control" id="work_session" placeholder="Number of minutes in work session" [(ngModel)]="config.work_session" min="1" step="0.1">
+            </div>
+          </div>
+        
+          <div class="form-group row">
+            <label for="short_break" class="col-sm-5 col-form-label no-right-padding">Minutes in short break</label>
+            <div class="col-sm-7 no-left-padding">
+              <input type="number" name="short_break" class="form-control" id="short_break" placeholder="Number of minutes in short break" [(ngModel)]="config.short_break" min="1" step="0.1">
+            </div>
+          </div>
+        
+          <div class="form-group row">
+            <label for="long_break" class="col-sm-5 col-form-label no-right-padding">Minutes in long break</label>
+            <div class="col-sm-7 no-left-padding">
+              <input type="number" name="long_break" class="form-control" id="long_break" placeholder="Number of minutes in long break" [(ngModel)]="config.long_break" min="1" step="0.1">
+            </div>
+          </div>
+        
+          <div class="form-group row">
+            <label for="continuous_sessions" class="col-sm-5 col-form-label no-right-padding">Long break after</label>
+            <div class="col-sm-2 no-left-padding no-right-padding">
+              <input type="number" name="continuous_sessions" class="form-control" id="continuous_sessions" placeholder="Number of minutes in short break" [(ngModel)]="config.continuous_sessions" min="1" step="1">
+            </div>
+            <label for="continuous_sessions_after" class="col-sm-5 col-form-label no-left-padding">  &nbsp; work sessions</label>
+            
+          </div>
+        
+          <div class="form-group row">
+            <div class="col-sm-7">Pause after each break</div>
+            <div class="col-sm-5">
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="manually_start_session" id="manually_start_session_true" [value]="true" [(ngModel)]="config.manually_start_session">
+                <label class="form-check-label" for="manually_start_session_true">Yes</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="manually_start_session" id="manually_start_session_false" [value]="false" [(ngModel)]="config.manually_start_session">
+                <label class="form-check-label" for="manually_start_session_false">No</label>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group row" *ngIf="is_sound_enabled()">
+            <div class="col-sm-7">Play notification when session is over</div>
+            <div class="col-sm-5">
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="play_session_completed_sound" id="play_session_completed_sound_true" [value]="true" [(ngModel)]="config.play_session_completed_sound">
+                <label class="form-check-label" for="play_session_completed_sound_true">Yes</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="play_session_completed_sound" id="play_session_completed_sound_false" [value]="false" [(ngModel)]="config.play_session_completed_sound">
+                <label class="form-check-label" for="play_session_completed_sound_false">No</label>
+              </div>
+            </div>
+          </div>
+        
+          <div class="form-group row" *ngIf="is_sound_enabled('play_session_completed_sound')">
+            <label for="work_session_complete_sound" class="col-sm-4 col-form-label no-right-padding">Work session over mp3</label>
+            <div class="col-sm-8 no-left-padding">
+              <input type="text" name="work_session_complete_sound" class="form-control" id="work_session_complete_sound" placeholder="Sound to play when work session is over" [(ngModel)]="config.work_session_complete_sound">
+            </div>
+          </div>
+
+          <div class="form-group row" *ngIf="is_sound_enabled('play_session_completed_sound')">
+            <label for="short_break_complete_sound" class="col-sm-4 col-form-label no-right-padding">Short break over mp3</label>
+            <div class="col-sm-8 no-left-padding">
+              <input type="text" name="short_break_complete_sound" class="form-control" id="short_break_complete_sound" placeholder="Sound to play when break is over" [(ngModel)]="config.short_break_complete_sound">
+            </div>
+          </div>
+
+          <div class="form-group row" *ngIf="is_sound_enabled('play_session_completed_sound')">
+            <label for="long_break_complete_sound" class="col-sm-4 col-form-label no-right-padding">Long break over mp3</label>
+            <div class="col-sm-8 no-left-padding">
+              <input type="text" name="long_break_complete_sound" class="form-control" id="long_break_complete_sound" placeholder="Sound to play when long break is over" [(ngModel)]="config.long_break_complete_sound">
+            </div>
+          </div>
+
+      </ng-template>
+    </ngb-tab>
+
+    <ngb-tab title="Write or Nuke">
+      <ng-template ngbTabContent>
+        <br>
+                
+          <div class="form-group row">
+            <div class="col-sm-7">Enable Write or Nuke</div>
+            <div class="col-sm-5">
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="write_or_nuke" id="write_or_nuke_true" [value]="true" [(ngModel)]="config.write_or_nuke">
+                <label class="form-check-label" for="write_or_nuke_true">Yes</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="write_or_nuke" id="write_or_nuke_false" [value]="false" [(ngModel)]="config.write_or_nuke">
+                <label class="form-check-label" for="write_or_nuke_false">No</label>
+              </div>
+            </div>
+          </div>
+        
+          <div class="form-group row" *ngIf="config.write_or_nuke">
+            <div class="col-sm-7">Show write or nuke button</div>
+            <div class="col-sm-5">
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="write_or_nuke_show_button" id="write_or_nuke_show_button_true" [value]="true" [(ngModel)]="config.write_or_nuke_show_button">
+                <label class="form-check-label" for="write_or_nuke_show_button_true">Yes</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="write_or_nuke_show_button" id="write_or_nuke_show_button_false" [value]="false" [(ngModel)]="config.write_or_nuke_show_button">
+                <label class="form-check-label" for="write_or_nuke_show_button_false">No</label>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group row" *ngIf="config.write_or_nuke">
+            <label for="write_or_nuke_interval" class="col-sm-7 col-form-label no-right-padding">Nuke contents after pause of</label>
+            <div class="col-sm-2 no-left-padding">
+              <input type="number" name="write_or_nuke_interval" class="form-control" id="write_or_nuke_interval" placeholder="Number of sessions in work session" [(ngModel)]="config.write_or_nuke_interval">
+            </div>
+            <label for="write_or_nuke_interval_after" class="col-sm-3 col-form-label no-left-padding"> seconds</label>
+            
+          </div>
+
+          <div class="form-group row" *ngIf="config.write_or_nuke && is_sound_enabled()">
+            <label for="write_or_nuke_warning_sound" class="col-sm-4 col-form-label no-right-padding">Nuke warning mp3</label>
+            <div class="col-sm-8 no-left-padding">
+              <input type="text" name="write_or_nuke_warning_sound" class="form-control" id="write_or_nuke_warning_sound" placeholder="Sound to play to warn about nuking" [(ngModel)]="config.write_or_nuke_warning_sound">
+            </div>
+          </div>
+
+          <div class="form-group row" *ngIf="config.write_or_nuke && is_sound_enabled()">
+            <label for="write_or_nuke_nuked_sound" class="col-sm-4 col-form-label no-right-padding">Nuked mp3</label>
+            <div class="col-sm-8 no-left-padding">
+              <input type="text" name="write_or_nuke_nuked_sound" class="form-control" id="write_or_nuke_nuked_sound" placeholder="Sound to play when content is nuked" [(ngModel)]="config.write_or_nuke_nuked_sound">
+            </div>
+          </div>
+      </ng-template>
+    </ngb-tab>
+  </ngb-tabset>
+</div>
+<div class="modal-footer">
+  <!-- <button type="button" class="btn btn-outline-success mr-auto" (click)="activeModal.close('Close click')">Help</button> -->
+  <button type="button" class="btn btn-outline-dark mr-auto" (click)="reset_config()">Reset</button>
+  <button type="button" class="btn btn-outline-danger" (click)="activeModal.close('Close click')">Cancel</button>
+  <button type="submit" class="btn btn-primary" (click)="onSubmit($event)">Save</button>
+</div>
+</form>
