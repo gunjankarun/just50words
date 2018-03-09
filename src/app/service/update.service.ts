@@ -136,7 +136,7 @@ export class UpdateService {
         file_ext = 'dmg';
         break;
       case 'linux':
-        file_ext = 'zip';
+        file_ext = 'deb';
         break;
       default:
         file_ext = '';
