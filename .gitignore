@@ -44,7 +44,7 @@ testem.log
 Thumbs.db
 
 #user files
-_assets
-articles
-articles_bkup
-config
+/_assets
+/articles
+/articles_bkup
+/config
