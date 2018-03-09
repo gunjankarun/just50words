@@ -441,7 +441,7 @@ Are you sure you want to continue?`
 
   show_config() {
     // console.log('Showing config popup');
-    this._modalService.open(ConfigComponent, { size: 'lg'});
+    this._modalService.open(ConfigComponent);
   }
 
   backup_articles() {

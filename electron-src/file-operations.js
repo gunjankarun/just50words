@@ -27,16 +27,14 @@ ipc.on('save-file', function (event, args) {
   const file_path = args.file_name;
   const file_contents = args.file_contents;
   const file_type = args.file_type;
-  fs.writeFileSync(file_path, file_contents, function (error) {
-    if (error) {
-      // throw error
-      console.log('There was an error in saving file', error);
-      event.sender.send('file-save-error-' + file_type, error);
-    }else{
-      console.log('Saved file', file_path);
-      event.sender.send('file-saved-'+file_type, args.file_name);
-    }
-  })
+  try {
+    fs.writeFileSync(file_path, file_contents);
+    // console.log('Saved file', file_path);
+    event.sender.send('file-saved-'+file_type, args.file_name);
+  } catch (error) {
+    // console.log('There was an error in saving file', error);
+    event.sender.send('file-save-error-' + file_type, error);
+  }
 })
 
 /**

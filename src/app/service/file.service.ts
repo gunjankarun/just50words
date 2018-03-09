@@ -287,6 +287,7 @@ export class FileService {
    * @memberof FileService
    */
   save_config_file(config: any, next) {
+    console.log('100 About to save config in file');
     const file_contents = JSON.stringify(config, null, 4);
     const save_data = {
       file_name: this.config_file,
@@ -295,15 +296,17 @@ export class FileService {
     };
 
     if (this._electronService.isElectronApp) {
-
+      console.log('200 This is an electron service');
       this.save(save_data, false);
 
       const scope = this;
       this.ipc.on('file-saved-config', function(evt, args) {
+        console.log('300 File saved ok');
         next(null, config);
       });
 
       this.ipc.on('file-save-error-config', function(evt, args) {
+        console.log('400 File NOT saved ok');
         next(args, null);
       });
     }else {
