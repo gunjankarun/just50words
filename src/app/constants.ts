@@ -14,6 +14,6 @@ export class Constants {
 
     public static GIT_USERNAME = 'gunjankarun';
     public static GIT_REPO_NAME = 'just50words';
-    public static PRODUCT_WEBSITE = 'https://github.com/gunjankarun/just50words';
+    public static PRODUCT_WEBSITE = 'https://just50words.com';
     public static YOUTUBE_TUTORIAL_URL = 'https://www.youtube.com/watch?v=pbedGDCMulY&list=PLm42-wLhnxrCPLcM1IgOF9z_hgMHi1GjY';
 }

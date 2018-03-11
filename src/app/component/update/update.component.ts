@@ -72,8 +72,11 @@ export class UpdateComponent implements OnInit, AfterViewInit {
       function(err, update_obj) {
         if (update_obj.new_version_available) {
           scope.version_str = 'Found new version ' + update_obj.latest_version + ' ';
+          scope.version_url = update_obj.release_url;
+        }else {
+          scope.version_str = 'You have the latest version';
+          // scope.version_url = update_obj.release_url;
         }
-        scope.version_url = update_obj.release_url;
         scope.update_data = update_obj;
       }
     );
