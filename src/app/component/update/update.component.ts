@@ -1,5 +1,6 @@
 import { Component,
   OnInit,
+  AfterViewInit,
   Input,
   Output,
   EventEmitter
@@ -15,13 +16,11 @@ import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
   templateUrl: './update.component.html',
   styleUrls: ['./update.component.css']
 })
-export class UpdateComponent implements OnInit {
+export class UpdateComponent implements OnInit, AfterViewInit {
   app_version = this._configService.app_version;
   git_username = Constants.GIT_USERNAME;
   git_repo_name = Constants.GIT_REPO_NAME;
-  version_str = ' v: ' +
-    this.app_version +
-    ' (Checking for updates)';
+  version_str = ' v: ' + this.app_version + ' (Checking for updates)';
   version_url = Constants.PRODUCT_WEBSITE;
   update_data = {
     latest_version: '',
@@ -37,8 +36,12 @@ export class UpdateComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    // this.app_version = this._configService.app_version;
     this.check_update();
+  }
+
+  ngAfterViewInit() {
+    // this.app_version = this._configService.app_version;
+    // this.check_update();
   }
 
   show_update_popup(updatePopup) {
@@ -55,10 +58,15 @@ export class UpdateComponent implements OnInit {
 
   check_update() {
     const scope = this;
-    this._updateService.check_update(this.app_version, this.git_username, this.git_repo_name,  function(err, update_obj){
-      scope.version_str = update_obj.title;
-      scope.version_url = update_obj.release_url;
-    });
+    this._updateService.check_update(
+      this.app_version,
+      this.git_username,
+      this.git_repo_name,
+      function(err, update_obj) {
+        scope.version_str = update_obj.title;
+        scope.version_url = update_obj.release_url;
+      }
+    );
   }
 
   open_url(event, url) {
@@ -69,5 +77,4 @@ export class UpdateComponent implements OnInit {
       window.open(url, '_blank');
     }
   }
-
 }
