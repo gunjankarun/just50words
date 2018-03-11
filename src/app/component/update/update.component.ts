@@ -1,6 +1,7 @@
 import { Component,
   OnInit,
   AfterViewInit,
+  ViewChild,
   Input,
   Output,
   EventEmitter
@@ -9,7 +10,7 @@ import { ConfigService } from '../../service/config.service';
 import { Constants } from '../../constants';
 import { UpdateService } from '../../service/update.service';
 import { ElectronService } from 'ngx-electron';
-import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbPopover, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-update',
@@ -17,6 +18,7 @@ import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
   styleUrls: ['./update.component.css']
 })
 export class UpdateComponent implements OnInit, AfterViewInit {
+  @ViewChild('p') public popover: NgbPopover;
   app_version = this._configService.app_version;
   git_username = Constants.GIT_USERNAME;
   git_repo_name = Constants.GIT_REPO_NAME;
@@ -56,6 +58,11 @@ export class UpdateComponent implements OnInit, AfterViewInit {
     );
   }
 
+  show_new_version_info(e) {
+    e.preventDefault();
+    this.popover.open();
+  }
+
   check_update() {
     const scope = this;
     this._updateService.check_update(
@@ -63,8 +70,11 @@ export class UpdateComponent implements OnInit, AfterViewInit {
       this.git_username,
       this.git_repo_name,
       function(err, update_obj) {
-        scope.version_str = update_obj.title;
+        if (update_obj.new_version_available) {
+          scope.version_str = 'Found new version ' + update_obj.latest_version + ' ';
+        }
         scope.version_url = update_obj.release_url;
+        scope.update_data = update_obj;
       }
     );
   }

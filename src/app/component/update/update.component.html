@@ -1,4 +1,4 @@
-<a href="#"  [ngbPopover]="updatePopup" triggers="manual" #p="ngbPopover" (click)="p.open()">{{version_str}}</a>
+<a href="#"  [ngbPopover]="updatePopup" triggers="manual" #p="ngbPopover" (click)="show_new_version_info($event)">{{version_str}}</a>
 
 <!-- update Popup -->
 <ng-template #updatePopup>

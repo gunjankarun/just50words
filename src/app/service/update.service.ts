@@ -26,11 +26,12 @@ export class UpdateService {
   check_update(app_version, git_username, git_repo_name, next) {
     this.check_release(git_username, git_repo_name).subscribe(http_data => {
       if (http_data) {
-        // console.log('100 ', http_data);
+        console.log('100 ', http_data);
         this.update_data.release_url = http_data.html_url;
         this.update_data.latest_version = http_data.tag_name;
-        this.update_data.title = '';
+        this.update_data.title = http_data.name;
         this.update_data.msg = http_data.body.replace(/\n/g, '<br>');
+        console.log('200 update_data', this.update_data);
 
         const arr_curr_version = app_version.split('.');
         const arr_new_version = http_data.tag_name.split('.');
@@ -40,19 +41,19 @@ export class UpdateService {
           const new_version = this.versionCompare(http_data.tag_name, app_version);
           if (new_version > 0) {
             // console.log('200 New Version Available');
-            this.update_data.title = '🎉   New version ' + http_data.tag_name + ' is available';
+            // this.update_data.title = '🎉   New version ' + http_data.tag_name + ' is available';
             this.update_data.new_version_available = true;
 
             // Now let us get the version url based on the os.
             const asset_file_ext = this._get_file_extension();
             if (asset_file_ext) {
-              console.log('asset_file_ext=', asset_file_ext);
+              // console.log('asset_file_ext=', asset_file_ext);
               http_data.assets.forEach(asset => {
                 const dl_url = asset.browser_download_url;
                 console.log('Checking url ' + dl_url);
                 const arr_dl_url = dl_url.split('.');
                 const dl_ext = arr_dl_url[arr_dl_url.length - 1];
-                console.log('Comparing ext = ' + dl_ext + ' with ' + asset_file_ext);
+                // console.log('Comparing ext = ' + dl_ext + ' with ' + asset_file_ext);
                 if (dl_ext.toLowerCase() === asset_file_ext) {
                   this.update_data.release_url = dl_url;
                   return next(null, this.update_data);
@@ -123,7 +124,7 @@ export class UpdateService {
         file_ext = 'deb';
         break;
       default:
-        file_ext = 'zip';
+        file_ext = 'dmg';
         break;
     }
     console.log('OS = ' + os + ' and file_ext = ' + file_ext);
