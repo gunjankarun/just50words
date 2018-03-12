@@ -93,7 +93,7 @@ const template = [
         submenu: [
             {
                 label: 'Learn More',
-                click() { require('electron').shell.openExternal('http://electron.atom.io') }
+                click() { require('electron').shell.openExternal('https://just50words.com') }
             }
         ]
     }
@@ -106,7 +106,7 @@ if (process.platform === 'darwin') {
         submenu: [
             {
             label: 'About Just 50 Words',
-            click () { require('electron').shell.openExternal('https://electron.atom.io') }
+            click () { require('electron').shell.openExternal('https://just50words.com') }
             },
             {
                 type: 'separator'

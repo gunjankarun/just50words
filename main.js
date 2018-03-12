@@ -18,6 +18,8 @@ function createWindow() {
         minHeight: 700,
         backgroundColor: '#ffffff',
         show: false,
+        center: true,
+        autoHideMenuBar: true,
         icon: path.join(__dirname, 'build/icon.png')
     })
     // mainWindow = new BrowserWindow({width: 800, height: 600, icon: path.join(__dirname, 'resources/img/typewriter.png') }) // window data

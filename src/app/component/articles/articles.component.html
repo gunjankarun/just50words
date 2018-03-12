@@ -80,6 +80,12 @@
                   [innerHTML]="show_list_label"
                   (click)="toggle_list()"></button>
           <!-- &nbsp;&nbsp;<div class="title" *ngIf='!show_list' style="float:left;">Just 50 Words</div> -->
+          <button type="button" class="btn btn-outline-dark btn-sm" 
+            (click)="toggle_zen_mode()" 
+            placement="bottom" ngbTooltip="Toggle Zen mode">
+            <span class="oi {{zen_mode_label}}"></span>
+          </button>
+
           <app-word-count
             [article_title]="current_article ? current_article.title : ''"
             [article_content]="current_article ? current_article.content : ''"

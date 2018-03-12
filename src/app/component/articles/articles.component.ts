@@ -73,6 +73,9 @@ export class ArticlesComponent implements OnInit, OnDestroy, AfterViewInit {
   editor_bg = this.config.editor_bg;
   editor_text_color = this.config.editor_text_color;
 
+  zen_mode = false;
+  zen_mode_label = 'oi-fullscreen-enter';
+
   constructor(
     private _articleService: ArticleService,
     private _configService: ConfigService,
@@ -84,45 +87,46 @@ export class ArticlesComponent implements OnInit, OnDestroy, AfterViewInit {
     private _updateService: UpdateService,
     private _writingPromptService: WritingPromptService
   ) {
-      // constructor
-      const scope = this;
+    // constructor
+    const scope = this;
 
-      if (this._electronService.isElectronApp) {
-        // this.app_version = this._electronService.remote.app.getVersion();
-        this.config_folder = this._electronService.remote.getGlobal('application_root');
-        this.config_file = this.config_folder + '_config.json';
-      }
-
-      this.config = this._configService.config;
-      // Listen for configuration changes
-      this.config_subscription = this._configService.cast.subscribe(
-        new_config => {
-          this.config = new_config;
-          this.target_words = new_config.target_words;
-          this.editorMaxWidth = new_config.editor_max_width;
-          this.write_or_nuke_mode = new_config.write_or_nuke;
-          this.write_or_nuke_show_button =
-            new_config.write_or_nuke_show_button;
-          this.editor_bg = new_config.editor_bg;
-          this.editor_text_color = new_config.editor_text_color;
-        }
+    if (this._electronService.isElectronApp) {
+      // this.app_version = this._electronService.remote.app.getVersion();
+      this.config_folder = this._electronService.remote.getGlobal(
+        'application_root'
       );
-
-      this.writingprompt_subscription = _writingPromptService.promptSelected$.subscribe(
-        prompt => {
-          this.current_article.title = prompt;
-          // this.current_article.content = '# ' + prompt + '  \n\n';
-          this.update_font_class();
-          this.editor_object.focus();
-        }
-      );
-
-      this._articleService.load_articles(function(err, articles) {
-        scope.articles = scope._articleService.articles;
-        scope.reset_list();
-        scope.new_article();
-      });
+      this.config_file = this.config_folder + '_config.json';
     }
+
+    this.config = this._configService.config;
+    // Listen for configuration changes
+    this.config_subscription = this._configService.cast.subscribe(
+      new_config => {
+        this.config = new_config;
+        this.target_words = new_config.target_words;
+        this.editorMaxWidth = new_config.editor_max_width;
+        this.write_or_nuke_mode = new_config.write_or_nuke;
+        this.write_or_nuke_show_button = new_config.write_or_nuke_show_button;
+        this.editor_bg = new_config.editor_bg;
+        this.editor_text_color = new_config.editor_text_color;
+      }
+    );
+
+    this.writingprompt_subscription = _writingPromptService.promptSelected$.subscribe(
+      prompt => {
+        this.current_article.title = prompt;
+        // this.current_article.content = '# ' + prompt + '  \n\n';
+        this.update_font_class();
+        this.editor_object.focus();
+      }
+    );
+
+    this._articleService.load_articles(function(err, articles) {
+      scope.articles = scope._articleService.articles;
+      scope.reset_list();
+      scope.new_article();
+    });
+  }
 
   ngOnDestroy() {
     // prevent memory leak when component destroyed
@@ -257,7 +261,14 @@ export class ArticlesComponent implements OnInit, OnDestroy, AfterViewInit {
 
   key_pressed_textarea(event) {
     let is_printable_char = false;
-    if (event && event.key && (event.key.length === 1 || event.key === 'Enter' || event.key === 'Backspace' || event.key === 'Delete')) {
+    if (
+      event &&
+      event.key &&
+      (event.key.length === 1 ||
+        event.key === 'Enter' ||
+        event.key === 'Backspace' ||
+        event.key === 'Delete')
+    ) {
       is_printable_char = true;
     }
 
@@ -455,5 +466,30 @@ Are you sure you want to continue?`
         this._msgService.add('Could not backup file ' + err);
       }
     });
+  }
+
+  toggle_zen_mode() {
+    this.zen_mode = !this.zen_mode;
+    if (this._electronService.isElectronApp) {
+      if (this.zen_mode) {
+        console.log('100 zeon mode =  ', this.zen_mode);
+        this.zen_mode_label = 'oi-fullscreen-exit';
+        if (this.show_list) {
+          console.log('200 show_list = ', this.show_list);
+          this.toggle_list();
+        }
+      } else {
+        this.zen_mode_label = 'oi-fullscreen-enter';
+        console.log('300 zeon mode = ', this.zen_mode);
+        if (!this.show_list) {
+          console.log('400 show_list = ', this.show_list);
+          this.toggle_list();
+        }
+      }
+      console.log('Toggling zen mode to  ', this.zen_mode);
+      const window = this._electronService.remote.getCurrentWindow();
+      window.setFullScreen(this.zen_mode);
+    }
+    this.editor_object.focus();
   }
 }
