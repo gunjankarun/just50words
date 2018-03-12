@@ -17,7 +17,7 @@ It features:
 
 ### Downloads
 
-Just 50 Words is available for download for [Mac](https://github.com/gunjankarun/just50words/releases/download/1.0.0/Just.50.Words-1.0.0.dmg) , [Windows](https://github.com/gunjankarun/just50words/releases/download/1.0.0/Just.50.Words-1.0.0.msi) and [Ubuntu](https://github.com/gunjankarun/just50words/releases/download/1.0.0/just50words_1.0.0.deb) . The source code is available at [Github](https://github.com/gunjankarun/just50words) .
+Just 50 Words is available for download for [Mac](https://github.com/gunjankarun/just50words/releases/download/1.1.0/just50words.dmg) , [Windows](https://github.com/gunjankarun/just50words/releases/download/1.1.0/just50words.msi) and [Ubuntu](https://github.com/gunjankarun/just50words/releases/download/1.1.0/just50words.deb) . 
 
 Features
 --------
