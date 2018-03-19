@@ -96,7 +96,9 @@ If you are a user of this app, then you can report bugs, suggest new features an
 
 ### Help me spread the word
 
-If you write articles or have a blog or are active on social media, then a review of this app will help me a lot. I would love to discuss any specific detail i.e. the technology involved, philosophy etc.
+If you write articles or have a blog or are active on social media, then a review of this app will help me a lot. I would love to discuss any specific detail i.e. the technology involved, philosophy etc.  
+
+[Click here to share Just 50 Words](https://share2social.com)
 
 ### Help me, help you
 
